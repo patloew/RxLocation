@@ -6,8 +6,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationServices;
 
-import java.util.concurrent.TimeoutException;
-
 import io.reactivex.SingleEmitter;
 
 /* Copyright 2016 Patrick Löwenstein

@@ -1,7 +1,5 @@
 package com.patloew.rxlocation;
 
-import com.google.android.gms.common.api.Status;
-
 /* Copyright (C) 2015 Michał Charmas (http://blog.charmas.pl)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

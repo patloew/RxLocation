@@ -4,8 +4,10 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.support.annotation.NonNull;
 
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.Maybe;
 import io.reactivex.Single;
@@ -28,50 +30,90 @@ public class Geocoding {
 
     private static final Function<List<Address>, Maybe<Address>> ADDRESS_MAYBE_FUNCTION = addresses -> addresses.isEmpty() ? Maybe.empty(): Maybe.just(addresses.get(0));
 
-    private final android.location.Geocoder geocoder;
+    private final Context context;
 
     Geocoding(Context context) {
-        this.geocoder = getGeocoder(context);
+        this.context = context;
     }
 
-    Geocoder getGeocoder(Context context) {
-        return new Geocoder(context);
+    Geocoder getGeocoder(Locale locale) {
+        if(locale != null) {
+            return new Geocoder(context, locale);
+        } else {
+            return new Geocoder(context);
+        }
     }
 
 
-    public Maybe<Address> fromLocation(Location location) {
-        return fromLocation(location, 1).flatMapMaybe(ADDRESS_MAYBE_FUNCTION);
+
+    public Maybe<Address> fromLocation(@NonNull Location location) {
+        return fromLocation(null, location, 1).flatMapMaybe(ADDRESS_MAYBE_FUNCTION);
     }
 
-    public Single<List<Address>> fromLocation(Location location, int maxResults) {
-        return Single.fromCallable(() -> geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), maxResults));
+    public Maybe<Address> fromLocation(Locale locale, @NonNull Location location) {
+        return fromLocation(locale, location, 1).flatMapMaybe(ADDRESS_MAYBE_FUNCTION);
     }
+
+    public Single<List<Address>> fromLocation(@NonNull Location location, int maxResults) {
+        return fromLocation(null, location, maxResults);
+    }
+
+    public Single<List<Address>> fromLocation(Locale locale, @NonNull Location location, int maxResults) {
+        return Single.fromCallable(() -> getGeocoder(locale).getFromLocation(location.getLatitude(), location.getLongitude(), maxResults));
+    }
+
 
 
     public Maybe<Address> fromLocation(double latitude, double longitude) {
-        return fromLocation(latitude, longitude, 1).flatMapMaybe(ADDRESS_MAYBE_FUNCTION);
+        return fromLocation(null, latitude, longitude, 1).flatMapMaybe(ADDRESS_MAYBE_FUNCTION);
+    }
+
+    public Maybe<Address> fromLocation(Locale locale, double latitude, double longitude) {
+        return fromLocation(locale, latitude, longitude, 1).flatMapMaybe(ADDRESS_MAYBE_FUNCTION);
     }
 
     public Single<List<Address>> fromLocation(double latitude, double longitude, int maxResults) {
-        return Single.fromCallable(() -> geocoder.getFromLocation(latitude, longitude, maxResults));
+        return fromLocation(null, latitude, longitude, maxResults);
+    }
+
+    public Single<List<Address>> fromLocation(Locale locale, double latitude, double longitude, int maxResults) {
+        return Single.fromCallable(() -> getGeocoder(locale).getFromLocation(latitude, longitude, maxResults));
     }
 
 
-    public Maybe<Address> fromLocationName(String locationName, double lowerLeftLatitude, double lowerLeftLongitude, double upperRightLatitude, double upperRightLongitude) {
-        return fromLocationName(locationName, 1, lowerLeftLatitude, lowerLeftLongitude, upperRightLatitude, upperRightLongitude).flatMapMaybe(ADDRESS_MAYBE_FUNCTION);
+
+    public Maybe<Address> fromLocationName(@NonNull String locationName, double lowerLeftLatitude, double lowerLeftLongitude, double upperRightLatitude, double upperRightLongitude) {
+        return fromLocationName(null, locationName, 1, lowerLeftLatitude, lowerLeftLongitude, upperRightLatitude, upperRightLongitude).flatMapMaybe(ADDRESS_MAYBE_FUNCTION);
     }
 
-    public Single<List<Address>> fromLocationName(String locationName, int maxResults, double lowerLeftLatitude, double lowerLeftLongitude, double upperRightLatitude, double upperRightLongitude) {
-        return Single.fromCallable(() -> geocoder.getFromLocationName(locationName, maxResults, lowerLeftLatitude, lowerLeftLongitude, upperRightLatitude, upperRightLongitude));
+    public Maybe<Address> fromLocationName(Locale locale, @NonNull String locationName, double lowerLeftLatitude, double lowerLeftLongitude, double upperRightLatitude, double upperRightLongitude) {
+        return fromLocationName(locale, locationName, 1, lowerLeftLatitude, lowerLeftLongitude, upperRightLatitude, upperRightLongitude).flatMapMaybe(ADDRESS_MAYBE_FUNCTION);
+    }
+
+    public Single<List<Address>> fromLocationName(@NonNull String locationName, int maxResults, double lowerLeftLatitude, double lowerLeftLongitude, double upperRightLatitude, double upperRightLongitude) {
+        return fromLocationName(null, locationName, maxResults, lowerLeftLatitude, lowerLeftLongitude, upperRightLatitude, upperRightLongitude);
+    }
+
+    public Single<List<Address>> fromLocationName(Locale locale, @NonNull String locationName, int maxResults, double lowerLeftLatitude, double lowerLeftLongitude, double upperRightLatitude, double upperRightLongitude) {
+        return Single.fromCallable(() -> getGeocoder(locale).getFromLocationName(locationName, maxResults, lowerLeftLatitude, lowerLeftLongitude, upperRightLatitude, upperRightLongitude));
     }
 
 
-    public Maybe<Address> fromLocationName(String locationName) {
-        return fromLocationName(locationName, 1).flatMapMaybe(ADDRESS_MAYBE_FUNCTION);
+
+    public Maybe<Address> fromLocationName(@NonNull String locationName) {
+        return fromLocationName(null, locationName, 1).flatMapMaybe(ADDRESS_MAYBE_FUNCTION);
     }
 
-    public Single<List<Address>> fromLocationName(String locationName, int maxResults) {
-        return Single.fromCallable(() -> geocoder.getFromLocationName(locationName, maxResults));
+    public Maybe<Address> fromLocationName(Locale locale, @NonNull String locationName) {
+        return fromLocationName(locale, locationName, 1).flatMapMaybe(ADDRESS_MAYBE_FUNCTION);
+    }
+
+    public Single<List<Address>> fromLocationName(@NonNull String locationName, int maxResults) {
+        return fromLocationName(null, locationName, maxResults);
+    }
+
+    public Single<List<Address>> fromLocationName(Locale locale, @NonNull String locationName, int maxResults) {
+        return Single.fromCallable(() -> getGeocoder(locale).getFromLocationName(locationName, maxResults));
     }
 
 }
