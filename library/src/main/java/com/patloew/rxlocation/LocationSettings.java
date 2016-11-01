@@ -8,7 +8,9 @@ import com.google.android.gms.location.LocationSettingsResult;
 
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
+import io.reactivex.functions.Function;
 
 /* Copyright 2016 Patrick Löwenstein
  *
@@ -60,21 +62,44 @@ public class LocationSettings {
 
     // Check and handle resolution
 
+    private static final Function<Boolean, Completable> CHECK_SETTINGS_COMPLETABLE_FUNCTION = success -> success ? Completable.complete() : Completable.error(new LocationSettingsNotSatisfiedException());
+
+
+    public Completable checkAndHandleResolutionCompletable(@NonNull LocationRequest locationRequest) {
+        return checkAndHandleResolution(locationRequest).flatMapCompletable(CHECK_SETTINGS_COMPLETABLE_FUNCTION);
+    }
+
     public Single<Boolean> checkAndHandleResolution(@NonNull LocationRequest locationRequest) {
         return checkAndHandleResolutionInternal(getLocationSettingsRequestBuilder().addLocationRequest(locationRequest).build(), null, null);
+    }
+
+
+    public Completable checkAndHandleResolutionCompletable(@NonNull LocationRequest locationRequest, long timeoutTime, @NonNull TimeUnit timeoutUnit) {
+        return checkAndHandleResolution(locationRequest, timeoutTime, timeoutUnit).flatMapCompletable(CHECK_SETTINGS_COMPLETABLE_FUNCTION);
     }
 
     public Single<Boolean> checkAndHandleResolution(@NonNull LocationRequest locationRequest, long timeoutTime, @NonNull TimeUnit timeoutUnit) {
         return checkAndHandleResolutionInternal(getLocationSettingsRequestBuilder().addLocationRequest(locationRequest).build(), timeoutTime, timeoutUnit);
     }
 
+
+    public Completable checkAndHandleResolutionCompletable(@NonNull LocationSettingsRequest locationSettingsRequest) {
+        return checkAndHandleResolutionInternal(locationSettingsRequest, null, null).flatMapCompletable(CHECK_SETTINGS_COMPLETABLE_FUNCTION);
+    }
+
     public Single<Boolean> checkAndHandleResolution(@NonNull LocationSettingsRequest locationSettingsRequest) {
         return checkAndHandleResolutionInternal(locationSettingsRequest, null, null);
+    }
+
+
+    public Completable checkAndHandleResolutionCompletable(@NonNull LocationSettingsRequest locationSettingsRequest, long timeoutTime, @NonNull TimeUnit timeoutUnit) {
+        return checkAndHandleResolutionInternal(locationSettingsRequest, timeoutTime, timeoutUnit).flatMapCompletable(CHECK_SETTINGS_COMPLETABLE_FUNCTION);
     }
 
     public Single<Boolean> checkAndHandleResolution(@NonNull LocationSettingsRequest locationSettingsRequest, long timeoutTime, @NonNull TimeUnit timeoutUnit) {
         return checkAndHandleResolutionInternal(locationSettingsRequest, timeoutTime, timeoutUnit);
     }
+
 
     private Single<Boolean> checkAndHandleResolutionInternal(LocationSettingsRequest locationSettingsRequest, Long timeoutTime, TimeUnit timeoutUnit) {
         return Single.create(new SettingsCheckHandleSingle(rxLocation, locationSettingsRequest, timeoutTime, timeoutUnit));

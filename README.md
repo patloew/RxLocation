@@ -21,9 +21,8 @@ LocationRequest locationRequest = LocationRequest.create()
                 .setInterval(5000);
 
 rxLocation.location().updates(locationRequest)
-		.flatMap(location -> rxLocation.geocoding().fromLocation(location, 1)
-								.flatMapObservable(Observable::fromIterable)
-		).subscribe(address -> {
+		.flatMap(location -> rxLocation.geocoding().fromLocation(location).toObservable())
+		.subscribe(address -> {
 			/* do something */
 		});
 ```
@@ -46,6 +45,7 @@ The following Exceptions are thrown in the lib and provided via `onError()`:
 * `GoogleAPIConnectionException`: When connecting to the GoogleAPIClient was not successful.
 * `GoogleAPIConnectionSuspendedException`: When the GoogleApiClient connection was suspended.
 * `SecurityException`: When you try to call an API without proper permissions.
+* `LocationSettingsNotSatisfiedException`: When you use `rxLocation.settings().checkAndHandleResolutionCompletable(...)` and the location settings were not satisfied, even after handling the resolution.
 
 # Sample
 
