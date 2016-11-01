@@ -30,7 +30,7 @@ class LocationUpdatesFlowable extends BaseFlowable<Location> {
 
     final LocationRequest locationRequest;
     final Looper looper;
-    private LocationListener locationListener;
+    LocationListener locationListener;
 
     protected LocationUpdatesFlowable(@NonNull RxLocation rxLocation, LocationRequest locationRequest, Looper looper, Long timeout, TimeUnit timeUnit) {
         super(rxLocation, timeout, timeUnit);

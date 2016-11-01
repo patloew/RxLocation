@@ -25,7 +25,7 @@ public class LocationSettingsActivity extends Activity {
     protected static final String ARG_STATUS = "status";
     protected static final String ARG_ID = "id";
 
-    private static final int REQUEST_CODE_RESOLUTION = 123;
+    static final int REQUEST_CODE_RESOLUTION = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class LocationSettingsActivity extends Activity {
         handleIntent();
     }
 
-    private void handleIntent() {
+    void handleIntent() {
         Status status = getIntent().getParcelableExtra(ARG_STATUS);
 
         try {
@@ -62,7 +62,7 @@ public class LocationSettingsActivity extends Activity {
         }
     }
 
-    private void setResolutionResultAndFinish(int resultCode) {
+    void setResolutionResultAndFinish(int resultCode) {
         SettingsCheckHandleSingle.onResolutionResult(getIntent().getStringExtra(ARG_ID), resultCode);
         finish();
     }

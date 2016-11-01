@@ -21,11 +21,8 @@ import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.reflect.Whitebox;
 
-import java.lang.reflect.Field;
-import java.util.Map;
-
 import io.reactivex.FlowableEmitter;
-import io.reactivex.ObservableEmitter;
+import io.reactivex.MaybeEmitter;
 import io.reactivex.SingleEmitter;
 import io.reactivex.observers.TestObserver;
 
@@ -59,24 +56,13 @@ public abstract class BaseOnSubscribeTest extends BaseTest {
         super.setup();
     }
 
-    @SuppressWarnings("unchecked")
-    protected static <T> ObservableEmitter<T> getSubscriber(BaseFlowable<T> baseFlowable, GoogleApiClient apiClient) {
-        try {
-            final Field subscriberField = BaseFlowable.class.getDeclaredField("subscriptionInfoMap");
-            subscriberField.setAccessible(true);
-            return ((Map<GoogleApiClient, ObservableEmitter<T>>) subscriberField.get(baseFlowable)).get(apiClient);
-        } catch(Exception e) {
-            return null;
-        }
+    // Mock GoogleApiClient connection success behaviour
+    protected <T> void setupBaseFlowableSuccess(final BaseFlowable<T> baseFlowable) {
+        setupBaseFlowableSuccess(baseFlowable, apiClient);
     }
 
     // Mock GoogleApiClient connection success behaviour
-    protected <T> void setupBaseObservableSuccess(final BaseFlowable<T> baseFlowable) {
-        setupBaseObservableSuccess(baseFlowable, apiClient);
-    }
-
-    // Mock GoogleApiClient connection success behaviour
-    protected <T> void setupBaseObservableSuccess(final BaseFlowable<T> baseFlowable, final GoogleApiClient apiClient) {
+    protected <T> void setupBaseFlowableSuccess(final BaseFlowable<T> baseFlowable, final GoogleApiClient apiClient) {
         doAnswer(invocation -> {
             final FlowableEmitter<T> subscriber = ((BaseFlowable.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
 
@@ -108,18 +94,23 @@ public abstract class BaseOnSubscribeTest extends BaseTest {
         }).when(baseSingle).createApiClient(Matchers.any(BaseRx.ApiClientConnectionCallbacks.class));
     }
 
-    // Mock GoogleApiClient connection error behaviour
-    protected <T> void setupBaseObservableError(final BaseFlowable<T> baseFlowable) {
+    // Mock GoogleApiClient connection success behaviour
+    protected <T> void setupBaseMaybeSuccess(final BaseMaybe<T> baseSingle) {
+        setupBaseMaybeSuccess(baseSingle, apiClient);
+    }
+
+    // Mock GoogleApiClient connection success behaviour
+    protected <T> void setupBaseMaybeSuccess(final BaseMaybe<T> baseSingle, final GoogleApiClient apiClient) {
         doAnswer(invocation -> {
-            final FlowableEmitter<T> subscriber = ((BaseFlowable.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
+            final MaybeEmitter<T> subscriber = ((BaseMaybe.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
 
             doAnswer(invocation1 -> {
-                subscriber.onError(new GoogleAPIConnectionException("Error connecting to GoogleApiClient.", connectionResult));
+                baseSingle.onGoogleApiClientReady(apiClient, subscriber);
                 return null;
             }).when(apiClient).connect();
 
             return apiClient;
-        }).when(baseFlowable).createApiClient(Matchers.any(BaseRx.ApiClientConnectionCallbacks.class));
+        }).when(baseSingle).createApiClient(Matchers.any(BaseRx.ApiClientConnectionCallbacks.class));
     }
 
     // Mock GoogleApiClient connection error behaviour
@@ -153,5 +144,10 @@ public abstract class BaseOnSubscribeTest extends BaseTest {
     protected static void assertSingleValue(TestObserver sub, Object value) {
         sub.assertComplete();
         sub.assertValue(value);
+    }
+
+    protected static void assertNoValue(TestObserver sub) {
+        sub.assertComplete();
+        sub.assertNoValues();
     }
 }

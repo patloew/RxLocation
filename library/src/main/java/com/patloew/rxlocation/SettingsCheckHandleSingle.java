@@ -116,6 +116,10 @@ class SettingsCheckHandleSingle extends BaseSingle<Boolean> {
 
                             emitter.onSuccess(false);
                             break;
+
+                        default:
+                            emitter.onError(new StatusException(status));
+                            break;
                     }
                 }
         );
