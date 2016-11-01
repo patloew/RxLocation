@@ -1,0 +1,36 @@
+language: android
+jdk:
+  - oraclejdk8
+android:
+  components:
+    # Uncomment the lines below if you want to
+    # use the latest revision of Android SDK Tools
+    - platform-tools
+    - tools
+
+    # The BuildTools version used by your project
+    - build-tools-25.0.0
+
+    # The SDK version used to compile your project
+    - android-25
+
+    # Additional components
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
+    - addon-google_apis-google-23
+
+before_install:
+  - export JAVA8_HOME=/usr/lib/jvm/java-8-oracle
+  - export JAVA_HOME=$JAVA8_HOME
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+script:
+  - ./gradlew build jacocoTestReport assembleAndroidTest
+  - ./gradlew connectedCheck
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
