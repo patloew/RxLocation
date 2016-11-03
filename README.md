@@ -1,8 +1,8 @@
 # Reactive Location API Library for Android
 
-[![Build Status](https://travis-ci.org/patloew/RxLocation.svg?branch=master)](https://travis-ci.org/patloew/RxLocation) [![codecov](https://codecov.io/gh/patloew/RxLocation/branch/master/graph/badge.svg)](https://codecov.io/gh/patloew/RxLocation) [![API](https://img.shields.io/badge/API-9%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=9)
+[![Build Status](https://travis-ci.org/patloew/RxLocation.svg?branch=master)](https://travis-ci.org/patloew/RxLocation) [![codecov](https://codecov.io/gh/patloew/RxLocation/branch/master/graph/badge.svg)](https://codecov.io/gh/patloew/RxLocation) [![Download](https://api.bintray.com/packages/patloew/maven/RxLocation/images/download.svg) ](https://bintray.com/patloew/maven/RxLocation/_latestVersion) [![API](https://img.shields.io/badge/API-9%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=9)
 
-This library wraps the Location APIs in [RxJava 2](https://github.com/ReactiveX/RxJava/tree/2.x) Observables, Singles and Maybes. No more managing GoogleApiClients! Also, the resolution of the location settings check is optionally handled by the lib.
+This library wraps the Location APIs in [RxJava 2](https://github.com/ReactiveX/RxJava/tree/2.x) Observables, Singles, Maybes and Completables. No more managing GoogleApiClients! Also, the resolution of the location settings check is optionally handled by the lib.
 
 For [RxJava 1](https://github.com/ReactiveX/RxJava/tree/1.x), please take a look at the [Android-ReactiveLocation](https://github.com/mcharmas/Android-ReactiveLocation) library by Michał Charmas.
 
@@ -35,6 +35,8 @@ The following APIs are wrapped by this library:
 * `LocationServices.SettingsApi` via `rxLocation.settings()`
 * `Geocoder` via `rxLocation.geocoding()`
 
+Checking the location settings is simplified with this library, by providing a `Single<Boolean>` via `rxLocation.settings().checkAndHandleResolution(locationRequest)`, which handles showing the resolution dialog if the location settings do not satisfy your request. It returns `true` if the settings are satisfied (optionally after showing the dialog, if a resolution is possible), and `false` otherwise. If you want to handle the `LocationSettingsResult` yourself, you can do so via `rxLocation.settings().check(locationRequest)`.
+
 An optional global default timeout for all Location API requests made through the library can be set via `rxLocation.setDefaultTimeout(...)`. In addition, timeouts can be set when creating a new Observable by providing timeout parameters, e.g. `rxLocation.location().updates(locationRequest, 15, TimeUnit.SECONDS)`. These parameters override the default timeout. When a timeout occurs, a StatusException is provided via `onError()`. The RxJava timeout operators can be used instead, but these do not cancel the Location API request immediately.
 
 You can also obtain a `Single<GoogleApiClient>`, which connects on subscribe and disconnects on unsubscribe via `GoogleAPIClientSingle.create(...)`.
@@ -50,6 +52,14 @@ The following Exceptions are thrown in the lib and provided via `onError()`:
 # Sample
 
 A basic sample app is available in the `sample` project.
+
+# Setup
+
+The lib is available on jCenter. Add the following to your `build.gradle`:
+
+	dependencies {
+	    compile 'com.patloew.rxlocation:rxlocation:1.0.0'
+	}
 
 # Testing
 
