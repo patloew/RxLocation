@@ -24,8 +24,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 @RunWith(PowerMockRunner.class)
-@PrepareOnlyThisForTest({ Observable.class, ContextCompat.class, LocationServices.class, ActivityRecognition.class, Status.class, ConnectionResult.class, BaseRx.class })
-public class RxFitTest extends BaseOnSubscribeTest {
+@PrepareOnlyThisForTest({ Observable.class, ContextCompat.class, LocationServices.class, ActivityRecognition.class, Status.class, ConnectionResult.class, RxLocationBaseOnSubscribe.class })
+public class RxLocationTest extends BaseOnSubscribeTest {
 
     @Before
     public void setup() throws Exception {

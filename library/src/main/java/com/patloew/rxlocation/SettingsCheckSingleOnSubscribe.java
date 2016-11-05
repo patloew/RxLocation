@@ -22,11 +22,11 @@ import io.reactivex.SingleEmitter;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License. */
-class SettingsCheckSingle extends BaseSingle<LocationSettingsResult> {
+class SettingsCheckSingleOnSubscribe extends RxLocationSingleOnSubscribe<LocationSettingsResult> {
 
     final LocationSettingsRequest locationSettingsRequest;
 
-    SettingsCheckSingle(RxLocation rxLocation, LocationSettingsRequest locationSettingsRequest, Long timeoutTime, TimeUnit timeoutUnit) {
+    SettingsCheckSingleOnSubscribe(RxLocation rxLocation, LocationSettingsRequest locationSettingsRequest, Long timeoutTime, TimeUnit timeoutUnit) {
         super(rxLocation, timeoutTime, timeoutUnit);
         this.locationSettingsRequest = locationSettingsRequest;
     }

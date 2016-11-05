@@ -29,7 +29,7 @@ import io.reactivex.SingleEmitter;
  * FILE MODIFIED by Patrick Löwenstein, 2016
  *
  */
-public class GoogleAPIClientSingle extends BaseSingle<GoogleApiClient> {
+public class GoogleAPIClientSingle extends RxLocationSingleOnSubscribe<GoogleApiClient> {
 
     GoogleAPIClientSingle(Context ctx, Api<? extends Api.ApiOptions.NotRequiredOptions>[] apis, Scope[] scopes) {
         super(ctx, apis, scopes);

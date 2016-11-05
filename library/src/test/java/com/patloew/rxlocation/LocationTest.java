@@ -51,7 +51,7 @@ public class LocationTest extends BaseTest {
 
     @Test
     public void Flush() throws Exception {
-        ArgumentCaptor<LocationFlushSingle> captor = ArgumentCaptor.forClass(LocationFlushSingle.class);
+        ArgumentCaptor<LocationFlushSingleOnSubscribe> captor = ArgumentCaptor.forClass(LocationFlushSingleOnSubscribe.class);
 
         rxLocation.location().flush();
         rxLocation.location().flush(TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
@@ -59,7 +59,7 @@ public class LocationTest extends BaseTest {
         PowerMockito.verifyStatic(times(2));
         Single.create(captor.capture());
 
-        LocationFlushSingle single = captor.getAllValues().get(0);
+        LocationFlushSingleOnSubscribe single = captor.getAllValues().get(0);
         assertNoTimeoutSet(single);
 
         single = captor.getAllValues().get(1);
@@ -68,33 +68,33 @@ public class LocationTest extends BaseTest {
 
     @Test
     public void LastLocation() throws Exception {
-        ArgumentCaptor<LocationLastMaybe> captor = ArgumentCaptor.forClass(LocationLastMaybe.class);
+        ArgumentCaptor<LocationLastMaybeOnSubscribe> captor = ArgumentCaptor.forClass(LocationLastMaybeOnSubscribe.class);
 
         rxLocation.location().lastLocation();
 
         PowerMockito.verifyStatic(times(1));
         Maybe.create(captor.capture());
 
-        LocationLastMaybe single = captor.getAllValues().get(0);
+        LocationLastMaybeOnSubscribe single = captor.getAllValues().get(0);
         assertNoTimeoutSet(single);
     }
 
     @Test
     public void LocationAvailable() throws Exception {
-        ArgumentCaptor<LocationAvailabilitySingle> captor = ArgumentCaptor.forClass(LocationAvailabilitySingle.class);
+        ArgumentCaptor<LocationAvailabilitySingleOnSubscribe> captor = ArgumentCaptor.forClass(LocationAvailabilitySingleOnSubscribe.class);
 
         rxLocation.location().isLocationAvailable();
 
         PowerMockito.verifyStatic(times(1));
         Single.create(captor.capture());
 
-        LocationAvailabilitySingle single = captor.getAllValues().get(0);
+        LocationAvailabilitySingleOnSubscribe single = captor.getAllValues().get(0);
         assertNoTimeoutSet(single);
     }
 
     @Test
     public void RequestUpdates() throws Exception {
-        ArgumentCaptor<LocationRequestUpdatesSingle> captor = ArgumentCaptor.forClass(LocationRequestUpdatesSingle.class);
+        ArgumentCaptor<LocationRequestUpdatesSingleOnSubscribe> captor = ArgumentCaptor.forClass(LocationRequestUpdatesSingleOnSubscribe.class);
 
         rxLocation.location().requestUpdates(locationRequest, pendingIntent);
         rxLocation.location().requestUpdates(locationRequest, pendingIntent, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
@@ -102,7 +102,7 @@ public class LocationTest extends BaseTest {
         PowerMockito.verifyStatic(times(2));
         Single.create(captor.capture());
 
-        LocationRequestUpdatesSingle single = captor.getAllValues().get(0);
+        LocationRequestUpdatesSingleOnSubscribe single = captor.getAllValues().get(0);
         assertEquals(locationRequest, single.locationRequest);
         assertEquals(pendingIntent, single.pendingIntent);
         assertNoTimeoutSet(single);
@@ -115,7 +115,7 @@ public class LocationTest extends BaseTest {
 
     @Test
     public void RemoveUpdates() throws Exception {
-        ArgumentCaptor<LocationRemoveUpdatesSingle> captor = ArgumentCaptor.forClass(LocationRemoveUpdatesSingle.class);
+        ArgumentCaptor<LocationRemoveUpdatesSingleOnSubscribe> captor = ArgumentCaptor.forClass(LocationRemoveUpdatesSingleOnSubscribe.class);
 
         rxLocation.location().removeUpdates(pendingIntent);
         rxLocation.location().removeUpdates(pendingIntent, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
@@ -123,7 +123,7 @@ public class LocationTest extends BaseTest {
         PowerMockito.verifyStatic(times(2));
         Single.create(captor.capture());
 
-        LocationRemoveUpdatesSingle single = captor.getAllValues().get(0);
+        LocationRemoveUpdatesSingleOnSubscribe single = captor.getAllValues().get(0);
         assertEquals(pendingIntent, single.pendingIntent);
         assertNoTimeoutSet(single);
 
@@ -136,7 +136,7 @@ public class LocationTest extends BaseTest {
 
     @Test
     public void LocationUpdates() throws Exception {
-        ArgumentCaptor<LocationUpdatesFlowable> captor = ArgumentCaptor.forClass(LocationUpdatesFlowable.class);
+        ArgumentCaptor<LocationUpdatesFlowableOnSubscribe> captor = ArgumentCaptor.forClass(LocationUpdatesFlowableOnSubscribe.class);
 
         rxLocation.location().updates(locationRequest);
         rxLocation.location().updates(locationRequest, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
@@ -144,7 +144,7 @@ public class LocationTest extends BaseTest {
         PowerMockito.verifyStatic(times(2));
         Flowable.create(captor.capture(), eq(BackpressureStrategy.MISSING));
 
-        LocationUpdatesFlowable single = captor.getAllValues().get(0);
+        LocationUpdatesFlowableOnSubscribe single = captor.getAllValues().get(0);
         assertEquals(locationRequest, single.locationRequest);
         assertNull(single.looper);
         assertNoTimeoutSet(single);
@@ -157,7 +157,7 @@ public class LocationTest extends BaseTest {
 
     @Test
     public void LocationUpdates_Looper() throws Exception {
-        ArgumentCaptor<LocationUpdatesFlowable> captor = ArgumentCaptor.forClass(LocationUpdatesFlowable.class);
+        ArgumentCaptor<LocationUpdatesFlowableOnSubscribe> captor = ArgumentCaptor.forClass(LocationUpdatesFlowableOnSubscribe.class);
 
         rxLocation.location().updates(locationRequest, looper);
         rxLocation.location().updates(locationRequest, looper, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
@@ -165,7 +165,7 @@ public class LocationTest extends BaseTest {
         PowerMockito.verifyStatic(times(2));
         Flowable.create(captor.capture(), eq(BackpressureStrategy.MISSING));
 
-        LocationUpdatesFlowable single = captor.getAllValues().get(0);
+        LocationUpdatesFlowableOnSubscribe single = captor.getAllValues().get(0);
         assertEquals(locationRequest, single.locationRequest);
         assertEquals(looper, single.looper);
         assertNoTimeoutSet(single);
@@ -178,7 +178,7 @@ public class LocationTest extends BaseTest {
 
     @Test
     public void LocationUpdates_BackpressureStrategy() throws Exception {
-        ArgumentCaptor<LocationUpdatesFlowable> captor = ArgumentCaptor.forClass(LocationUpdatesFlowable.class);
+        ArgumentCaptor<LocationUpdatesFlowableOnSubscribe> captor = ArgumentCaptor.forClass(LocationUpdatesFlowableOnSubscribe.class);
 
         rxLocation.location().updates(locationRequest, BackpressureStrategy.LATEST);
         rxLocation.location().updates(locationRequest, TIMEOUT_TIME, TIMEOUT_TIMEUNIT, BackpressureStrategy.LATEST);
@@ -186,7 +186,7 @@ public class LocationTest extends BaseTest {
         PowerMockito.verifyStatic(times(2));
         Flowable.create(captor.capture(), eq(BackpressureStrategy.LATEST));
 
-        LocationUpdatesFlowable single = captor.getAllValues().get(0);
+        LocationUpdatesFlowableOnSubscribe single = captor.getAllValues().get(0);
         assertEquals(locationRequest, single.locationRequest);
         assertNull(single.looper);
         assertNoTimeoutSet(single);
@@ -199,7 +199,7 @@ public class LocationTest extends BaseTest {
 
     @Test
     public void LocationUpdates_Looper_BackpressureStrategy() throws Exception {
-        ArgumentCaptor<LocationUpdatesFlowable> captor = ArgumentCaptor.forClass(LocationUpdatesFlowable.class);
+        ArgumentCaptor<LocationUpdatesFlowableOnSubscribe> captor = ArgumentCaptor.forClass(LocationUpdatesFlowableOnSubscribe.class);
 
         rxLocation.location().updates(locationRequest, looper, BackpressureStrategy.LATEST);
         rxLocation.location().updates(locationRequest, looper, TIMEOUT_TIME, TIMEOUT_TIMEUNIT, BackpressureStrategy.LATEST);
@@ -207,7 +207,7 @@ public class LocationTest extends BaseTest {
         PowerMockito.verifyStatic(times(2));
         Flowable.create(captor.capture(), eq(BackpressureStrategy.LATEST));
 
-        LocationUpdatesFlowable single = captor.getAllValues().get(0);
+        LocationUpdatesFlowableOnSubscribe single = captor.getAllValues().get(0);
         assertEquals(locationRequest, single.locationRequest);
         assertEquals(looper, single.looper);
         assertNoTimeoutSet(single);

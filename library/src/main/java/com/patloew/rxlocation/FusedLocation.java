@@ -51,7 +51,7 @@ public class FusedLocation {
     }
 
     private Single<Status> flushInternal(Long timeoutTime, TimeUnit timeoutUnit) {
-        return Single.create(new LocationFlushSingle(rxLocation, timeoutTime, timeoutUnit));
+        return Single.create(new LocationFlushSingleOnSubscribe(rxLocation, timeoutTime, timeoutUnit));
     }
 
 
@@ -59,7 +59,7 @@ public class FusedLocation {
 
     @RequiresPermission(anyOf = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION})
     public Maybe<Location> lastLocation() {
-        return Maybe.create(new LocationLastMaybe(rxLocation));
+        return Maybe.create(new LocationLastMaybeOnSubscribe(rxLocation));
     }
 
 
@@ -67,7 +67,7 @@ public class FusedLocation {
 
     @RequiresPermission(anyOf = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION})
     public Single<Boolean> isLocationAvailable() {
-        return Single.create(new LocationAvailabilitySingle(rxLocation));
+        return Single.create(new LocationAvailabilitySingleOnSubscribe(rxLocation));
     }
 
 
@@ -114,7 +114,7 @@ public class FusedLocation {
     }
 
     private Flowable<Location> updatesInternal(LocationRequest locationRequest, Looper looper, Long timeoutTime, TimeUnit timeoutUnit, BackpressureStrategy backpressureStrategy) {
-        return Flowable.create(new LocationUpdatesFlowable(rxLocation, locationRequest, looper, timeoutTime, timeoutUnit), backpressureStrategy);
+        return Flowable.create(new LocationUpdatesFlowableOnSubscribe(rxLocation, locationRequest, looper, timeoutTime, timeoutUnit), backpressureStrategy);
     }
 
 
@@ -131,7 +131,7 @@ public class FusedLocation {
     }
 
     private Single<Status> requestUpdatesInternal(LocationRequest locationRequest, PendingIntent pendingIntent, Long timeoutTime, TimeUnit timeoutUnit) {
-        return Single.create(new LocationRequestUpdatesSingle(rxLocation, locationRequest, pendingIntent, timeoutTime, timeoutUnit));
+        return Single.create(new LocationRequestUpdatesSingleOnSubscribe(rxLocation, locationRequest, pendingIntent, timeoutTime, timeoutUnit));
     }
 
 
@@ -146,7 +146,7 @@ public class FusedLocation {
     }
 
     private Single<Status> removeUpdatesInternal(PendingIntent pendingIntent, Long timeoutTime, TimeUnit timeoutUnit) {
-        return Single.create(new LocationRemoveUpdatesSingle(rxLocation, pendingIntent, timeoutTime, timeoutUnit));
+        return Single.create(new LocationRemoveUpdatesSingleOnSubscribe(rxLocation, pendingIntent, timeoutTime, timeoutUnit));
     }
 
 }

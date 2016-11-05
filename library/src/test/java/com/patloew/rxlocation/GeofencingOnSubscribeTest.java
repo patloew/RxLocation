@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 
 @SuppressWarnings("MissingPermission")
 @RunWith(PowerMockRunner.class)
-@PrepareOnlyThisForTest({ LocationServices.class, com.google.android.gms.location.ActivityRecognition.class, Status.class, ConnectionResult.class, BaseRx.class })
+@PrepareOnlyThisForTest({ LocationServices.class, com.google.android.gms.location.ActivityRecognition.class, Status.class, ConnectionResult.class, RxLocationBaseOnSubscribe.class })
 public class GeofencingOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Mock GeofencingRequest geofencingRequest;
@@ -44,7 +44,7 @@ public class GeofencingOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void GeofencingAddSingle_Success() {
-        GeofencingAddSingle single = PowerMockito.spy(new GeofencingAddSingle(rxLocation, geofencingRequest, pendingIntent, null, null));
+        GeofencingAddSingleOnSubscribe single = PowerMockito.spy(new GeofencingAddSingleOnSubscribe(rxLocation, geofencingRequest, pendingIntent, null, null));
 
         setPendingResultValue(status);
         when(status.isSuccess()).thenReturn(true);
@@ -57,7 +57,7 @@ public class GeofencingOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void GeofencingAddSingle_StatusException() {
-        GeofencingAddSingle single = PowerMockito.spy(new GeofencingAddSingle(rxLocation, geofencingRequest, pendingIntent, null, null));
+        GeofencingAddSingleOnSubscribe single = PowerMockito.spy(new GeofencingAddSingleOnSubscribe(rxLocation, geofencingRequest, pendingIntent, null, null));
 
         setPendingResultValue(status);
         when(status.isSuccess()).thenReturn(false);
@@ -72,7 +72,7 @@ public class GeofencingOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void GeofencingRemoveSingle_PendingIntent_Success() {
-        GeofencingRemoveSingle single = PowerMockito.spy(new GeofencingRemoveSingle(rxLocation, null, pendingIntent, null, null));
+        GeofencingRemoveSingleOnSubscribe single = PowerMockito.spy(new GeofencingRemoveSingleOnSubscribe(rxLocation, null, pendingIntent, null, null));
 
         setPendingResultValue(status);
         when(status.isSuccess()).thenReturn(true);
@@ -85,7 +85,7 @@ public class GeofencingOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void GeofencingRemoveSingle_PendingIntent_StatusException() {
-        GeofencingRemoveSingle single = PowerMockito.spy(new GeofencingRemoveSingle(rxLocation, null, pendingIntent, null, null));
+        GeofencingRemoveSingleOnSubscribe single = PowerMockito.spy(new GeofencingRemoveSingleOnSubscribe(rxLocation, null, pendingIntent, null, null));
 
         setPendingResultValue(status);
         when(status.isSuccess()).thenReturn(false);
@@ -98,7 +98,7 @@ public class GeofencingOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void GeofencingRemoveSingle_IdList_Success() {
-        GeofencingRemoveSingle single = PowerMockito.spy(new GeofencingRemoveSingle(rxLocation, geofenceRequestIds, null, null, null));
+        GeofencingRemoveSingleOnSubscribe single = PowerMockito.spy(new GeofencingRemoveSingleOnSubscribe(rxLocation, geofenceRequestIds, null, null, null));
 
         setPendingResultValue(status);
         when(status.isSuccess()).thenReturn(true);
@@ -111,7 +111,7 @@ public class GeofencingOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void GeofencingRemoveSingle_IdList_StatusException() {
-        GeofencingRemoveSingle single = PowerMockito.spy(new GeofencingRemoveSingle(rxLocation, geofenceRequestIds, null, null, null));
+        GeofencingRemoveSingleOnSubscribe single = PowerMockito.spy(new GeofencingRemoveSingleOnSubscribe(rxLocation, geofenceRequestIds, null, null, null));
 
         setPendingResultValue(status);
         when(status.isSuccess()).thenReturn(false);

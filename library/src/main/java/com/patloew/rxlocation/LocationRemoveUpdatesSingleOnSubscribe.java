@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.ActivityRecognition;
+import com.google.android.gms.location.LocationServices;
 
 import java.util.concurrent.TimeUnit;
 
@@ -24,20 +24,19 @@ import io.reactivex.SingleEmitter;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License. */
-class ActivityRemoveUpdatesSingle extends BaseSingle<Status> {
+class LocationRemoveUpdatesSingleOnSubscribe extends RxLocationSingleOnSubscribe<Status> {
 
     final PendingIntent pendingIntent;
 
-    ActivityRemoveUpdatesSingle(@NonNull RxLocation rxLocation, PendingIntent pendingIntent, Long timeout, TimeUnit timeUnit) {
+    LocationRemoveUpdatesSingleOnSubscribe(@NonNull RxLocation rxLocation, PendingIntent pendingIntent, Long timeout, TimeUnit timeUnit) {
         super(rxLocation, timeout, timeUnit);
         this.pendingIntent = pendingIntent;
     }
 
     @Override
     protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<Status> emitter) {
-        //noinspection MissingPermission
         setupLocationPendingResult(
-                ActivityRecognition.ActivityRecognitionApi.removeActivityUpdates(apiClient, pendingIntent),
+                LocationServices.FusedLocationApi.removeLocationUpdates(apiClient, pendingIntent),
                 SingleResultCallBack.get(emitter)
         );
     }

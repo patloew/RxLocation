@@ -11,8 +11,8 @@ import com.google.android.gms.common.api.Scope;
 
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.FlowableEmitter;
-import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.MaybeEmitter;
+import io.reactivex.MaybeOnSubscribe;
 
 /* Copyright (C) 2015 Michał Charmas (http://blog.charmas.pl)
  *
@@ -33,18 +33,17 @@ import io.reactivex.FlowableOnSubscribe;
  * FILE MODIFIED by Patrick Löwenstein, 2016
  *
  */
-abstract class BaseFlowable<T> extends BaseRx<T> implements FlowableOnSubscribe<T> {
-
-    protected BaseFlowable(@NonNull RxLocation rxLocation, Long timeout, TimeUnit timeUnit) {
+abstract class RxLocationMaybeOnSubscribe<T> extends RxLocationBaseOnSubscribe<T> implements MaybeOnSubscribe<T> {
+    protected RxLocationMaybeOnSubscribe(@NonNull RxLocation rxLocation, Long timeout, TimeUnit timeUnit) {
         super(rxLocation, timeout, timeUnit);
     }
 
-    protected BaseFlowable(@NonNull Context ctx, @NonNull Api<? extends Api.ApiOptions.NotRequiredOptions>[] services, Scope[] scopes) {
+    protected RxLocationMaybeOnSubscribe(@NonNull Context ctx, @NonNull Api<? extends Api.ApiOptions.NotRequiredOptions>[] services, Scope[] scopes) {
         super(ctx, services, scopes);
     }
 
     @Override
-    public final void subscribe(FlowableEmitter<T> emitter) throws Exception {
+    public final void subscribe(MaybeEmitter<T> emitter) throws Exception {
         final GoogleApiClient apiClient = createApiClient(new ApiClientConnectionCallbacks(emitter));
 
         try {
@@ -62,15 +61,15 @@ abstract class BaseFlowable<T> extends BaseRx<T> implements FlowableOnSubscribe<
         });
     }
 
-    protected abstract void onGoogleApiClientReady(GoogleApiClient apiClient, FlowableEmitter<T> emitter);
+    protected abstract void onGoogleApiClientReady(GoogleApiClient apiClient, MaybeEmitter<T> emitter);
 
-    protected class ApiClientConnectionCallbacks extends BaseRx.ApiClientConnectionCallbacks {
+    protected class ApiClientConnectionCallbacks extends RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks {
 
-        final protected FlowableEmitter<T> emitter;
+        final protected MaybeEmitter<T> emitter;
 
         private GoogleApiClient apiClient;
 
-        private ApiClientConnectionCallbacks(FlowableEmitter<T> emitter) {
+        private ApiClientConnectionCallbacks(MaybeEmitter<T> emitter) {
             this.emitter = emitter;
         }
 

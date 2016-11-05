@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 @SuppressWarnings("MissingPermission")
 @RunWith(PowerMockRunner.class)
-@PrepareOnlyThisForTest({ LocationServices.class, com.google.android.gms.location.ActivityRecognition.class, Status.class, ConnectionResult.class, BaseRx.class })
+@PrepareOnlyThisForTest({ LocationServices.class, com.google.android.gms.location.ActivityRecognition.class, Status.class, ConnectionResult.class, RxLocationBaseOnSubscribe.class })
 public class ActivityOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Mock PendingIntent pendingIntent;
@@ -37,7 +37,7 @@ public class ActivityOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void ActivityRequestUpdatesSingle_Success() {
-        ActivityRequestUpdatesSingle single = PowerMockito.spy(new ActivityRequestUpdatesSingle(rxLocation, 1L, pendingIntent, null, null));
+        ActivityRequestUpdatesSingleOnSubscribe single = PowerMockito.spy(new ActivityRequestUpdatesSingleOnSubscribe(rxLocation, 1L, pendingIntent, null, null));
 
         setPendingResultValue(status);
         when(status.isSuccess()).thenReturn(true);
@@ -50,7 +50,7 @@ public class ActivityOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void ActivityRequestUpdatesSingle_StatusException() {
-        ActivityRequestUpdatesSingle single = PowerMockito.spy(new ActivityRequestUpdatesSingle(rxLocation, 1L, pendingIntent, null, null));
+        ActivityRequestUpdatesSingleOnSubscribe single = PowerMockito.spy(new ActivityRequestUpdatesSingleOnSubscribe(rxLocation, 1L, pendingIntent, null, null));
 
         setPendingResultValue(status);
         when(status.isSuccess()).thenReturn(false);
@@ -65,7 +65,7 @@ public class ActivityOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void ActivityRemoveUpdatesSingle_Success() {
-        ActivityRemoveUpdatesSingle single = PowerMockito.spy(new ActivityRemoveUpdatesSingle(rxLocation, pendingIntent, null, null));
+        ActivityRemoveUpdatesSingleOnSubscribe single = PowerMockito.spy(new ActivityRemoveUpdatesSingleOnSubscribe(rxLocation, pendingIntent, null, null));
 
         setPendingResultValue(status);
         when(status.isSuccess()).thenReturn(true);
@@ -78,7 +78,7 @@ public class ActivityOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void ActivityRemoveUpdatesSingle_StatusException() {
-        ActivityRemoveUpdatesSingle single = PowerMockito.spy(new ActivityRemoveUpdatesSingle(rxLocation, pendingIntent, null, null));
+        ActivityRemoveUpdatesSingleOnSubscribe single = PowerMockito.spy(new ActivityRemoveUpdatesSingleOnSubscribe(rxLocation, pendingIntent, null, null));
 
         setPendingResultValue(status);
         when(status.isSuccess()).thenReturn(false);

@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.spy;
 
 @RunWith(PowerMockRunner.class)
-@PrepareOnlyThisForTest({ SettingsCheckHandleSingle.class, Status.class })
+@PrepareOnlyThisForTest({ SettingsCheckHandleSingleOnSubscribe.class, Status.class })
 public class LocationSettingsActivityTest  {
 
     @Mock Status status;
@@ -36,7 +36,7 @@ public class LocationSettingsActivityTest  {
     @Before
     public void setup() throws Exception {
         MockitoAnnotations.initMocks(this);
-        PowerMockito.spy(SettingsCheckHandleSingle.class);
+        PowerMockito.spy(SettingsCheckHandleSingleOnSubscribe.class);
 
         activity = spy(new LocationSettingsActivity());
 
@@ -91,7 +91,7 @@ public class LocationSettingsActivityTest  {
         activity.setResolutionResultAndFinish(Activity.RESULT_OK);
 
         PowerMockito.verifyStatic();
-        SettingsCheckHandleSingle.onResolutionResult(observableId, Activity.RESULT_OK);
+        SettingsCheckHandleSingleOnSubscribe.onResolutionResult(observableId, Activity.RESULT_OK);
 
         verify(activity).finish();
     }
@@ -101,7 +101,7 @@ public class LocationSettingsActivityTest  {
         activity.setResolutionResultAndFinish(Activity.RESULT_CANCELED);
 
         PowerMockito.verifyStatic();
-        SettingsCheckHandleSingle.onResolutionResult(observableId, Activity.RESULT_CANCELED);
+        SettingsCheckHandleSingleOnSubscribe.onResolutionResult(observableId, Activity.RESULT_CANCELED);
 
         verify(activity).finish();
     }

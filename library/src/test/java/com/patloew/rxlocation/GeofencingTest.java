@@ -48,7 +48,7 @@ public class GeofencingTest extends BaseTest {
 
     @Test
     public void Add() throws Exception {
-        ArgumentCaptor<GeofencingAddSingle> captor = ArgumentCaptor.forClass(GeofencingAddSingle.class);
+        ArgumentCaptor<GeofencingAddSingleOnSubscribe> captor = ArgumentCaptor.forClass(GeofencingAddSingleOnSubscribe.class);
 
         rxLocation.geofencing().add(geofencingRequest, pendingIntent);
         rxLocation.geofencing().add(geofencingRequest, pendingIntent, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
@@ -56,7 +56,7 @@ public class GeofencingTest extends BaseTest {
         PowerMockito.verifyStatic(times(2));
         Single.create(captor.capture());
 
-        GeofencingAddSingle single = captor.getAllValues().get(0);
+        GeofencingAddSingleOnSubscribe single = captor.getAllValues().get(0);
         assertEquals(geofencingRequest, single.geofencingRequest);
         assertEquals(pendingIntent, single.pendingIntent);
         assertNoTimeoutSet(single);
@@ -71,7 +71,7 @@ public class GeofencingTest extends BaseTest {
 
     @Test
     public void Remove_PendingIntent() throws Exception {
-        ArgumentCaptor<GeofencingRemoveSingle> captor = ArgumentCaptor.forClass(GeofencingRemoveSingle.class);
+        ArgumentCaptor<GeofencingRemoveSingleOnSubscribe> captor = ArgumentCaptor.forClass(GeofencingRemoveSingleOnSubscribe.class);
 
         rxLocation.geofencing().remove(pendingIntent);
         rxLocation.geofencing().remove(pendingIntent, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
@@ -79,7 +79,7 @@ public class GeofencingTest extends BaseTest {
         PowerMockito.verifyStatic(times(2));
         Single.create(captor.capture());
 
-        GeofencingRemoveSingle single = captor.getAllValues().get(0);
+        GeofencingRemoveSingleOnSubscribe single = captor.getAllValues().get(0);
         assertEquals(pendingIntent, single.pendingIntent);
         assertNull(single.geofenceRequestIds);
         assertNoTimeoutSet(single);
@@ -92,7 +92,7 @@ public class GeofencingTest extends BaseTest {
 
     @Test
     public void Remove_IdList() throws Exception {
-        ArgumentCaptor<GeofencingRemoveSingle> captor = ArgumentCaptor.forClass(GeofencingRemoveSingle.class);
+        ArgumentCaptor<GeofencingRemoveSingleOnSubscribe> captor = ArgumentCaptor.forClass(GeofencingRemoveSingleOnSubscribe.class);
 
         rxLocation.geofencing().remove(geofenceRequestIds);
         rxLocation.geofencing().remove(geofenceRequestIds, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
@@ -100,7 +100,7 @@ public class GeofencingTest extends BaseTest {
         PowerMockito.verifyStatic(times(2));
         Single.create(captor.capture());
 
-        GeofencingRemoveSingle single = captor.getAllValues().get(0);
+        GeofencingRemoveSingleOnSubscribe single = captor.getAllValues().get(0);
         assertEquals(geofenceRequestIds, single.geofenceRequestIds);
         assertNull(single.pendingIntent);
         assertNoTimeoutSet(single);

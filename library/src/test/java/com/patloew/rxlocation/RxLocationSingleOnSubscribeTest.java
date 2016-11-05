@@ -24,10 +24,11 @@ import io.reactivex.observers.TestObserver;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
 @PrepareOnlyThisForTest({ ContextCompat.class, Status.class, LocationServices.class, ActivityRecognition.class, ConnectionResult.class, SingleEmitter.class })
-public class BaseSingleTest extends BaseOnSubscribeTest {
+public class RxLocationSingleOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Before
     public void setup() throws Exception {
@@ -36,9 +37,9 @@ public class BaseSingleTest extends BaseOnSubscribeTest {
     }
 
     @Test
-    public void BaseObservable_ApiClient_Connected() {
+    public void ApiClient_Connected() {
         final Object object = new Object();
-        BaseSingle<Object> single = spy(new BaseSingle<Object>(ctx, new Api[] {}, null) {
+        RxLocationSingleOnSubscribe<Object> single = spy(new RxLocationSingleOnSubscribe<Object>(ctx, new Api[] {}, null) {
             @Override
             protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<? super Object> emitter) {
                 emitter.onSuccess(object);
@@ -46,11 +47,11 @@ public class BaseSingleTest extends BaseOnSubscribeTest {
         });
 
         doAnswer(invocation -> {
-            BaseRx.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, BaseRx.ApiClientConnectionCallbacks.class);
+            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
             callbacks.setClient(apiClient);
             callbacks.onConnected(null);
             return apiClient;
-        }).when(single).createApiClient(Matchers.any(BaseRx.ApiClientConnectionCallbacks.class));
+        }).when(single).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
 
         TestObserver<Object> sub = Single.create(single).test();
 
@@ -59,9 +60,31 @@ public class BaseSingleTest extends BaseOnSubscribeTest {
     }
 
     @Test
-    public void BaseObservable_ApiClient_ConnectionSuspended() {
+    public void ApiClient_Connected_Dispose() {
+        RxLocationSingleOnSubscribe<Object> single = spy(new RxLocationSingleOnSubscribe<Object>(ctx, new Api[] {}, null) {
+            @Override
+            protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<? super Object> emitter) { }
+        });
+
+        doAnswer(invocation -> {
+            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
+            callbacks.setClient(apiClient);
+            callbacks.onConnected(null);
+            return apiClient;
+        }).when(single).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
+
+        doReturn(true).when(apiClient).isConnected();
+
+        Single.create(single).subscribe().dispose();
+
+        verify(single).onUnsubscribed(apiClient);
+        verify(apiClient).disconnect();
+    }
+
+    @Test
+    public void ApiClient_ConnectionSuspended() {
         final Object object = new Object();
-        BaseSingle<Object> single = spy(new BaseSingle<Object>(ctx, new Api[] {}, null) {
+        RxLocationSingleOnSubscribe<Object> single = spy(new RxLocationSingleOnSubscribe<Object>(ctx, new Api[] {}, null) {
             @Override
             protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<? super Object> emitter) {
                 emitter.onSuccess(object);
@@ -69,11 +92,11 @@ public class BaseSingleTest extends BaseOnSubscribeTest {
         });
 
         doAnswer(invocation -> {
-            BaseRx.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, BaseRx.ApiClientConnectionCallbacks.class);
+            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
             callbacks.setClient(apiClient);
             callbacks.onConnectionSuspended(0);
             return apiClient;
-        }).when(single).createApiClient(Matchers.any(BaseRx.ApiClientConnectionCallbacks.class));
+        }).when(single).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
 
         TestObserver<Object> sub = Single.create(single).test();
 
@@ -82,9 +105,9 @@ public class BaseSingleTest extends BaseOnSubscribeTest {
     }
 
     @Test
-    public void BaseObservable_ApiClient_ConnectionFailed() {
+    public void ApiClient_ConnectionFailed() {
         final Object object = new Object();
-        BaseSingle<Object> single = spy(new BaseSingle<Object>(ctx, new Api[] {}, null) {
+        RxLocationSingleOnSubscribe<Object> single = spy(new RxLocationSingleOnSubscribe<Object>(ctx, new Api[] {}, null) {
             @Override
             protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<? super Object> emitter) {
                 emitter.onSuccess(object);
@@ -94,11 +117,11 @@ public class BaseSingleTest extends BaseOnSubscribeTest {
         doReturn(false).when(connectionResult).hasResolution();
 
         doAnswer(invocation -> {
-            BaseRx.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, BaseRx.ApiClientConnectionCallbacks.class);
+            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
             callbacks.setClient(apiClient);
             callbacks.onConnectionFailed(connectionResult);
             return apiClient;
-        }).when(single).createApiClient(Matchers.any(BaseRx.ApiClientConnectionCallbacks.class));
+        }).when(single).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
 
         TestObserver<Object> sub = Single.create(single).test();
 

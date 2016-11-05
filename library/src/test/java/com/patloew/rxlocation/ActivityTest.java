@@ -40,7 +40,7 @@ public class ActivityTest extends BaseTest {
 
     @Test
     public void Activity_RequestUpdates() throws Exception {
-        ArgumentCaptor<ActivityRequestUpdatesSingle> captor = ArgumentCaptor.forClass(ActivityRequestUpdatesSingle.class);
+        ArgumentCaptor<ActivityRequestUpdatesSingleOnSubscribe> captor = ArgumentCaptor.forClass(ActivityRequestUpdatesSingleOnSubscribe.class);
 
         long detectionIntervalMillis = 123L;
         rxLocation.activity().requestUpdates(detectionIntervalMillis,pendingIntent);
@@ -49,7 +49,7 @@ public class ActivityTest extends BaseTest {
         PowerMockito.verifyStatic(times(2));
         Single.create(captor.capture());
 
-        ActivityRequestUpdatesSingle single = captor.getAllValues().get(0);
+        ActivityRequestUpdatesSingleOnSubscribe single = captor.getAllValues().get(0);
         assertEquals(detectionIntervalMillis, single.detectionIntervalMillis);
         assertEquals(pendingIntent, single.pendingIntent);
         assertNoTimeoutSet(single);
@@ -64,7 +64,7 @@ public class ActivityTest extends BaseTest {
 
     @Test
     public void Activity_RemoveUpdates() throws Exception {
-        ArgumentCaptor<ActivityRemoveUpdatesSingle> captor = ArgumentCaptor.forClass(ActivityRemoveUpdatesSingle.class);
+        ArgumentCaptor<ActivityRemoveUpdatesSingleOnSubscribe> captor = ArgumentCaptor.forClass(ActivityRemoveUpdatesSingleOnSubscribe.class);
 
         rxLocation.activity().removeUpdates(pendingIntent);
         rxLocation.activity().removeUpdates(pendingIntent, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
@@ -72,7 +72,7 @@ public class ActivityTest extends BaseTest {
         PowerMockito.verifyStatic(times(2));
         Single.create(captor.capture());
 
-        ActivityRemoveUpdatesSingle single = captor.getAllValues().get(0);
+        ActivityRemoveUpdatesSingleOnSubscribe single = captor.getAllValues().get(0);
         assertEquals(pendingIntent, single.pendingIntent);
         assertNoTimeoutSet(single);
 

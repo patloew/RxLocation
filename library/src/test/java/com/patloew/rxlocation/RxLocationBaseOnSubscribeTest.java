@@ -28,7 +28,7 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
 @PrepareOnlyThisForTest({ ContextCompat.class, Status.class, LocationServices.class, ActivityRecognition.class, ConnectionResult.class, GoogleApiClient.Builder.class })
-public class BaseRxTest extends BaseOnSubscribeTest {
+public class RxLocationBaseOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Before
     public void setup() throws Exception {
@@ -38,22 +38,22 @@ public class BaseRxTest extends BaseOnSubscribeTest {
 
     @Test
     public void setupFitnessPendingResult_NoTimeout() {
-        BaseRx<Object> baseRx = spy(new BaseRx<Object>(rxLocation, null, null) { });
+        RxLocationBaseOnSubscribe<Object> rxLocationBaseOnSubscribe = spy(new RxLocationBaseOnSubscribe<Object>(rxLocation, null, null) { });
 
         ResultCallback resultCallback = Mockito.mock(ResultCallback.class);
 
-        baseRx.setupLocationPendingResult(pendingResult, resultCallback);
+        rxLocationBaseOnSubscribe.setupLocationPendingResult(pendingResult, resultCallback);
 
         verify(pendingResult).setResultCallback(resultCallback);
     }
 
     @Test
     public void setupFitnessPendingResult_Timeout() {
-        BaseRx<Object> baseRx = spy(new BaseRx<Object>(rxLocation, TIMEOUT_TIME, TIMEOUT_TIMEUNIT) { });
+        RxLocationBaseOnSubscribe<Object> rxLocationBaseOnSubscribe = spy(new RxLocationBaseOnSubscribe<Object>(rxLocation, TIMEOUT_TIME, TIMEOUT_TIMEUNIT) { });
 
         ResultCallback resultCallback = Mockito.mock(ResultCallback.class);
 
-        baseRx.setupLocationPendingResult(pendingResult, resultCallback);
+        rxLocationBaseOnSubscribe.setupLocationPendingResult(pendingResult, resultCallback);
 
         verify(pendingResult).setResultCallback(resultCallback, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
     }
@@ -62,14 +62,14 @@ public class BaseRxTest extends BaseOnSubscribeTest {
     public void createApiClient_NoScopes() {
         GoogleApiClient.Builder builder = Mockito.mock(GoogleApiClient.Builder.class);
 
-        BaseRx<Object> baseRx = spy(new BaseRx<Object>(ctx, new Api[]{ LocationServices.API }, null) { });
+        RxLocationBaseOnSubscribe<Object> rxLocationBaseOnSubscribe = spy(new RxLocationBaseOnSubscribe<Object>(ctx, new Api[]{ LocationServices.API }, null) { });
 
-        doReturn(builder).when(baseRx).getApiClientBuilder();
+        doReturn(builder).when(rxLocationBaseOnSubscribe).getApiClientBuilder();
         doReturn(apiClient).when(builder).build();
 
-        BaseRx.ApiClientConnectionCallbacks callbacks = Mockito.mock(BaseRx.ApiClientConnectionCallbacks.class);
+        RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = Mockito.mock(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
 
-        assertEquals(apiClient, baseRx.createApiClient(callbacks));
+        assertEquals(apiClient, rxLocationBaseOnSubscribe.createApiClient(callbacks));
         verify(builder).addApi(LocationServices.API);
         verify(builder).addConnectionCallbacks(callbacks);
         verify(builder).addOnConnectionFailedListener(callbacks);
@@ -82,14 +82,14 @@ public class BaseRxTest extends BaseOnSubscribeTest {
         GoogleApiClient.Builder builder = Mockito.mock(GoogleApiClient.Builder.class);
 
         Scope scope = new Scope("Test");
-        BaseRx<Object> baseRx = spy(new BaseRx<Object>(ctx, new Api[]{ LocationServices.API }, new Scope[]{ scope } ) { });
+        RxLocationBaseOnSubscribe<Object> rxLocationBaseOnSubscribe = spy(new RxLocationBaseOnSubscribe<Object>(ctx, new Api[]{ LocationServices.API }, new Scope[]{ scope } ) { });
 
-        doReturn(builder).when(baseRx).getApiClientBuilder();
+        doReturn(builder).when(rxLocationBaseOnSubscribe).getApiClientBuilder();
         doReturn(apiClient).when(builder).build();
 
-        BaseRx.ApiClientConnectionCallbacks callbacks = Mockito.mock(BaseRx.ApiClientConnectionCallbacks.class);
+        RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = Mockito.mock(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
 
-        assertEquals(apiClient, baseRx.createApiClient(callbacks));
+        assertEquals(apiClient, rxLocationBaseOnSubscribe.createApiClient(callbacks));
         verify(builder).addApi(LocationServices.API);
         verify(builder).addScope(scope);
         verify(builder).addConnectionCallbacks(callbacks);

@@ -35,7 +35,7 @@ import static org.mockito.Mockito.when;
 
 @SuppressWarnings("MissingPermission")
 @RunWith(PowerMockRunner.class)
-@PrepareOnlyThisForTest({ LocationRequest.class, LocationAvailability.class, LocationServices.class, com.google.android.gms.location.ActivityRecognition.class, Status.class, ConnectionResult.class, BaseRx.class })
+@PrepareOnlyThisForTest({ LocationRequest.class, LocationAvailability.class, LocationServices.class, com.google.android.gms.location.ActivityRecognition.class, Status.class, ConnectionResult.class, RxLocationBaseOnSubscribe.class })
 public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Mock PendingIntent pendingIntent;
@@ -53,7 +53,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void LocationAvailabilitySingle_Success() {
-        LocationAvailabilitySingle single = PowerMockito.spy(new LocationAvailabilitySingle(rxLocation));
+        LocationAvailabilitySingleOnSubscribe single = PowerMockito.spy(new LocationAvailabilitySingleOnSubscribe(rxLocation));
 
         LocationAvailability locationAvailability = Mockito.mock(LocationAvailability.class);
         doReturn(true).when(locationAvailability).isLocationAvailable();
@@ -66,7 +66,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void LocationAvailabilitySingle_Null_False() {
-        LocationAvailabilitySingle single = PowerMockito.spy(new LocationAvailabilitySingle(rxLocation));
+        LocationAvailabilitySingleOnSubscribe single = PowerMockito.spy(new LocationAvailabilitySingleOnSubscribe(rxLocation));
 
         when(fusedLocationProviderApi.getLocationAvailability(apiClient)).thenReturn(null);
 
@@ -79,7 +79,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void LocationFlushSingle_Success() {
-        LocationFlushSingle single = PowerMockito.spy(new LocationFlushSingle(rxLocation, null, null));
+        LocationFlushSingleOnSubscribe single = PowerMockito.spy(new LocationFlushSingleOnSubscribe(rxLocation, null, null));
 
         setPendingResultValue(status);
         when(status.isSuccess()).thenReturn(true);
@@ -92,7 +92,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void LocationFlushSingle_StatusException() {
-        LocationFlushSingle single = PowerMockito.spy(new LocationFlushSingle(rxLocation, null, null));
+        LocationFlushSingleOnSubscribe single = PowerMockito.spy(new LocationFlushSingleOnSubscribe(rxLocation, null, null));
 
         setPendingResultValue(status);
         when(status.isSuccess()).thenReturn(false);
@@ -107,7 +107,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void LocationLastMaybe_Success() {
-        LocationLastMaybe maybe = PowerMockito.spy(new LocationLastMaybe(rxLocation));
+        LocationLastMaybeOnSubscribe maybe = PowerMockito.spy(new LocationLastMaybeOnSubscribe(rxLocation));
 
         Location location = Mockito.mock(Location.class);
         when(fusedLocationProviderApi.getLastLocation(apiClient)).thenReturn(location);
@@ -119,7 +119,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void LocationLastMaybe_Null_False() {
-        LocationLastMaybe maybe = PowerMockito.spy(new LocationLastMaybe(rxLocation));
+        LocationLastMaybeOnSubscribe maybe = PowerMockito.spy(new LocationLastMaybeOnSubscribe(rxLocation));
 
         when(fusedLocationProviderApi.getLocationAvailability(apiClient)).thenReturn(null);
 
@@ -132,7 +132,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void LocationRemoveUpdatesSingle_Success() {
-        LocationRemoveUpdatesSingle single = PowerMockito.spy(new LocationRemoveUpdatesSingle(rxLocation, pendingIntent, null, null));
+        LocationRemoveUpdatesSingleOnSubscribe single = PowerMockito.spy(new LocationRemoveUpdatesSingleOnSubscribe(rxLocation, pendingIntent, null, null));
 
         setPendingResultValue(status);
         when(status.isSuccess()).thenReturn(true);
@@ -145,7 +145,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void LocationRemoveUpdatesSingle_StatusException() {
-        LocationRemoveUpdatesSingle single = PowerMockito.spy(new LocationRemoveUpdatesSingle(rxLocation, pendingIntent, null, null));
+        LocationRemoveUpdatesSingleOnSubscribe single = PowerMockito.spy(new LocationRemoveUpdatesSingleOnSubscribe(rxLocation, pendingIntent, null, null));
 
         setPendingResultValue(status);
         when(status.isSuccess()).thenReturn(false);
@@ -160,7 +160,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void LocationRequestUpdatesSingle_Success() {
-        LocationRequestUpdatesSingle single = PowerMockito.spy(new LocationRequestUpdatesSingle(rxLocation, locationRequest, pendingIntent, null, null));
+        LocationRequestUpdatesSingleOnSubscribe single = PowerMockito.spy(new LocationRequestUpdatesSingleOnSubscribe(rxLocation, locationRequest, pendingIntent, null, null));
 
         setPendingResultValue(status);
         when(status.isSuccess()).thenReturn(true);
@@ -173,7 +173,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void LocationRequestUpdatesSingle_StatusException() {
-        LocationRequestUpdatesSingle single = PowerMockito.spy(new LocationRequestUpdatesSingle(rxLocation, locationRequest, pendingIntent, null, null));
+        LocationRequestUpdatesSingleOnSubscribe single = PowerMockito.spy(new LocationRequestUpdatesSingleOnSubscribe(rxLocation, locationRequest, pendingIntent, null, null));
 
         setPendingResultValue(status);
         when(status.isSuccess()).thenReturn(false);
@@ -188,7 +188,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void LocationUpdatesFlowable_Success() {
-        LocationUpdatesFlowable single = PowerMockito.spy(new LocationUpdatesFlowable(rxLocation, locationRequest, null, null, null));
+        LocationUpdatesFlowableOnSubscribe single = PowerMockito.spy(new LocationUpdatesFlowableOnSubscribe(rxLocation, locationRequest, null, null, null));
 
         setPendingResultValue(status);
 
@@ -208,7 +208,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void LocationUpdatesFlowable_StatusException() {
-        LocationUpdatesFlowable single = PowerMockito.spy(new LocationUpdatesFlowable(rxLocation, locationRequest, null, null, null));
+        LocationUpdatesFlowableOnSubscribe single = PowerMockito.spy(new LocationUpdatesFlowableOnSubscribe(rxLocation, locationRequest, null, null, null));
 
         setPendingResultValue(status);
         when(status.isSuccess()).thenReturn(false);

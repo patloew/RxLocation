@@ -63,7 +63,7 @@ public class LocationSettingsActivity extends Activity {
     }
 
     void setResolutionResultAndFinish(int resultCode) {
-        SettingsCheckHandleSingle.onResolutionResult(getIntent().getStringExtra(ARG_ID), resultCode);
+        SettingsCheckHandleSingleOnSubscribe.onResolutionResult(getIntent().getStringExtra(ARG_ID), resultCode);
         finish();
     }
 }

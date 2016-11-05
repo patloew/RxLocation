@@ -11,8 +11,8 @@ import com.google.android.gms.common.api.Scope;
 
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.MaybeEmitter;
-import io.reactivex.MaybeOnSubscribe;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
 
 /* Copyright (C) 2015 Michał Charmas (http://blog.charmas.pl)
  *
@@ -33,17 +33,17 @@ import io.reactivex.MaybeOnSubscribe;
  * FILE MODIFIED by Patrick Löwenstein, 2016
  *
  */
-abstract class BaseMaybe<T> extends BaseRx<T> implements MaybeOnSubscribe<T> {
-    protected BaseMaybe(@NonNull RxLocation rxLocation, Long timeout, TimeUnit timeUnit) {
+abstract class RxLocationSingleOnSubscribe<T> extends RxLocationBaseOnSubscribe<T> implements SingleOnSubscribe<T> {
+    protected RxLocationSingleOnSubscribe(@NonNull RxLocation rxLocation, Long timeout, TimeUnit timeUnit) {
         super(rxLocation, timeout, timeUnit);
     }
 
-    protected BaseMaybe(@NonNull Context ctx, @NonNull Api<? extends Api.ApiOptions.NotRequiredOptions>[] services, Scope[] scopes) {
+    protected RxLocationSingleOnSubscribe(@NonNull Context ctx, @NonNull Api<? extends Api.ApiOptions.NotRequiredOptions>[] services, Scope[] scopes) {
         super(ctx, services, scopes);
     }
 
     @Override
-    public final void subscribe(MaybeEmitter<T> emitter) throws Exception {
+    public final void subscribe(SingleEmitter<T> emitter) throws Exception {
         final GoogleApiClient apiClient = createApiClient(new ApiClientConnectionCallbacks(emitter));
 
         try {
@@ -61,15 +61,15 @@ abstract class BaseMaybe<T> extends BaseRx<T> implements MaybeOnSubscribe<T> {
         });
     }
 
-    protected abstract void onGoogleApiClientReady(GoogleApiClient apiClient, MaybeEmitter<T> emitter);
+    protected abstract void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<T> emitter);
 
-    protected class ApiClientConnectionCallbacks extends BaseRx.ApiClientConnectionCallbacks {
+    protected class ApiClientConnectionCallbacks extends RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks {
 
-        final protected MaybeEmitter<T> emitter;
+        final protected SingleEmitter<T> emitter;
 
         private GoogleApiClient apiClient;
 
-        private ApiClientConnectionCallbacks(MaybeEmitter<T> emitter) {
+        private ApiClientConnectionCallbacks(SingleEmitter<T> emitter) {
             this.emitter = emitter;
         }
 

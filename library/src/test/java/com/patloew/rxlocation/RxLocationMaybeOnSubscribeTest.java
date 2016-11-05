@@ -25,10 +25,11 @@ import io.reactivex.observers.TestObserver;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
 @PrepareOnlyThisForTest({ ContextCompat.class, Status.class, LocationServices.class, ActivityRecognition.class, ConnectionResult.class, SingleEmitter.class })
-public class BaseMaybeTest extends BaseOnSubscribeTest {
+public class RxLocationMaybeOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Before
     public void setup() throws Exception {
@@ -37,9 +38,9 @@ public class BaseMaybeTest extends BaseOnSubscribeTest {
     }
 
     @Test
-    public void BaseObservable_ApiClient_Connected() {
+    public void ApiClient_Connected() {
         final Object object = new Object();
-        BaseMaybe<Object> single = spy(new BaseMaybe<Object>(ctx, new Api[] {}, null) {
+        RxLocationMaybeOnSubscribe<Object> maybeOnSubscribe = spy(new RxLocationMaybeOnSubscribe<Object>(ctx, new Api[] {}, null) {
             @Override
             protected void onGoogleApiClientReady(GoogleApiClient apiClient, MaybeEmitter<? super Object> emitter) {
                 emitter.onSuccess(object);
@@ -47,22 +48,45 @@ public class BaseMaybeTest extends BaseOnSubscribeTest {
         });
 
         doAnswer(invocation -> {
-            BaseRx.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, BaseRx.ApiClientConnectionCallbacks.class);
+            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
             callbacks.setClient(apiClient);
             callbacks.onConnected(null);
             return apiClient;
-        }).when(single).createApiClient(Matchers.any(BaseRx.ApiClientConnectionCallbacks.class));
+        }).when(maybeOnSubscribe).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
 
-        TestObserver<Object> sub = Maybe.create(single).test();
+        TestObserver<Object> sub = Maybe.create(maybeOnSubscribe).test();
 
         sub.assertValue(object);
         sub.assertComplete();
     }
 
+
     @Test
-    public void BaseObservable_ApiClient_ConnectionSuspended() {
+    public void ApiClient_Connected_Dispose() {
+        RxLocationMaybeOnSubscribe<Object> maybeOnSubscribe = spy(new RxLocationMaybeOnSubscribe<Object>(ctx, new Api[] {}, null) {
+            @Override
+            protected void onGoogleApiClientReady(GoogleApiClient apiClient, MaybeEmitter<? super Object> emitter) { }
+        });
+
+        doAnswer(invocation -> {
+            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
+            callbacks.setClient(apiClient);
+            callbacks.onConnected(null);
+            return apiClient;
+        }).when(maybeOnSubscribe).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
+
+        doReturn(true).when(apiClient).isConnected();
+
+        Maybe.create(maybeOnSubscribe).subscribe().dispose();
+
+        verify(maybeOnSubscribe).onUnsubscribed(apiClient);
+        verify(apiClient).disconnect();
+    }
+
+    @Test
+    public void ApiClient_ConnectionSuspended() {
         final Object object = new Object();
-        BaseMaybe<Object> single = spy(new BaseMaybe<Object>(ctx, new Api[] {}, null) {
+        RxLocationMaybeOnSubscribe<Object> maybeOnSubscribe = spy(new RxLocationMaybeOnSubscribe<Object>(ctx, new Api[] {}, null) {
             @Override
             protected void onGoogleApiClientReady(GoogleApiClient apiClient, MaybeEmitter<? super Object> emitter) {
                 emitter.onSuccess(object);
@@ -70,22 +94,22 @@ public class BaseMaybeTest extends BaseOnSubscribeTest {
         });
 
         doAnswer(invocation -> {
-            BaseRx.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, BaseRx.ApiClientConnectionCallbacks.class);
+            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
             callbacks.setClient(apiClient);
             callbacks.onConnectionSuspended(0);
             return apiClient;
-        }).when(single).createApiClient(Matchers.any(BaseRx.ApiClientConnectionCallbacks.class));
+        }).when(maybeOnSubscribe).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
 
-        TestObserver<Object> sub = Maybe.create(single).test();
+        TestObserver<Object> sub = Maybe.create(maybeOnSubscribe).test();
 
         sub.assertNoValues();
         sub.assertError(GoogleAPIConnectionSuspendedException.class);
     }
 
     @Test
-    public void BaseObservable_ApiClient_ConnectionFailed() {
+    public void ApiClient_ConnectionFailed() {
         final Object object = new Object();
-        BaseMaybe<Object> single = spy(new BaseMaybe<Object>(ctx, new Api[] {}, null) {
+        RxLocationMaybeOnSubscribe<Object> maybeOnSubscribe = spy(new RxLocationMaybeOnSubscribe<Object>(ctx, new Api[] {}, null) {
             @Override
             protected void onGoogleApiClientReady(GoogleApiClient apiClient, MaybeEmitter<? super Object> emitter) {
                 emitter.onSuccess(object);
@@ -95,13 +119,13 @@ public class BaseMaybeTest extends BaseOnSubscribeTest {
         doReturn(false).when(connectionResult).hasResolution();
 
         doAnswer(invocation -> {
-            BaseRx.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, BaseRx.ApiClientConnectionCallbacks.class);
+            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
             callbacks.setClient(apiClient);
             callbacks.onConnectionFailed(connectionResult);
             return apiClient;
-        }).when(single).createApiClient(Matchers.any(BaseRx.ApiClientConnectionCallbacks.class));
+        }).when(maybeOnSubscribe).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
 
-        TestObserver<Object> sub = Maybe.create(single).test();
+        TestObserver<Object> sub = Maybe.create(maybeOnSubscribe).test();
 
         sub.assertNoValues();
         sub.assertError(GoogleAPIConnectionException.class);

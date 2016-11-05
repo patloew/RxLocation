@@ -44,7 +44,7 @@ public class SettingsTest extends BaseTest {
 
     @Test
     public void Check_LocationRequest() throws Exception {
-        ArgumentCaptor<SettingsCheckSingle> captor = ArgumentCaptor.forClass(SettingsCheckSingle.class);
+        ArgumentCaptor<SettingsCheckSingleOnSubscribe> captor = ArgumentCaptor.forClass(SettingsCheckSingleOnSubscribe.class);
 
         doReturn(locationSettingsRequestBuilder).when(locationSettingsRequestBuilder).addLocationRequest(locationRequest);
         doReturn(locationSettingsRequest).when(locationSettingsRequestBuilder).build();
@@ -58,7 +58,7 @@ public class SettingsTest extends BaseTest {
         PowerMockito.verifyStatic(times(2));
         Single.create(captor.capture());
 
-        SettingsCheckSingle single = captor.getAllValues().get(0);
+        SettingsCheckSingleOnSubscribe single = captor.getAllValues().get(0);
         assertEquals(locationSettingsRequest, single.locationSettingsRequest);
         assertNoTimeoutSet(single);
 
@@ -69,7 +69,7 @@ public class SettingsTest extends BaseTest {
 
     @Test
     public void Check_LocationSettingsRequest() throws Exception {
-        ArgumentCaptor<SettingsCheckSingle> captor = ArgumentCaptor.forClass(SettingsCheckSingle.class);
+        ArgumentCaptor<SettingsCheckSingleOnSubscribe> captor = ArgumentCaptor.forClass(SettingsCheckSingleOnSubscribe.class);
 
         rxLocation.settings().check(locationSettingsRequest);
         rxLocation.settings().check(locationSettingsRequest, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
@@ -77,7 +77,7 @@ public class SettingsTest extends BaseTest {
         PowerMockito.verifyStatic(times(2));
         Single.create(captor.capture());
 
-        SettingsCheckSingle single = captor.getAllValues().get(0);
+        SettingsCheckSingleOnSubscribe single = captor.getAllValues().get(0);
         assertEquals(locationSettingsRequest, single.locationSettingsRequest);
         assertNoTimeoutSet(single);
 
@@ -88,7 +88,7 @@ public class SettingsTest extends BaseTest {
 
     @Test
     public void CheckAndHandleResolution_Completable_LocationRequest() throws Exception {
-        ArgumentCaptor<SettingsCheckHandleSingle> captor = ArgumentCaptor.forClass(SettingsCheckHandleSingle.class);
+        ArgumentCaptor<SettingsCheckHandleSingleOnSubscribe> captor = ArgumentCaptor.forClass(SettingsCheckHandleSingleOnSubscribe.class);
 
         doReturn(locationSettingsRequestBuilder).when(locationSettingsRequestBuilder).addLocationRequest(locationRequest);
         doReturn(locationSettingsRequest).when(locationSettingsRequestBuilder).build();
@@ -102,7 +102,7 @@ public class SettingsTest extends BaseTest {
         PowerMockito.verifyStatic(times(2));
         Single.create(captor.capture());
 
-        SettingsCheckHandleSingle single = captor.getAllValues().get(0);
+        SettingsCheckHandleSingleOnSubscribe single = captor.getAllValues().get(0);
         assertEquals(locationSettingsRequest, single.locationSettingsRequest);
         assertNoTimeoutSet(single);
 
@@ -113,7 +113,7 @@ public class SettingsTest extends BaseTest {
 
     @Test
     public void CheckAndHandleResolution_LocationRequest() throws Exception {
-        ArgumentCaptor<SettingsCheckHandleSingle> captor = ArgumentCaptor.forClass(SettingsCheckHandleSingle.class);
+        ArgumentCaptor<SettingsCheckHandleSingleOnSubscribe> captor = ArgumentCaptor.forClass(SettingsCheckHandleSingleOnSubscribe.class);
 
         doReturn(locationSettingsRequestBuilder).when(locationSettingsRequestBuilder).addLocationRequest(locationRequest);
         doReturn(locationSettingsRequest).when(locationSettingsRequestBuilder).build();
@@ -127,7 +127,7 @@ public class SettingsTest extends BaseTest {
         PowerMockito.verifyStatic(times(2));
         Single.create(captor.capture());
 
-        SettingsCheckHandleSingle single = captor.getAllValues().get(0);
+        SettingsCheckHandleSingleOnSubscribe single = captor.getAllValues().get(0);
         assertEquals(locationSettingsRequest, single.locationSettingsRequest);
         assertNoTimeoutSet(single);
 
@@ -138,7 +138,7 @@ public class SettingsTest extends BaseTest {
 
     @Test
     public void CheckAndHandleResolution_Completable_LocationSettingsRequest() throws Exception {
-        ArgumentCaptor<SettingsCheckHandleSingle> captor = ArgumentCaptor.forClass(SettingsCheckHandleSingle.class);
+        ArgumentCaptor<SettingsCheckHandleSingleOnSubscribe> captor = ArgumentCaptor.forClass(SettingsCheckHandleSingleOnSubscribe.class);
 
         rxLocation.settings().checkAndHandleResolutionCompletable(locationSettingsRequest);
         rxLocation.settings().checkAndHandleResolutionCompletable(locationSettingsRequest, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
@@ -146,7 +146,7 @@ public class SettingsTest extends BaseTest {
         PowerMockito.verifyStatic(times(2));
         Single.create(captor.capture());
 
-        SettingsCheckHandleSingle single = captor.getAllValues().get(0);
+        SettingsCheckHandleSingleOnSubscribe single = captor.getAllValues().get(0);
         assertEquals(locationSettingsRequest, single.locationSettingsRequest);
         assertNoTimeoutSet(single);
 
@@ -157,7 +157,7 @@ public class SettingsTest extends BaseTest {
 
     @Test
     public void CheckAndHandleResolution_LocationSettingsRequest() throws Exception {
-        ArgumentCaptor<SettingsCheckHandleSingle> captor = ArgumentCaptor.forClass(SettingsCheckHandleSingle.class);
+        ArgumentCaptor<SettingsCheckHandleSingleOnSubscribe> captor = ArgumentCaptor.forClass(SettingsCheckHandleSingleOnSubscribe.class);
 
         rxLocation.settings().checkAndHandleResolution(locationSettingsRequest);
         rxLocation.settings().checkAndHandleResolution(locationSettingsRequest, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
@@ -165,7 +165,7 @@ public class SettingsTest extends BaseTest {
         PowerMockito.verifyStatic(times(2));
         Single.create(captor.capture());
 
-        SettingsCheckHandleSingle single = captor.getAllValues().get(0);
+        SettingsCheckHandleSingleOnSubscribe single = captor.getAllValues().get(0);
         assertEquals(locationSettingsRequest, single.locationSettingsRequest);
         assertNoTimeoutSet(single);
 

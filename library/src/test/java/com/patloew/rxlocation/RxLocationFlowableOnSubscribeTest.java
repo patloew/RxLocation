@@ -27,10 +27,11 @@ import io.reactivex.subscribers.TestSubscriber;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
 @PrepareOnlyThisForTest({ ContextCompat.class, LocationServices.class, ActivityRecognition.class, Status.class, ConnectionResult.class })
-public class BaseFlowableTest extends BaseOnSubscribeTest {
+public class RxLocationFlowableOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Before
     public void setup() throws Exception {
@@ -41,7 +42,7 @@ public class BaseFlowableTest extends BaseOnSubscribeTest {
     @Test
     public void BaseObservable_ApiClient_Connected() {
         final Object object = new Object();
-        BaseFlowable<Object> observable = spy(new BaseFlowable<Object>(ctx, new Api[] {}, null) {
+        RxLocationFlowableOnSubscribe<Object> observable = spy(new RxLocationFlowableOnSubscribe<Object>(ctx, new Api[] {}, null) {
             @Override
             protected void onGoogleApiClientReady(GoogleApiClient apiClient, FlowableEmitter<? super Object> subscriber) {
                 subscriber.onNext(object);
@@ -50,11 +51,11 @@ public class BaseFlowableTest extends BaseOnSubscribeTest {
         });
 
         doAnswer(invocation -> {
-            BaseRx.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, BaseRx.ApiClientConnectionCallbacks.class);
+            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
             callbacks.setClient(apiClient);
             callbacks.onConnected(null);
             return apiClient;
-        }).when(observable).createApiClient(Matchers.any(BaseRx.ApiClientConnectionCallbacks.class));
+        }).when(observable).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
 
         TestSubscriber<Object> sub = Flowable.create(observable, BackpressureStrategy.MISSING).test();
 
@@ -63,9 +64,34 @@ public class BaseFlowableTest extends BaseOnSubscribeTest {
     }
 
     @Test
+    public void BaseObservable_ApiClient_Connected_Dispose() {
+        final Object object = new Object();
+        RxLocationFlowableOnSubscribe<Object> observable = spy(new RxLocationFlowableOnSubscribe<Object>(ctx, new Api[] {}, null) {
+            @Override
+            protected void onGoogleApiClientReady(GoogleApiClient apiClient, FlowableEmitter<? super Object> subscriber) {
+                subscriber.onNext(object);
+            }
+        });
+
+        doAnswer(invocation -> {
+            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
+            callbacks.setClient(apiClient);
+            callbacks.onConnected(null);
+            return apiClient;
+        }).when(observable).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
+
+        doReturn(true).when(apiClient).isConnected();
+
+        Flowable.create(observable, BackpressureStrategy.MISSING).subscribe().dispose();
+
+        verify(observable).onUnsubscribed(apiClient);
+        verify(apiClient).disconnect();
+    }
+
+    @Test
     public void BaseObservable_ApiClient_ConnectionSuspended() {
         final Object object = new Object();
-        BaseFlowable<Object> observable = spy(new BaseFlowable<Object>(ctx, new Api[] {}, null) {
+        RxLocationFlowableOnSubscribe<Object> observable = spy(new RxLocationFlowableOnSubscribe<Object>(ctx, new Api[] {}, null) {
             @Override
             protected void onGoogleApiClientReady(GoogleApiClient apiClient, FlowableEmitter<? super Object> subscriber) {
                 subscriber.onNext(object);
@@ -76,12 +102,12 @@ public class BaseFlowableTest extends BaseOnSubscribeTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                BaseRx.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, BaseRx.ApiClientConnectionCallbacks.class);
+                RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
                 callbacks.setClient(apiClient);
                 callbacks.onConnectionSuspended(0);
                 return apiClient;
             }
-        }).when(observable).createApiClient(Matchers.any(BaseRx.ApiClientConnectionCallbacks.class));
+        }).when(observable).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
 
         TestSubscriber<Object> sub = Flowable.create(observable, BackpressureStrategy.MISSING).test();
 
@@ -92,7 +118,7 @@ public class BaseFlowableTest extends BaseOnSubscribeTest {
     @Test
     public void BaseObservable_ApiClient_ConnectionFailed() {
         final Object object = new Object();
-        BaseFlowable<Object> observable = spy(new BaseFlowable<Object>(ctx, new Api[] {}, null) {
+        RxLocationFlowableOnSubscribe<Object> observable = spy(new RxLocationFlowableOnSubscribe<Object>(ctx, new Api[] {}, null) {
             @Override
             protected void onGoogleApiClientReady(GoogleApiClient apiClient, FlowableEmitter<? super Object> subscriber) {
                 subscriber.onNext(object);
@@ -103,11 +129,11 @@ public class BaseFlowableTest extends BaseOnSubscribeTest {
         doReturn(false).when(connectionResult).hasResolution();
 
         doAnswer(invocation -> {
-            BaseRx.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, BaseRx.ApiClientConnectionCallbacks.class);
+            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
             callbacks.setClient(apiClient);
             callbacks.onConnectionFailed(connectionResult);
             return apiClient;
-        }).when(observable).createApiClient(Matchers.any(BaseRx.ApiClientConnectionCallbacks.class));
+        }).when(observable).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
 
         TestSubscriber<Object> sub = Flowable.create(observable, BackpressureStrategy.MISSING).test();
 

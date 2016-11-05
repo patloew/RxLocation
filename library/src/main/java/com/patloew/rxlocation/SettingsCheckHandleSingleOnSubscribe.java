@@ -32,15 +32,15 @@ import io.reactivex.SingleEmitter;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License. */
-class SettingsCheckHandleSingle extends BaseSingle<Boolean> {
+class SettingsCheckHandleSingleOnSubscribe extends RxLocationSingleOnSubscribe<Boolean> {
 
-    static final Map<String, WeakReference<SettingsCheckHandleSingle>> observableMap = new HashMap<>();
+    static final Map<String, WeakReference<SettingsCheckHandleSingleOnSubscribe>> observableMap = new HashMap<>();
 
     final Context context;
     final LocationSettingsRequest locationSettingsRequest;
     private WeakReference<SingleEmitter<Boolean>> emitterWeakRef;
 
-    SettingsCheckHandleSingle(RxLocation rxLocation, LocationSettingsRequest locationSettingsRequest, Long timeoutTime, TimeUnit timeoutUnit) {
+    SettingsCheckHandleSingleOnSubscribe(RxLocation rxLocation, LocationSettingsRequest locationSettingsRequest, Long timeoutTime, TimeUnit timeoutUnit) {
         super(rxLocation, timeoutTime, timeoutUnit);
         this.context = rxLocation.ctx;
         this.locationSettingsRequest = locationSettingsRequest;
@@ -48,7 +48,7 @@ class SettingsCheckHandleSingle extends BaseSingle<Boolean> {
 
     static void onResolutionResult(String observableId, int resultCode) {
         if (observableMap.containsKey(observableId)) {
-            SettingsCheckHandleSingle observable = observableMap.get(observableId).get();
+            SettingsCheckHandleSingleOnSubscribe observable = observableMap.get(observableId).get();
 
             if (observable != null && observable.emitterWeakRef != null) {
                 SingleEmitter<Boolean> observer = observable.emitterWeakRef.get();
@@ -66,10 +66,10 @@ class SettingsCheckHandleSingle extends BaseSingle<Boolean> {
 
     static void observableMapCleanup() {
         if(!observableMap.isEmpty()) {
-            Iterator<Map.Entry<String, WeakReference<SettingsCheckHandleSingle>>> it = observableMap.entrySet().iterator();
+            Iterator<Map.Entry<String, WeakReference<SettingsCheckHandleSingleOnSubscribe>>> it = observableMap.entrySet().iterator();
 
             while(it.hasNext()) {
-                Map.Entry<String, WeakReference<SettingsCheckHandleSingle>> entry = it.next();
+                Map.Entry<String, WeakReference<SettingsCheckHandleSingleOnSubscribe>> entry = it.next();
                 if(entry.getValue().get() == null) { it.remove(); }
             }
         }
@@ -97,7 +97,7 @@ class SettingsCheckHandleSingle extends BaseSingle<Boolean> {
 
                             if (context != null) {
                                 String observableId = UUID.randomUUID().toString();
-                                observableMap.put(observableId, new WeakReference<>(SettingsCheckHandleSingle.this));
+                                observableMap.put(observableId, new WeakReference<>(SettingsCheckHandleSingleOnSubscribe.this));
 
                                 Intent intent = new Intent(context, LocationSettingsActivity.class);
                                 intent.putExtra(LocationSettingsActivity.ARG_STATUS, status);

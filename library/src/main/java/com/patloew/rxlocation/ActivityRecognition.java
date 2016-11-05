@@ -45,7 +45,7 @@ public class ActivityRecognition {
     }
 
     private Single<Status> requestUpdatesInternal(long detectionIntervalMillis, PendingIntent pendingIntent, Long timeout, TimeUnit timeUnit) {
-        return Single.create(new ActivityRequestUpdatesSingle(rxLocation, detectionIntervalMillis, pendingIntent, timeout, timeUnit));
+        return Single.create(new ActivityRequestUpdatesSingleOnSubscribe(rxLocation, detectionIntervalMillis, pendingIntent, timeout, timeUnit));
     }
 
     // Remove Updates
@@ -61,7 +61,7 @@ public class ActivityRecognition {
     }
 
     private Single<Status> removeUpdatesInternal(PendingIntent pendingIntent, Long timeout, TimeUnit timeUnit) {
-        return Single.create(new ActivityRemoveUpdatesSingle(rxLocation, pendingIntent, timeout, timeUnit));
+        return Single.create(new ActivityRemoveUpdatesSingleOnSubscribe(rxLocation, pendingIntent, timeout, timeUnit));
     }
 
 }

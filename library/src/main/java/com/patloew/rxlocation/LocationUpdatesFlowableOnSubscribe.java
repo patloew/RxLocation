@@ -26,13 +26,13 @@ import io.reactivex.FlowableEmitter;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License. */
-class LocationUpdatesFlowable extends BaseFlowable<Location> {
+class LocationUpdatesFlowableOnSubscribe extends RxLocationFlowableOnSubscribe<Location> {
 
     final LocationRequest locationRequest;
     final Looper looper;
     LocationListener locationListener;
 
-    protected LocationUpdatesFlowable(@NonNull RxLocation rxLocation, LocationRequest locationRequest, Looper looper, Long timeout, TimeUnit timeUnit) {
+    protected LocationUpdatesFlowableOnSubscribe(@NonNull RxLocation rxLocation, LocationRequest locationRequest, Looper looper, Long timeout, TimeUnit timeUnit) {
         super(rxLocation, timeout, timeUnit);
         this.locationRequest = locationRequest;
         this.looper = looper;

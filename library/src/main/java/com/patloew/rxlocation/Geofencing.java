@@ -48,7 +48,7 @@ public class Geofencing {
     }
 
     private Single<Status> addInternal(GeofencingRequest geofencingRequest, PendingIntent pendingIntent, Long timeoutTime, TimeUnit timeoutUnit) {
-        return Single.create(new GeofencingAddSingle(rxLocation, geofencingRequest, pendingIntent, timeoutTime, timeoutUnit));
+        return Single.create(new GeofencingAddSingleOnSubscribe(rxLocation, geofencingRequest, pendingIntent, timeoutTime, timeoutUnit));
     }
 
 
@@ -71,6 +71,6 @@ public class Geofencing {
     }
 
     private Single<Status> removeInternal(List<String> geofenceRequestIds, PendingIntent pendingIntent, Long timeoutTime, TimeUnit timeoutUnit) {
-        return Single.create(new GeofencingRemoveSingle(rxLocation, geofenceRequestIds, pendingIntent, timeoutTime, timeoutUnit));
+        return Single.create(new GeofencingRemoveSingleOnSubscribe(rxLocation, geofenceRequestIds, pendingIntent, timeoutTime, timeoutUnit));
     }
 }

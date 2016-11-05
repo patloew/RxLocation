@@ -32,14 +32,14 @@ import java.util.concurrent.TimeUnit;
  * FILE MODIFIED by Patrick Löwenstein, 2016
  *
  */
-abstract class BaseRx<T> {
+abstract class RxLocationBaseOnSubscribe<T> {
     protected final Context ctx;
     final Long timeoutTime;
     final TimeUnit timeoutUnit;
     private final Api<? extends Api.ApiOptions.NotRequiredOptions>[] services;
     private final Scope[] scopes;
 
-    protected BaseRx(@NonNull RxLocation rxLocation, Long timeout, TimeUnit timeUnit) {
+    protected RxLocationBaseOnSubscribe(@NonNull RxLocation rxLocation, Long timeout, TimeUnit timeUnit) {
         this.ctx = rxLocation.ctx;
         this.services = new Api[]{LocationServices.API};
         this.scopes = null;
@@ -53,7 +53,7 @@ abstract class BaseRx<T> {
         }
     }
 
-    protected BaseRx(@NonNull Context ctx, @NonNull Api<? extends Api.ApiOptions.NotRequiredOptions>[] services, Scope[] scopes) {
+    protected RxLocationBaseOnSubscribe(@NonNull Context ctx, @NonNull Api<? extends Api.ApiOptions.NotRequiredOptions>[] services, Scope[] scopes) {
         this.ctx = ctx;
         this.services = services;
         this.scopes = scopes;
@@ -98,8 +98,7 @@ abstract class BaseRx<T> {
         return apiClient;
     }
 
-    protected void onUnsubscribed(GoogleApiClient apiClient) {
-    }
+    protected void onUnsubscribed(GoogleApiClient apiClient) { }
 
     protected abstract class ApiClientConnectionCallbacks implements
             GoogleApiClient.ConnectionCallbacks,

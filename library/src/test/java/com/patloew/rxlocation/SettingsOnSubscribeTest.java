@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 
 @SuppressWarnings("MissingPermission")
 @RunWith(PowerMockRunner.class)
-@PrepareOnlyThisForTest({ LocationSettingsRequest.class, LocationSettingsResult.class, LocationAvailability.class, LocationServices.class, com.google.android.gms.location.ActivityRecognition.class, Status.class, ConnectionResult.class, BaseRx.class })
+@PrepareOnlyThisForTest({ LocationSettingsRequest.class, LocationSettingsResult.class, LocationAvailability.class, LocationServices.class, com.google.android.gms.location.ActivityRecognition.class, Status.class, ConnectionResult.class, RxLocationBaseOnSubscribe.class })
 public class SettingsOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Mock LocationSettingsRequest locationSettingsRequest;
@@ -48,7 +48,7 @@ public class SettingsOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void SettingsCheckSingle_Success() {
-        SettingsCheckSingle single = PowerMockito.spy(new SettingsCheckSingle(rxLocation, locationSettingsRequest, null, null));
+        SettingsCheckSingleOnSubscribe single = PowerMockito.spy(new SettingsCheckSingleOnSubscribe(rxLocation, locationSettingsRequest, null, null));
 
         setPendingResultValue(locationSettingsResult);
         doReturn(status).when(locationSettingsResult).getStatus();
@@ -62,7 +62,7 @@ public class SettingsOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void SettingsCheckSingle_StatusException() {
-        SettingsCheckSingle single = PowerMockito.spy(new SettingsCheckSingle(rxLocation, locationSettingsRequest, null, null));
+        SettingsCheckSingleOnSubscribe single = PowerMockito.spy(new SettingsCheckSingleOnSubscribe(rxLocation, locationSettingsRequest, null, null));
 
         setPendingResultValue(locationSettingsResult);
         doReturn(status).when(locationSettingsResult).getStatus();
@@ -79,7 +79,7 @@ public class SettingsOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void SettingsCheckHandleSingle_Success() {
-        SettingsCheckHandleSingle single = PowerMockito.spy(new SettingsCheckHandleSingle(rxLocation, locationSettingsRequest, null, null));
+        SettingsCheckHandleSingleOnSubscribe single = PowerMockito.spy(new SettingsCheckHandleSingleOnSubscribe(rxLocation, locationSettingsRequest, null, null));
 
         setPendingResultValue(locationSettingsResult);
         doReturn(status).when(locationSettingsResult).getStatus();
@@ -93,7 +93,7 @@ public class SettingsOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void SettingsCheckHandleSingle_ChangeUnavailable() {
-        SettingsCheckHandleSingle single = PowerMockito.spy(new SettingsCheckHandleSingle(rxLocation, locationSettingsRequest, null, null));
+        SettingsCheckHandleSingleOnSubscribe single = PowerMockito.spy(new SettingsCheckHandleSingleOnSubscribe(rxLocation, locationSettingsRequest, null, null));
 
         setPendingResultValue(locationSettingsResult);
         doReturn(status).when(locationSettingsResult).getStatus();
@@ -107,7 +107,7 @@ public class SettingsOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void SettingsCheckHandleSingle_ResolutionRequired_Success() {
-        SettingsCheckHandleSingle single = PowerMockito.spy(new SettingsCheckHandleSingle(rxLocation, locationSettingsRequest, null, null));
+        SettingsCheckHandleSingleOnSubscribe single = PowerMockito.spy(new SettingsCheckHandleSingleOnSubscribe(rxLocation, locationSettingsRequest, null, null));
 
         setPendingResultValue(locationSettingsResult);
         doReturn(status).when(locationSettingsResult).getStatus();
@@ -115,20 +115,20 @@ public class SettingsOnSubscribeTest extends BaseOnSubscribeTest {
         when(settingsApi.checkLocationSettings(apiClient, locationSettingsRequest)).thenReturn(pendingResult);
 
         doAnswer(invocation -> {
-            String key = (String) SettingsCheckHandleSingle.observableMap.keySet().toArray()[0];
-            SettingsCheckHandleSingle.onResolutionResult(key, Activity.RESULT_OK);
+            String key = (String) SettingsCheckHandleSingleOnSubscribe.observableMap.keySet().toArray()[0];
+            SettingsCheckHandleSingleOnSubscribe.onResolutionResult(key, Activity.RESULT_OK);
             return null;
         }).when(ctx).startActivity(any(Intent.class));
 
         setupBaseSingleSuccess(single);
 
         assertSingleValue(Single.create(single).test(), true);
-        assertTrue(SettingsCheckHandleSingle.observableMap.isEmpty());
+        assertTrue(SettingsCheckHandleSingleOnSubscribe.observableMap.isEmpty());
     }
 
     @Test
     public void SettingsCheckHandleSingle_ResolutionRequired_Canceled() {
-        SettingsCheckHandleSingle single = PowerMockito.spy(new SettingsCheckHandleSingle(rxLocation, locationSettingsRequest, null, null));
+        SettingsCheckHandleSingleOnSubscribe single = PowerMockito.spy(new SettingsCheckHandleSingleOnSubscribe(rxLocation, locationSettingsRequest, null, null));
 
         setPendingResultValue(locationSettingsResult);
         doReturn(status).when(locationSettingsResult).getStatus();
@@ -136,20 +136,20 @@ public class SettingsOnSubscribeTest extends BaseOnSubscribeTest {
         when(settingsApi.checkLocationSettings(apiClient, locationSettingsRequest)).thenReturn(pendingResult);
 
         doAnswer(invocation -> {
-            String key = (String) SettingsCheckHandleSingle.observableMap.keySet().toArray()[0];
-            SettingsCheckHandleSingle.onResolutionResult(key, Activity.RESULT_CANCELED);
+            String key = (String) SettingsCheckHandleSingleOnSubscribe.observableMap.keySet().toArray()[0];
+            SettingsCheckHandleSingleOnSubscribe.onResolutionResult(key, Activity.RESULT_CANCELED);
             return null;
         }).when(ctx).startActivity(any(Intent.class));
 
         setupBaseSingleSuccess(single);
 
         assertSingleValue(Single.create(single).test(), false);
-        assertTrue(SettingsCheckHandleSingle.observableMap.isEmpty());
+        assertTrue(SettingsCheckHandleSingleOnSubscribe.observableMap.isEmpty());
     }
 
     @Test
     public void SettingsCheckHandleSingle_StatusException() {
-        SettingsCheckHandleSingle single = PowerMockito.spy(new SettingsCheckHandleSingle(rxLocation, locationSettingsRequest, null, null));
+        SettingsCheckHandleSingleOnSubscribe single = PowerMockito.spy(new SettingsCheckHandleSingleOnSubscribe(rxLocation, locationSettingsRequest, null, null));
 
         setPendingResultValue(locationSettingsResult);
         doReturn(status).when(locationSettingsResult).getStatus();

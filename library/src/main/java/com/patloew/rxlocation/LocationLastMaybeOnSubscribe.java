@@ -1,15 +1,12 @@
 package com.patloew.rxlocation;
 
-import android.app.PendingIntent;
+import android.location.Location;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
 
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.SingleEmitter;
+import io.reactivex.MaybeEmitter;
 
 /* Copyright 2016 Patrick Löwenstein
  *
@@ -24,20 +21,21 @@ import io.reactivex.SingleEmitter;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License. */
-class LocationRemoveUpdatesSingle extends BaseSingle<Status> {
+class LocationLastMaybeOnSubscribe extends RxLocationMaybeOnSubscribe<Location> {
 
-    final PendingIntent pendingIntent;
-
-    protected LocationRemoveUpdatesSingle(@NonNull RxLocation rxLocation, PendingIntent pendingIntent, Long timeout, TimeUnit timeUnit) {
-        super(rxLocation, timeout, timeUnit);
-        this.pendingIntent = pendingIntent;
+    LocationLastMaybeOnSubscribe(@NonNull RxLocation rxLocation) {
+        super(rxLocation, null, null);
     }
 
     @Override
-    protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<Status> emitter) {
-        setupLocationPendingResult(
-                LocationServices.FusedLocationApi.removeLocationUpdates(apiClient, pendingIntent),
-                SingleResultCallBack.get(emitter)
-        );
+    protected void onGoogleApiClientReady(GoogleApiClient apiClient, MaybeEmitter<Location> emitter) {
+        //noinspection MissingPermission
+        Location location = LocationServices.FusedLocationApi.getLastLocation(apiClient);
+
+        if (location != null) {
+            emitter.onSuccess(location);
+        } else {
+            emitter.onComplete();
+        }
     }
 }

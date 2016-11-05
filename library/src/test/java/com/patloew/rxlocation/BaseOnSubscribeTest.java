@@ -57,52 +57,52 @@ public abstract class BaseOnSubscribeTest extends BaseTest {
     }
 
     // Mock GoogleApiClient connection success behaviour
-    protected <T> void setupBaseFlowableSuccess(final BaseFlowable<T> baseFlowable) {
-        setupBaseFlowableSuccess(baseFlowable, apiClient);
+    protected <T> void setupBaseFlowableSuccess(final RxLocationFlowableOnSubscribe<T> rxLocationFlowableOnSubscribe) {
+        setupBaseFlowableSuccess(rxLocationFlowableOnSubscribe, apiClient);
     }
 
     // Mock GoogleApiClient connection success behaviour
-    protected <T> void setupBaseFlowableSuccess(final BaseFlowable<T> baseFlowable, final GoogleApiClient apiClient) {
+    protected <T> void setupBaseFlowableSuccess(final RxLocationFlowableOnSubscribe<T> rxLocationFlowableOnSubscribe, final GoogleApiClient apiClient) {
         doAnswer(invocation -> {
-            final FlowableEmitter<T> subscriber = ((BaseFlowable.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
+            final FlowableEmitter<T> subscriber = ((RxLocationFlowableOnSubscribe.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
 
             doAnswer(invocation1 -> {
-                baseFlowable.onGoogleApiClientReady(apiClient, subscriber);
+                rxLocationFlowableOnSubscribe.onGoogleApiClientReady(apiClient, subscriber);
                 return null;
             }).when(apiClient).connect();
 
             return apiClient;
-        }).when(baseFlowable).createApiClient(Matchers.any(BaseRx.ApiClientConnectionCallbacks.class));
+        }).when(rxLocationFlowableOnSubscribe).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
     }
 
     // Mock GoogleApiClient connection success behaviour
-    protected <T> void setupBaseSingleSuccess(final BaseSingle<T> baseSingle) {
-        setupBaseSingleSuccess(baseSingle, apiClient);
+    protected <T> void setupBaseSingleSuccess(final RxLocationSingleOnSubscribe<T> rxLocationSingleOnSubscribe) {
+        setupBaseSingleSuccess(rxLocationSingleOnSubscribe, apiClient);
     }
 
     // Mock GoogleApiClient connection success behaviour
-    protected <T> void setupBaseSingleSuccess(final BaseSingle<T> baseSingle, final GoogleApiClient apiClient) {
+    protected <T> void setupBaseSingleSuccess(final RxLocationSingleOnSubscribe<T> rxLocationSingleOnSubscribe, final GoogleApiClient apiClient) {
         doAnswer(invocation -> {
-            final SingleEmitter<T> subscriber = ((BaseSingle.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
+            final SingleEmitter<T> subscriber = ((RxLocationSingleOnSubscribe.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
 
             doAnswer(invocation1 -> {
-                baseSingle.onGoogleApiClientReady(apiClient, subscriber);
+                rxLocationSingleOnSubscribe.onGoogleApiClientReady(apiClient, subscriber);
                 return null;
             }).when(apiClient).connect();
 
             return apiClient;
-        }).when(baseSingle).createApiClient(Matchers.any(BaseRx.ApiClientConnectionCallbacks.class));
+        }).when(rxLocationSingleOnSubscribe).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
     }
 
     // Mock GoogleApiClient connection success behaviour
-    protected <T> void setupBaseMaybeSuccess(final BaseMaybe<T> baseSingle) {
+    protected <T> void setupBaseMaybeSuccess(final RxLocationMaybeOnSubscribe<T> baseSingle) {
         setupBaseMaybeSuccess(baseSingle, apiClient);
     }
 
     // Mock GoogleApiClient connection success behaviour
-    protected <T> void setupBaseMaybeSuccess(final BaseMaybe<T> baseSingle, final GoogleApiClient apiClient) {
+    protected <T> void setupBaseMaybeSuccess(final RxLocationMaybeOnSubscribe<T> baseSingle, final GoogleApiClient apiClient) {
         doAnswer(invocation -> {
-            final MaybeEmitter<T> subscriber = ((BaseMaybe.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
+            final MaybeEmitter<T> subscriber = ((RxLocationMaybeOnSubscribe.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
 
             doAnswer(invocation1 -> {
                 baseSingle.onGoogleApiClientReady(apiClient, subscriber);
@@ -110,13 +110,13 @@ public abstract class BaseOnSubscribeTest extends BaseTest {
             }).when(apiClient).connect();
 
             return apiClient;
-        }).when(baseSingle).createApiClient(Matchers.any(BaseRx.ApiClientConnectionCallbacks.class));
+        }).when(baseSingle).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
     }
 
     // Mock GoogleApiClient connection error behaviour
-    protected <T> void setupBaseSingleError(final BaseSingle<T> baseSingle) {
+    protected <T> void setupBaseSingleError(final RxLocationSingleOnSubscribe<T> rxLocationSingleOnSubscribe) {
         doAnswer(invocation -> {
-            final SingleEmitter<T> subscriber = ((BaseSingle.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
+            final SingleEmitter<T> subscriber = ((RxLocationSingleOnSubscribe.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
 
             doAnswer(invocation1 -> {
                 subscriber.onError(new GoogleAPIConnectionException("Error connecting to GoogleApiClient.", connectionResult));
@@ -124,7 +124,7 @@ public abstract class BaseOnSubscribeTest extends BaseTest {
             }).when(apiClient).connect();
 
             return apiClient;
-        }).when(baseSingle).createApiClient(Matchers.any(BaseRx.ApiClientConnectionCallbacks.class));
+        }).when(rxLocationSingleOnSubscribe).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
     }
 
     @SuppressWarnings("unchecked")

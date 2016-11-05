@@ -1,13 +1,13 @@
 package com.patloew.rxlocation;
 
 import android.app.PendingIntent;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.SingleEmitter;
@@ -25,25 +25,23 @@ import io.reactivex.SingleEmitter;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License. */
-class GeofencingRemoveSingle extends BaseSingle<Status> {
+class LocationRequestUpdatesSingleOnSubscribe extends RxLocationSingleOnSubscribe<Status> {
 
-    final List<String> geofenceRequestIds;
+    final LocationRequest locationRequest;
     final PendingIntent pendingIntent;
 
-    GeofencingRemoveSingle(RxLocation rxLocation, List<String> geofenceRequestIds, PendingIntent pendingIntent, Long timeoutTime, TimeUnit timeoutUnit) {
-        super(rxLocation, timeoutTime, timeoutUnit);
-        this.geofenceRequestIds = geofenceRequestIds;
+    LocationRequestUpdatesSingleOnSubscribe(@NonNull RxLocation rxLocation, LocationRequest locationRequest, PendingIntent pendingIntent, Long timeout, TimeUnit timeUnit) {
+        super(rxLocation, timeout, timeUnit);
+        this.locationRequest = locationRequest;
         this.pendingIntent = pendingIntent;
     }
 
     @Override
     protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<Status> emitter) {
-        ResultCallback<Status> resultCallback = SingleResultCallBack.get(emitter);
-
-        if (geofenceRequestIds != null) {
-            setupLocationPendingResult(LocationServices.GeofencingApi.removeGeofences(apiClient, geofenceRequestIds), resultCallback);
-        } else {
-            setupLocationPendingResult(LocationServices.GeofencingApi.removeGeofences(apiClient, pendingIntent), resultCallback);
-        }
+        //noinspection MissingPermission
+        setupLocationPendingResult(
+                LocationServices.FusedLocationApi.requestLocationUpdates(apiClient, locationRequest, pendingIntent),
+                SingleResultCallBack.get(emitter)
+        );
     }
 }

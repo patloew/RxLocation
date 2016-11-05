@@ -1,10 +1,11 @@
 package com.patloew.rxlocation;
 
+import android.app.PendingIntent;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.ActivityRecognition;
 
 import java.util.concurrent.TimeUnit;
 
@@ -23,16 +24,20 @@ import io.reactivex.SingleEmitter;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License. */
-class LocationFlushSingle extends BaseSingle<Status> {
+class ActivityRemoveUpdatesSingleOnSubscribe extends RxLocationSingleOnSubscribe<Status> {
 
-    LocationFlushSingle(@NonNull RxLocation rxLocation, Long timeout, TimeUnit timeUnit) {
+    final PendingIntent pendingIntent;
+
+    ActivityRemoveUpdatesSingleOnSubscribe(@NonNull RxLocation rxLocation, PendingIntent pendingIntent, Long timeout, TimeUnit timeUnit) {
         super(rxLocation, timeout, timeUnit);
+        this.pendingIntent = pendingIntent;
     }
 
     @Override
     protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<Status> emitter) {
+        //noinspection MissingPermission
         setupLocationPendingResult(
-                LocationServices.FusedLocationApi.flushLocations(apiClient),
+                ActivityRecognition.ActivityRecognitionApi.removeActivityUpdates(apiClient, pendingIntent),
                 SingleResultCallBack.get(emitter)
         );
     }

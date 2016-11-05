@@ -27,13 +27,13 @@ public abstract class BaseTest {
         rxLocation = new RxLocation(ctx);
     }
 
-    protected static final void assertNoTimeoutSet(BaseRx baseRx) {
-        assertNull(baseRx.timeoutTime);
-        assertNull(baseRx.timeoutUnit);
+    protected static final void assertNoTimeoutSet(RxLocationBaseOnSubscribe rxLocationBaseOnSubscribe) {
+        assertNull(rxLocationBaseOnSubscribe.timeoutTime);
+        assertNull(rxLocationBaseOnSubscribe.timeoutUnit);
     }
 
-    protected static final void assertTimeoutSet(BaseRx baseRx) {
-        assertEquals(TIMEOUT_TIME, (long) baseRx.timeoutTime);
-        assertEquals(TIMEOUT_TIMEUNIT, baseRx.timeoutUnit);
+    protected static final void assertTimeoutSet(RxLocationBaseOnSubscribe rxLocationBaseOnSubscribe) {
+        assertEquals(TIMEOUT_TIME, (long) rxLocationBaseOnSubscribe.timeoutTime);
+        assertEquals(TIMEOUT_TIMEUNIT, rxLocationBaseOnSubscribe.timeoutUnit);
     }
 }

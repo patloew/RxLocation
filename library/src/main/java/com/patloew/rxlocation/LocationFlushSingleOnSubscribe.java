@@ -1,10 +1,9 @@
 package com.patloew.rxlocation;
 
-import android.app.PendingIntent;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.concurrent.TimeUnit;
@@ -24,22 +23,16 @@ import io.reactivex.SingleEmitter;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License. */
-class GeofencingAddSingle extends BaseSingle<Status> {
+class LocationFlushSingleOnSubscribe extends RxLocationSingleOnSubscribe<Status> {
 
-    final GeofencingRequest geofencingRequest;
-    final PendingIntent pendingIntent;
-
-    GeofencingAddSingle(RxLocation rxLocation, GeofencingRequest geofencingRequest, PendingIntent pendingIntent, Long timeoutTime, TimeUnit timeoutUnit) {
-        super(rxLocation, timeoutTime, timeoutUnit);
-        this.geofencingRequest = geofencingRequest;
-        this.pendingIntent = pendingIntent;
+    LocationFlushSingleOnSubscribe(@NonNull RxLocation rxLocation, Long timeout, TimeUnit timeUnit) {
+        super(rxLocation, timeout, timeUnit);
     }
 
     @Override
     protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<Status> emitter) {
-        //noinspection MissingPermission
         setupLocationPendingResult(
-                LocationServices.GeofencingApi.addGeofences(apiClient, geofencingRequest, pendingIntent),
+                LocationServices.FusedLocationApi.flushLocations(apiClient),
                 SingleResultCallBack.get(emitter)
         );
     }

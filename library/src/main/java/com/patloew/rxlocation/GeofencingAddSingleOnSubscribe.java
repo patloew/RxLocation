@@ -1,11 +1,10 @@
 package com.patloew.rxlocation;
 
 import android.app.PendingIntent;
-import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.concurrent.TimeUnit;
@@ -25,14 +24,14 @@ import io.reactivex.SingleEmitter;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License. */
-class LocationRequestUpdatesSingle extends BaseSingle<Status> {
+class GeofencingAddSingleOnSubscribe extends RxLocationSingleOnSubscribe<Status> {
 
-    final LocationRequest locationRequest;
+    final GeofencingRequest geofencingRequest;
     final PendingIntent pendingIntent;
 
-    protected LocationRequestUpdatesSingle(@NonNull RxLocation rxLocation, LocationRequest locationRequest, PendingIntent pendingIntent, Long timeout, TimeUnit timeUnit) {
-        super(rxLocation, timeout, timeUnit);
-        this.locationRequest = locationRequest;
+    GeofencingAddSingleOnSubscribe(RxLocation rxLocation, GeofencingRequest geofencingRequest, PendingIntent pendingIntent, Long timeoutTime, TimeUnit timeoutUnit) {
+        super(rxLocation, timeoutTime, timeoutUnit);
+        this.geofencingRequest = geofencingRequest;
         this.pendingIntent = pendingIntent;
     }
 
@@ -40,7 +39,7 @@ class LocationRequestUpdatesSingle extends BaseSingle<Status> {
     protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<Status> emitter) {
         //noinspection MissingPermission
         setupLocationPendingResult(
-                LocationServices.FusedLocationApi.requestLocationUpdates(apiClient, locationRequest, pendingIntent),
+                LocationServices.GeofencingApi.addGeofences(apiClient, geofencingRequest, pendingIntent),
                 SingleResultCallBack.get(emitter)
         );
     }

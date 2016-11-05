@@ -24,12 +24,12 @@ import io.reactivex.SingleEmitter;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License. */
-class ActivityRequestUpdatesSingle extends BaseSingle<Status> {
+class ActivityRequestUpdatesSingleOnSubscribe extends RxLocationSingleOnSubscribe<Status> {
 
     final long detectionIntervalMillis;
     final PendingIntent pendingIntent;
 
-    ActivityRequestUpdatesSingle(@NonNull RxLocation rxLocation, long detectionIntervalMillis, PendingIntent pendingIntent, Long timeout, TimeUnit timeUnit) {
+    ActivityRequestUpdatesSingleOnSubscribe(@NonNull RxLocation rxLocation, long detectionIntervalMillis, PendingIntent pendingIntent, Long timeout, TimeUnit timeUnit) {
         super(rxLocation, timeout, timeUnit);
         this.detectionIntervalMillis = detectionIntervalMillis;
         this.pendingIntent = pendingIntent;

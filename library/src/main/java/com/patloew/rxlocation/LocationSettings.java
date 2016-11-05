@@ -57,7 +57,7 @@ public class LocationSettings {
     }
 
     private Single<LocationSettingsResult> checkInternal(LocationSettingsRequest locationSettingsRequest, Long timeoutTime, TimeUnit timeoutUnit) {
-        return Single.create(new SettingsCheckSingle(rxLocation, locationSettingsRequest, timeoutTime, timeoutUnit));
+        return Single.create(new SettingsCheckSingleOnSubscribe(rxLocation, locationSettingsRequest, timeoutTime, timeoutUnit));
     }
 
     // Check and handle resolution
@@ -102,7 +102,7 @@ public class LocationSettings {
 
 
     private Single<Boolean> checkAndHandleResolutionInternal(LocationSettingsRequest locationSettingsRequest, Long timeoutTime, TimeUnit timeoutUnit) {
-        return Single.create(new SettingsCheckHandleSingle(rxLocation, locationSettingsRequest, timeoutTime, timeoutUnit));
+        return Single.create(new SettingsCheckHandleSingleOnSubscribe(rxLocation, locationSettingsRequest, timeoutTime, timeoutUnit));
     }
 
 }
