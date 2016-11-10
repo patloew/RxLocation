@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             if(apiAvailability.isUserResolvableError(status)) {
                 apiAvailability.getErrorDialog(this, status, 1).show();
             } else {
-                Snackbar.make(lastUpdate, "Google Play Services unavailable. This app will not work", Snackbar.LENGTH_INDEFINITE);
+                Snackbar.make(lastUpdate, "Google Play Services unavailable. This app will not work", Snackbar.LENGTH_INDEFINITE).show();
             }
         }
     }

@@ -37,7 +37,26 @@ The following APIs are wrapped by this library:
 
 Checking the location settings is simplified with this library, by providing a `Single<Boolean>` via `rxLocation.settings().checkAndHandleResolution(locationRequest)`, which handles showing the resolution dialog if the location settings do not satisfy your request. It returns `true` if the settings are satisfied (optionally after showing the dialog, if a resolution is possible), and `false` otherwise. If you want to handle the `LocationSettingsResult` yourself, you can do so via `rxLocation.settings().check(locationRequest)`.
 
-An optional global default timeout for all Location API requests made through the library can be set via `rxLocation.setDefaultTimeout(...)`. In addition, timeouts can be set when creating a new Observable by providing timeout parameters, e.g. `rxLocation.location().updates(locationRequest, 15, TimeUnit.SECONDS)`. These parameters override the default timeout. When a timeout occurs, a StatusException is provided via `onError()`. The RxJava timeout operators can be used instead, but these do not cancel the Location API request immediately.
+An optional global default timeout for all Location API requests made through the library can be set via `rxLocation.setDefaultTimeout(...)`. In addition, timeouts can be set when creating a new Observable by providing timeout parameters, e.g. `rxLocation.geofencing().add(geofencingRequest, pendingIntent, 15, TimeUnit.SECONDS)`. These parameters override the default timeout. When a timeout occurs, a StatusException is provided via `onError()`. Keep in mind that these timeouts only apply to calls to the Location API, e.g. when registering a location update listener. As an example, the timeout provided to `rxLocation.location().updates(locationRequest, 15, TimeUnit.Seconds)` does *not* mean that you will not receive location updates anymore after 15 seconds. Use `setExpirationDuration()` on your locationRequest for this use case.
+
+Don't forget to dispose of your Subscriber/Observer when you are finished:
+
+```java
+Disposable disposable = rxLocation.location().updates(locationRequest).subscribe();
+
+// Dispose of your Observer when you no longer need updates
+disposable.dispose();
+```
+
+As an alternative, multiple Disposables can be collected to dipose of at once via `CompositeDisposable`:
+
+```java
+CompositeDisposable disposable = new CompositeDisposable();
+disposable.add(rxLocation.location().updates(locationRequest).subscribe());
+
+// Dispose of all collected Disposables at once, e.g. in onDestroy()
+disposable.clear();
+```
 
 You can also obtain a `Single<GoogleApiClient>`, which connects on subscribe and disconnects on unsubscribe via `GoogleAPIClientSingle.create(...)`.
 
