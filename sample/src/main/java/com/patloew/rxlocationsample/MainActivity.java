@@ -5,8 +5,14 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.mikepenz.aboutlibraries.Libs;
+import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.patloew.rxlocation.RxLocation;
 
 import java.text.DateFormat;
@@ -60,9 +66,50 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        checkPlayServicesAvailable();
+    }
+
+    private void checkPlayServicesAvailable() {
+        final GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        final int status = apiAvailability.isGooglePlayServicesAvailable(this);
+
+        if(status != ConnectionResult.SUCCESS) {
+            if(apiAvailability.isUserResolvableError(status)) {
+                apiAvailability.getErrorDialog(this, status, 1).show();
+            } else {
+                Snackbar.make(lastUpdate, "Google Play Services unavailable. This app will not work", Snackbar.LENGTH_INDEFINITE);
+            }
+        }
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         presenter.detachView();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.menu_licenses) {
+            new LibsBuilder()
+                    .withFields(Libs.toStringArray(R.string.class.getFields()))
+                    .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                    .withActivityTitle("Open Source Licenses")
+                    .withLicenseShown(true)
+                    .start(this);
+
+            return true;
+        }
+
+        return false;
     }
 
     // View Interface
