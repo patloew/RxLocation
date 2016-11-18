@@ -77,7 +77,7 @@ A basic sample app is available in the `sample` project.
 The lib is available on jCenter. Add the following to your `build.gradle`:
 
 	dependencies {
-	    compile 'com.patloew.rxlocation:rxlocation:1.0.0'
+	    compile 'com.patloew.rxlocation:rxlocation:1.0.1'
 	}
 
 # Testing
