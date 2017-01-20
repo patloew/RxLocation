@@ -70,7 +70,7 @@ public class LocationSettings {
     }
 
     public Single<Boolean> checkAndHandleResolution(@NonNull LocationRequest locationRequest) {
-        return checkAndHandleResolutionInternal(getLocationSettingsRequestBuilder().addLocationRequest(locationRequest).build(), null, null);
+        return checkAndHandleResolutionInternal(getLocationSettingsRequestBuilder().addLocationRequest(locationRequest).setAlwaysShow(true).build(), null, null);
     }
 
 
