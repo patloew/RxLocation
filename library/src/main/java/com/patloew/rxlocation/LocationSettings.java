@@ -41,11 +41,11 @@ public class LocationSettings {
     // Check
 
     public Single<LocationSettingsResult> check(@NonNull LocationRequest locationRequest) {
-        return checkInternal(getLocationSettingsRequestBuilder().addLocationRequest(locationRequest).build(), null, null);
+        return checkInternal(getLocationSettingsRequestBuilder().addLocationRequest(locationRequest).setAlwaysShow(true).build(), null, null);
     }
 
     public Single<LocationSettingsResult> check(@NonNull LocationRequest locationRequest, long timeoutTime, @NonNull TimeUnit timeoutUnit) {
-        return checkInternal(getLocationSettingsRequestBuilder().addLocationRequest(locationRequest).build(), timeoutTime, timeoutUnit);
+        return checkInternal(getLocationSettingsRequestBuilder().addLocationRequest(locationRequest).setAlwaysShow(true).build(), timeoutTime, timeoutUnit);
     }
 
     public Single<LocationSettingsResult> check(@NonNull LocationSettingsRequest locationSettingsRequest) {
@@ -79,7 +79,7 @@ public class LocationSettings {
     }
 
     public Single<Boolean> checkAndHandleResolution(@NonNull LocationRequest locationRequest, long timeoutTime, @NonNull TimeUnit timeoutUnit) {
-        return checkAndHandleResolutionInternal(getLocationSettingsRequestBuilder().addLocationRequest(locationRequest).build(), timeoutTime, timeoutUnit);
+        return checkAndHandleResolutionInternal(getLocationSettingsRequestBuilder().addLocationRequest(locationRequest).setAlwaysShow(true).build(), timeoutTime, timeoutUnit);
     }
 
 
