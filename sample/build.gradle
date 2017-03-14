@@ -3,12 +3,12 @@ apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.patloew.rxfitsample"
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0.0"
     }
@@ -37,16 +37,13 @@ retrolambda {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    compile "com.android.support:design:25.0.1"
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile "com.android.support:design:25.2.0"
 
     compile project(':library')
     //compile 'com.patloew.rxlocation:rxlocation:1.0.1'
 
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
-
-    compile 'com.google.android.gms:play-services-location:9.8.0'
 
     compile('com.mikepenz:aboutlibraries:5.8.5@aar') {
         transitive = true
