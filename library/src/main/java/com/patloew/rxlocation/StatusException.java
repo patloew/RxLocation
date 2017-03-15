@@ -1,5 +1,6 @@
 package com.patloew.rxlocation;
 
+import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.Status;
 
 /* Copyright (C) 2015 Michał Charmas (http://blog.charmas.pl)
@@ -15,16 +16,25 @@ import com.google.android.gms.common.api.Status;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * ------------
+ *
+ *
+ * FILE MODIFIED by Patrick Löwenstein 2017
  */
-public class StatusException extends Exception {
-    private final Status status;
+public class StatusException extends RuntimeException {
+    private final Result result;
 
-    public StatusException(Status status) {
-        super(status.toString());
-        this.status = status;
+    public StatusException(Result result) {
+        super(result.getStatus().toString());
+        this.result = result;
+    }
+
+    public Result getResult() {
+        return result;
     }
 
     public Status getStatus() {
-        return status;
+        return result.getStatus();
     }
 }

@@ -5,18 +5,18 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.patloew.rxlocation'
-version = '1.0.1'
+version = '1.0.2'
 project.archivesBaseName = 'rxlocation'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 14
         targetSdkVersion 25
         versionCode 2
-        versionName "1.0.1"
+        versionName "1.0.2"
     }
     buildTypes {
         release {
@@ -43,8 +43,8 @@ retrolambda {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
-    compile 'com.google.android.gms:play-services-location:9.8.0'
+    compile 'io.reactivex.rxjava2:rxjava:2.0.7'
+    compile 'com.google.android.gms:play-services-location:10.2.0'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.10.19'

@@ -118,7 +118,7 @@ class SettingsCheckHandleSingleOnSubscribe extends RxLocationSingleOnSubscribe<B
                             break;
 
                         default:
-                            emitter.onError(new StatusException(status));
+                            emitter.onError(new StatusException(result));
                             break;
                     }
                 }

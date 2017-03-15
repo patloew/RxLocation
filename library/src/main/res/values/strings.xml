@@ -9,7 +9,7 @@
     <string name="library_rxlocation_libraryName">RxLocation</string>
     <string name="library_rxlocation_libraryDescription">This library wraps the Location APIs in RxJava 2 Observables, Singles and Maybes. No more managing GoogleApiClients! Also, the resolution of the location settings check is optionally handled by the lib.</string>
     <string name="library_rxlocation_libraryWebsite">https://github.com/patloew/RxLocation</string>
-    <string name="library_rxlocation_libraryVersion">1.0.0</string>
+    <string name="library_rxlocation_libraryVersion">1.0.2</string>
     <!-- OpenSource section -->
     <string name="library_rxlocation_isOpenSource">true</string>
     <string name="library_rxlocation_repositoryLink">https://github.com/patloew/RxLocation</string>

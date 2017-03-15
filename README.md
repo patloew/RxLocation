@@ -1,6 +1,6 @@
 # Reactive Location API Library for Android
 
-[![Build Status](https://travis-ci.org/patloew/RxLocation.svg?branch=master)](https://travis-ci.org/patloew/RxLocation) [![codecov](https://codecov.io/gh/patloew/RxLocation/branch/master/graph/badge.svg)](https://codecov.io/gh/patloew/RxLocation) [![Download](https://api.bintray.com/packages/patloew/maven/RxLocation/images/download.svg) ](https://bintray.com/patloew/maven/RxLocation/_latestVersion) [![API](https://img.shields.io/badge/API-9%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=9)
+[![Build Status](https://travis-ci.org/patloew/RxLocation.svg?branch=master)](https://travis-ci.org/patloew/RxLocation) [![codecov](https://codecov.io/gh/patloew/RxLocation/branch/master/graph/badge.svg)](https://codecov.io/gh/patloew/RxLocation) [![Download](https://api.bintray.com/packages/patloew/maven/RxLocation/images/download.svg) ](https://bintray.com/patloew/maven/RxLocation/_latestVersion) [![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
 
 This library wraps the Location APIs in [RxJava 2](https://github.com/ReactiveX/RxJava/tree/2.x) Observables, Singles, Maybes and Completables. No more managing GoogleApiClients! Also, the resolution of the location settings check is optionally handled by the lib.
 
@@ -68,6 +68,8 @@ The following Exceptions are thrown in the lib and provided via `onError()`:
 * `SecurityException`: When you try to call an API without proper permissions.
 * `LocationSettingsNotSatisfiedException`: When you use `rxLocation.settings().checkAndHandleResolutionCompletable(...)` and the location settings were not satisfied, even after handling the resolution.
 
+When using the Geocoding component of RxLocation, exceptions can be thrown even after disposing, which can lead to app crashes. To prevent this, install a global `RxJavaPlugins.setErrorHandler()`, e.g. in your Application class.
+
 # Sample
 
 A basic sample app is available in the `sample` project.
@@ -77,7 +79,7 @@ A basic sample app is available in the `sample` project.
 The lib is available on jCenter. Add the following to your `build.gradle`:
 
 	dependencies {
-	    compile 'com.patloew.rxlocation:rxlocation:1.0.1'
+	    compile 'com.patloew.rxlocation:rxlocation:1.0.2'
 	}
 
 # Testing

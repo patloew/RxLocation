@@ -45,7 +45,7 @@ class SingleResultCallBack<T extends Result, R> implements ResultCallback<T> {
     @Override
     public void onResult(@NonNull T result) {
         if (!result.getStatus().isSuccess()) {
-            emitter.onError(new StatusException(result.getStatus()));
+            emitter.onError(new StatusException(result));
         } else {
             try {
                 emitter.onSuccess(mapper.apply(result));
