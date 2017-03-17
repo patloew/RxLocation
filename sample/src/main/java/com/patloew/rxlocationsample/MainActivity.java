@@ -91,6 +91,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MyApplication.getRefWatcher().watch(presenter);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;

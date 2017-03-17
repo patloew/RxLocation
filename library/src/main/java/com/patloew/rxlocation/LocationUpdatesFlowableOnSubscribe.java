@@ -30,7 +30,7 @@ class LocationUpdatesFlowableOnSubscribe extends RxLocationFlowableOnSubscribe<L
 
     final LocationRequest locationRequest;
     final Looper looper;
-    LocationListener locationListener;
+    RxLocationListener locationListener;
 
     protected LocationUpdatesFlowableOnSubscribe(@NonNull RxLocation rxLocation, LocationRequest locationRequest, Looper looper, Long timeout, TimeUnit timeUnit) {
         super(rxLocation, timeout, timeUnit);
@@ -40,7 +40,7 @@ class LocationUpdatesFlowableOnSubscribe extends RxLocationFlowableOnSubscribe<L
 
     @Override
     protected void onGoogleApiClientReady(GoogleApiClient apiClient, FlowableEmitter<Location> emitter) {
-        locationListener = emitter::onNext;
+        locationListener = new RxLocationListener(emitter);
 
         //noinspection MissingPermission
         setupLocationPendingResult(
@@ -52,5 +52,25 @@ class LocationUpdatesFlowableOnSubscribe extends RxLocationFlowableOnSubscribe<L
     @Override
     protected void onUnsubscribed(GoogleApiClient apiClient) {
         LocationServices.FusedLocationApi.removeLocationUpdates(apiClient, locationListener);
+        locationListener.onUnsubscribed();
+        locationListener = null;
+    }
+
+    static class RxLocationListener implements LocationListener {
+
+        private FlowableEmitter<Location> emitter;
+
+        RxLocationListener(FlowableEmitter<Location> emitter) {
+            this.emitter = emitter;
+        }
+
+        void onUnsubscribed() {
+            emitter = null;
+        }
+
+        @Override
+        public void onLocationChanged(Location location) {
+            if(emitter != null) { emitter.onNext(location); }
+        }
     }
 }
