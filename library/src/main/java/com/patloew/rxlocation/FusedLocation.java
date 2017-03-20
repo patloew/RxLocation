@@ -62,6 +62,11 @@ public class FusedLocation {
         return Maybe.create(new LocationLastMaybeOnSubscribe(rxLocation));
     }
 
+    @RequiresPermission(anyOf = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION})
+    public Maybe<Location> lastLocationOf() {
+        return Maybe.create(new LocationLastMaybeOfOnSubscribe(rxLocation));
+    }
+
 
     // Location Availability
 

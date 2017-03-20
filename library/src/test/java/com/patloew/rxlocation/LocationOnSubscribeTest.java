@@ -128,6 +128,29 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
         assertNoValue(Maybe.create(maybe).test());
     }
 
+    @Test
+    public void LocationLastMaybeOf_Success() {
+        LocationLastMaybeOfOnSubscribe maybe = PowerMockito.spy(new LocationLastMaybeOfOnSubscribe(rxLocation));
+
+        Location location = Mockito.mock(Location.class);
+        when(fusedLocationProviderApi.getLastLocation(apiClient)).thenReturn(location);
+
+        setupBaseMaybeSuccess(maybe);
+
+        assertSingleValue(Maybe.create(maybe).test(), location);
+    }
+
+    @Test
+    public void LocationLastMaybeOf_Null_Error() {
+        LocationLastMaybeOfOnSubscribe maybe = PowerMockito.spy(new LocationLastMaybeOfOnSubscribe(rxLocation));
+
+        when(fusedLocationProviderApi.getLocationAvailability(apiClient)).thenReturn(null);
+
+        setupBaseMaybeSuccess(maybe);
+
+        assertError(Maybe.create(maybe).test(), LocationUnavailableException.class);
+    }
+
     // LocationRemoveUpdatesSingle
 
     @Test
