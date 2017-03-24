@@ -7,8 +7,9 @@ import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 
-import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
 
 /* Copyright (C) 2015 Michał Charmas (http://blog.charmas.pl)
  *
@@ -29,23 +30,23 @@ import io.reactivex.SingleEmitter;
  * FILE MODIFIED by Patrick Löwenstein, 2016
  *
  */
-public class GoogleAPIClientSingle extends RxLocationSingleOnSubscribe<GoogleApiClient> {
+public class GoogleApiClientFlowable extends RxLocationFlowableOnSubscribe<GoogleApiClient> {
 
-    GoogleAPIClientSingle(Context ctx, Api<? extends Api.ApiOptions.NotRequiredOptions>[] apis, Scope[] scopes) {
+    GoogleApiClientFlowable(Context ctx, Api<? extends Api.ApiOptions.NotRequiredOptions>[] apis, Scope[] scopes) {
         super(ctx, apis, scopes);
     }
 
     @SafeVarargs
-    public static Single<GoogleApiClient> create(@NonNull Context context, @NonNull Api<? extends Api.ApiOptions.NotRequiredOptions>... apis) {
-        return Single.create(new GoogleAPIClientSingle(context, apis, null));
+    public static Flowable<GoogleApiClient> create(@NonNull Context context, @NonNull Api<? extends Api.ApiOptions.NotRequiredOptions>... apis) {
+        return Flowable.create(new GoogleApiClientFlowable(context, apis, null), BackpressureStrategy.LATEST);
     }
 
-    public static Single<GoogleApiClient> create(@NonNull Context context, @NonNull Api<? extends Api.ApiOptions.NotRequiredOptions>[] apis, Scope[] scopes) {
-        return Single.create(new GoogleAPIClientSingle(context, apis, scopes));
+    public static Flowable<GoogleApiClient> create(@NonNull Context context, @NonNull Api<? extends Api.ApiOptions.NotRequiredOptions>[] apis, Scope[] scopes) {
+        return Flowable.create(new GoogleApiClientFlowable(context, apis, scopes), BackpressureStrategy.LATEST);
     }
 
     @Override
-    protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<GoogleApiClient> emitter) {
-        emitter.onSuccess(apiClient);
+    protected void onGoogleApiClientReady(GoogleApiClient apiClient, FlowableEmitter<GoogleApiClient> emitter) {
+        emitter.onNext(apiClient);
     }
 }

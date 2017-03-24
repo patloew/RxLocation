@@ -25,6 +25,7 @@ import io.reactivex.FlowableEmitter;
 import io.reactivex.MaybeEmitter;
 import io.reactivex.SingleEmitter;
 import io.reactivex.observers.TestObserver;
+import io.reactivex.subscribers.TestSubscriber;
 
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
@@ -119,12 +120,26 @@ public abstract class BaseOnSubscribeTest extends BaseTest {
             final SingleEmitter<T> subscriber = ((RxLocationSingleOnSubscribe.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
 
             doAnswer(invocation1 -> {
-                subscriber.onError(new GoogleAPIConnectionException("Error connecting to GoogleApiClient.", connectionResult));
+                subscriber.onError(new GoogleApiConnectionException("Error connecting to GoogleApiClient.", connectionResult));
                 return null;
             }).when(apiClient).connect();
 
             return apiClient;
         }).when(rxLocationSingleOnSubscribe).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
+    }
+
+    // Mock GoogleApiClient connection error behaviour
+    protected <T> void setupBaseFlowableError(final RxLocationFlowableOnSubscribe<T> rxLocationFlowableOnSubscribe) {
+        doAnswer(invocation -> {
+            final FlowableEmitter<T> subscriber = ((RxLocationFlowableOnSubscribe.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
+
+            doAnswer(invocation1 -> {
+                subscriber.onError(new GoogleApiConnectionException("Error connecting to GoogleApiClient.", connectionResult));
+                return null;
+            }).when(apiClient).connect();
+
+            return apiClient;
+        }).when(rxLocationFlowableOnSubscribe).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
     }
 
     @SuppressWarnings("unchecked")
@@ -140,8 +155,19 @@ public abstract class BaseOnSubscribeTest extends BaseTest {
         sub.assertNoValues();
     }
 
+    protected static void assertError(TestSubscriber sub, Class<? extends Throwable> errorClass) {
+        sub.assertError(errorClass);
+        sub.assertNoValues();
+    }
+
     @SuppressWarnings("unchecked")
     protected static void assertSingleValue(TestObserver sub, Object value) {
+        sub.assertComplete();
+        sub.assertValue(value);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected static void assertSingleValue(TestSubscriber sub, Object value) {
         sub.assertComplete();
         sub.assertValue(value);
     }

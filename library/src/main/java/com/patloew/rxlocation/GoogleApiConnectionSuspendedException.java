@@ -1,7 +1,5 @@
 package com.patloew.rxlocation;
 
-import com.google.android.gms.common.ConnectionResult;
-
 /* Copyright (C) 2015 Michał Charmas (http://blog.charmas.pl)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,23 +14,14 @@ import com.google.android.gms.common.ConnectionResult;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class GoogleAPIConnectionException extends RuntimeException {
-    private final ConnectionResult connectionResult;
+public class GoogleApiConnectionSuspendedException extends RuntimeException {
+    private final int cause;
 
-    GoogleAPIConnectionException(String detailMessage, ConnectionResult connectionResult) {
-        super(detailMessage);
-        this.connectionResult = connectionResult;
+    GoogleApiConnectionSuspendedException(int cause) {
+        this.cause = cause;
     }
 
-    public ConnectionResult getConnectionResult() {
-        return connectionResult;
-    }
-
-    public boolean wasResolutionUnsuccessful() {
-        if (connectionResult != null) {
-            return connectionResult.hasResolution();
-        } else {
-            return false;
-        }
+    public int getErrorCause() {
+        return cause;
     }
 }

@@ -101,7 +101,7 @@ public class RxLocationSingleOnSubscribeTest extends BaseOnSubscribeTest {
         TestObserver<Object> sub = Single.create(single).test();
 
         sub.assertNoValues();
-        sub.assertError(GoogleAPIConnectionSuspendedException.class);
+        sub.assertError(GoogleApiConnectionSuspendedException.class);
     }
 
     @Test
@@ -126,6 +126,6 @@ public class RxLocationSingleOnSubscribeTest extends BaseOnSubscribeTest {
         TestObserver<Object> sub = Single.create(single).test();
 
         sub.assertNoValues();
-        sub.assertError(GoogleAPIConnectionException.class);
+        sub.assertError(GoogleApiConnectionException.class);
     }
 }

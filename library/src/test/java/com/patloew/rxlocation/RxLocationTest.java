@@ -17,8 +17,9 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareOnlyThisForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
-import io.reactivex.Single;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -61,19 +62,19 @@ public class RxLocationTest extends BaseOnSubscribeTest {
 
     @Test
     public void GoogleAPIClientObservable_Success() {
-        GoogleAPIClientSingle single = PowerMockito.spy(new GoogleAPIClientSingle(ctx, new Api[]{}, new Scope[]{}));
+        GoogleApiClientFlowable single = PowerMockito.spy(new GoogleApiClientFlowable(ctx, new Api[]{}, new Scope[]{}));
 
-        setupBaseSingleSuccess(single);
+        setupBaseFlowableSuccess(single);
 
-        assertSingleValue(Single.create(single).test(), apiClient);
+        Flowable.create(single, BackpressureStrategy.LATEST).test().assertValue(apiClient);
     }
 
     @Test
     public void GoogleAPIClientObservable_ConnectionException() {
-        final GoogleAPIClientSingle single = PowerMockito.spy(new GoogleAPIClientSingle(ctx, new Api[]{}, new Scope[]{}));
+        final GoogleApiClientFlowable single = PowerMockito.spy(new GoogleApiClientFlowable(ctx, new Api[]{}, new Scope[]{}));
 
-        setupBaseSingleError(single);
+        setupBaseFlowableError(single);
 
-        assertError(Single.create(single).test(), GoogleAPIConnectionException.class);
+        assertError(Flowable.create(single, BackpressureStrategy.LATEST).test(), GoogleApiConnectionException.class);
     }
 }

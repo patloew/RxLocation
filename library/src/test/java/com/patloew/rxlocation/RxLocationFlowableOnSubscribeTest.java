@@ -112,7 +112,7 @@ public class RxLocationFlowableOnSubscribeTest extends BaseOnSubscribeTest {
         TestSubscriber<Object> sub = Flowable.create(observable, BackpressureStrategy.MISSING).test();
 
         sub.assertNoValues();
-        sub.assertError(GoogleAPIConnectionSuspendedException.class);
+        sub.assertError(GoogleApiConnectionSuspendedException.class);
     }
 
     @Test
@@ -138,7 +138,7 @@ public class RxLocationFlowableOnSubscribeTest extends BaseOnSubscribeTest {
         TestSubscriber<Object> sub = Flowable.create(observable, BackpressureStrategy.MISSING).test();
 
         sub.assertNoValues();
-        sub.assertError(GoogleAPIConnectionException.class);
+        sub.assertError(GoogleApiConnectionException.class);
     }
 
 }

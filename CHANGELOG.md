@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 1.0.3
+
+* Update dependencies (Play Services 10.2.1)
+* Fix bug which lead to leaks when using `rxLocation.location().updates() (#26)
+* BREAKING: Removed `GoogleAPIClientSingle` and replaced it with `GoogleApiClientFlowable` (#22)
+* BREAKING: Replace uppercase "API" in `GoogleApiConnectionException` and `GoogleApiConnectionSuspendedException` with "Api"
+
 ## Version 1.0.2
 
 * Update dependencies (RxJava 2.0.7, Play Services 10.2.0)

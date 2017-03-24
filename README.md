@@ -58,7 +58,7 @@ disposable.add(rxLocation.location().updates(locationRequest).subscribe());
 disposable.clear();
 ```
 
-You can also obtain a `Single<GoogleApiClient>`, which connects on subscribe and disconnects on unsubscribe via `GoogleAPIClientSingle.create(...)`.
+You can also obtain a `Flowable<GoogleApiClient>`, which connects on subscribe and disconnects on dispose via `GoogleApiClientFlowable.create(...)`.
 
 The following Exceptions are thrown in the lib and provided via `onError()`:
 

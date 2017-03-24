@@ -84,12 +84,12 @@ abstract class RxLocationSingleOnSubscribe<T> extends RxLocationBaseOnSubscribe<
 
         @Override
         public void onConnectionSuspended(int cause) {
-            emitter.onError(new GoogleAPIConnectionSuspendedException(cause));
+            emitter.onError(new GoogleApiConnectionSuspendedException(cause));
         }
 
         @Override
         public void onConnectionFailed(ConnectionResult connectionResult) {
-            emitter.onError(new GoogleAPIConnectionException("Error connecting to GoogleApiClient.", connectionResult));
+            emitter.onError(new GoogleApiConnectionException("Error connecting to GoogleApiClient.", connectionResult));
         }
 
         public void setClient(GoogleApiClient client) {

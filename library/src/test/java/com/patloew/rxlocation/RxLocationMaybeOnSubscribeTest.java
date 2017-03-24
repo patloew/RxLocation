@@ -103,7 +103,7 @@ public class RxLocationMaybeOnSubscribeTest extends BaseOnSubscribeTest {
         TestObserver<Object> sub = Maybe.create(maybeOnSubscribe).test();
 
         sub.assertNoValues();
-        sub.assertError(GoogleAPIConnectionSuspendedException.class);
+        sub.assertError(GoogleApiConnectionSuspendedException.class);
     }
 
     @Test
@@ -128,6 +128,6 @@ public class RxLocationMaybeOnSubscribeTest extends BaseOnSubscribeTest {
         TestObserver<Object> sub = Maybe.create(maybeOnSubscribe).test();
 
         sub.assertNoValues();
-        sub.assertError(GoogleAPIConnectionException.class);
+        sub.assertError(GoogleApiConnectionException.class);
     }
 }
