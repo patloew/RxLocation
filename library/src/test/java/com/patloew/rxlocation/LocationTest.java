@@ -80,6 +80,19 @@ public class LocationTest extends BaseTest {
     }
 
     @Test
+    public void LastLocationOf() throws Exception {
+        ArgumentCaptor<LocationLastMaybeOfOnSubscribe> captor = ArgumentCaptor.forClass(LocationLastMaybeOfOnSubscribe.class);
+
+        rxLocation.location().lastLocationOf();
+
+        PowerMockito.verifyStatic(times(1));
+        Maybe.create(captor.capture());
+
+        LocationLastMaybeOfOnSubscribe single = captor.getAllValues().get(0);
+        assertNoTimeoutSet(single);
+    }
+
+    @Test
     public void LocationAvailable() throws Exception {
         ArgumentCaptor<LocationAvailabilitySingleOnSubscribe> captor = ArgumentCaptor.forClass(LocationAvailabilitySingleOnSubscribe.class);
 
