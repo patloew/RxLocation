@@ -23,7 +23,12 @@ import io.reactivex.functions.Function;
  * limitations under the License. */
 class SingleResultCallBack<T extends Result, R> implements ResultCallback<T> {
 
-    private static final Function ID_FUNC = input -> input;
+    private static final Function ID_FUNC = new Function() {
+        @Override
+        public Object apply(Object input) throws Exception {
+            return input;
+        }
+    };
 
     private final SingleEmitter<R> emitter;
     private final Function<T, R> mapper;

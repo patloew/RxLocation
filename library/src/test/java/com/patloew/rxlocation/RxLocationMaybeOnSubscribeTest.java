@@ -14,6 +14,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.powermock.core.classloader.annotations.PrepareOnlyThisForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -47,11 +49,14 @@ public class RxLocationMaybeOnSubscribeTest extends BaseOnSubscribeTest {
             }
         });
 
-        doAnswer(invocation -> {
-            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
-            callbacks.setClient(apiClient);
-            callbacks.onConnected(null);
-            return apiClient;
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
+                callbacks.setClient(apiClient);
+                callbacks.onConnected(null);
+                return apiClient;
+            }
         }).when(maybeOnSubscribe).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
 
         TestObserver<Object> sub = Maybe.create(maybeOnSubscribe).test();
@@ -68,11 +73,14 @@ public class RxLocationMaybeOnSubscribeTest extends BaseOnSubscribeTest {
             protected void onGoogleApiClientReady(GoogleApiClient apiClient, MaybeEmitter<? super Object> emitter) { }
         });
 
-        doAnswer(invocation -> {
-            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
-            callbacks.setClient(apiClient);
-            callbacks.onConnected(null);
-            return apiClient;
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
+                callbacks.setClient(apiClient);
+                callbacks.onConnected(null);
+                return apiClient;
+            }
         }).when(maybeOnSubscribe).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
 
         doReturn(true).when(apiClient).isConnected();
@@ -93,11 +101,14 @@ public class RxLocationMaybeOnSubscribeTest extends BaseOnSubscribeTest {
             }
         });
 
-        doAnswer(invocation -> {
-            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
-            callbacks.setClient(apiClient);
-            callbacks.onConnectionSuspended(0);
-            return apiClient;
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
+                callbacks.setClient(apiClient);
+                callbacks.onConnectionSuspended(0);
+                return apiClient;
+            }
         }).when(maybeOnSubscribe).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
 
         TestObserver<Object> sub = Maybe.create(maybeOnSubscribe).test();
@@ -118,11 +129,14 @@ public class RxLocationMaybeOnSubscribeTest extends BaseOnSubscribeTest {
 
         doReturn(false).when(connectionResult).hasResolution();
 
-        doAnswer(invocation -> {
-            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
-            callbacks.setClient(apiClient);
-            callbacks.onConnectionFailed(connectionResult);
-            return apiClient;
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
+                callbacks.setClient(apiClient);
+                callbacks.onConnectionFailed(connectionResult);
+                return apiClient;
+            }
         }).when(maybeOnSubscribe).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
 
         TestObserver<Object> sub = Maybe.create(maybeOnSubscribe).test();

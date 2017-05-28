@@ -60,7 +60,7 @@ public class GeocodingTest extends BaseTest {
         super.setup();
 
         geocoding = spy(rxLocation.geocoding());
-        doReturn(geocoder).when(geocoding).getGeocoder(any());
+        doReturn(geocoder).when(geocoding).getGeocoder((Locale) any());
         doReturn(latitude).when(location).getLatitude();
         doReturn(longitude).when(location).getLongitude();
 

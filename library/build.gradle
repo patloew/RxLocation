@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'jacoco-android'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
@@ -25,20 +24,12 @@ android {
             consumerProguardFiles 'proguard-rules-consumer.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
     testOptions {
         unitTests.returnDefaultValues = true
     }
     lintOptions {
         abortOnError false
     }
-}
-
-retrolambda {
-    javaVersion JavaVersion.VERSION_1_6
 }
 
 dependencies {

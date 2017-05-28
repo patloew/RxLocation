@@ -8,8 +8,11 @@ import com.google.android.gms.location.LocationRequest;
 import com.patloew.rxlocation.RxLocation;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /* Copyright 2016 Patrick Löwenstein
@@ -55,9 +58,24 @@ public class MainPresenter {
     public void startLocationRefresh() {
         disposable.add(
                 rxLocation.settings().checkAndHandleResolution(locationRequest)
-                        .flatMapObservable(this::getAddressObservable)
+                        .flatMapObservable(new Function<Boolean, ObservableSource<Address>>() {
+                            @Override
+                            public ObservableSource<Address> apply(Boolean success) throws Exception {
+                                return MainPresenter.this.getAddressObservable(success);
+                            }
+                        })
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(view::onAddressUpdate, throwable -> Log.e("MainPresenter", "Error fetching location/address updates", throwable))
+                        .subscribe(new Consumer<Address>() {
+                            @Override
+                            public void accept(Address address) throws Exception {
+                                view.onAddressUpdate(address);
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                Log.e("MainPresenter", "Error fetching location/address updates", throwable);
+                            }
+                        })
         );
     }
 
@@ -66,15 +84,35 @@ public class MainPresenter {
             return rxLocation.location().updates(locationRequest)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .doOnNext(view::onLocationUpdate)
-                            .flatMap(this::getAddressFromLocation);
+                    .doOnNext(new Consumer<Location>() {
+                        @Override
+                        public void accept(Location location) throws Exception {
+                            view.onLocationUpdate(location);
+                        }
+                    })
+                    .flatMap(new Function<Location, ObservableSource<? extends Address>>() {
+                        @Override
+                        public ObservableSource<? extends Address> apply(Location location) throws Exception {
+                            return MainPresenter.this.getAddressFromLocation(location);
+                        }
+                    });
 
         } else {
             view.onLocationSettingsUnsuccessful();
 
             return rxLocation.location().lastLocation()
-                            .doOnSuccess(view::onLocationUpdate)
-                            .flatMapObservable(this::getAddressFromLocation);
+                    .doOnSuccess(new Consumer<Location>() {
+                        @Override
+                        public void accept(Location location) throws Exception {
+                            view.onLocationUpdate(location);
+                        }
+                    })
+                    .flatMapObservable(new Function<Location, ObservableSource<? extends Address>>() {
+                        @Override
+                        public ObservableSource<? extends Address> apply(Location location) throws Exception {
+                            return MainPresenter.this.getAddressFromLocation(location);
+                        }
+                    });
         }
     }
 

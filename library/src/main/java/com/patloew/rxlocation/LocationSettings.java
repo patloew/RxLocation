@@ -62,7 +62,12 @@ public class LocationSettings {
 
     // Check and handle resolution
 
-    private static final Function<Boolean, Completable> CHECK_SETTINGS_COMPLETABLE_FUNCTION = success -> success ? Completable.complete() : Completable.error(new LocationSettingsNotSatisfiedException());
+    private static final Function<Boolean, Completable> CHECK_SETTINGS_COMPLETABLE_FUNCTION = new Function<Boolean, Completable>() {
+        @Override
+        public Completable apply(Boolean success) throws Exception {
+            return success ? Completable.complete() : Completable.error(new LocationSettingsNotSatisfiedException());
+        }
+    };
 
 
     public Completable checkAndHandleResolutionCompletable(@NonNull LocationRequest locationRequest) {

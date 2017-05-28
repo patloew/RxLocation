@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -134,7 +135,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void onLocationSettingsUnsuccessful() {
         Snackbar.make(lastUpdate, "Location settings requirements not satisfied. Showing last known location if available.", Snackbar.LENGTH_INDEFINITE)
-                .setAction("Retry", view -> presenter.startLocationRefresh())
+                .setAction("Retry", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        presenter.startLocationRefresh();
+                    }
+                })
                 .show();
     }
 

@@ -18,6 +18,8 @@ import com.google.android.gms.location.SettingsApi;
 
 import org.mockito.Matchers;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.reflect.Whitebox;
 
@@ -64,15 +66,21 @@ public abstract class BaseOnSubscribeTest extends BaseTest {
 
     // Mock GoogleApiClient connection success behaviour
     protected <T> void setupBaseFlowableSuccess(final RxLocationFlowableOnSubscribe<T> rxLocationFlowableOnSubscribe, final GoogleApiClient apiClient) {
-        doAnswer(invocation -> {
-            final FlowableEmitter<T> subscriber = ((RxLocationFlowableOnSubscribe.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                final FlowableEmitter<T> subscriber = ((RxLocationFlowableOnSubscribe.ApiClientConnectionCallbacks) invocation.getArguments()[0]).emitter;
 
-            doAnswer(invocation1 -> {
-                rxLocationFlowableOnSubscribe.onGoogleApiClientReady(apiClient, subscriber);
-                return null;
-            }).when(apiClient).connect();
+                doAnswer(new Answer() {
+                    @Override
+                    public Object answer(InvocationOnMock invocation1) throws Throwable {
+                        rxLocationFlowableOnSubscribe.onGoogleApiClientReady(apiClient, subscriber);
+                        return null;
+                    }
+                }).when(apiClient).connect();
 
-            return apiClient;
+                return apiClient;
+            }
         }).when(rxLocationFlowableOnSubscribe).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
     }
 
@@ -83,15 +91,21 @@ public abstract class BaseOnSubscribeTest extends BaseTest {
 
     // Mock GoogleApiClient connection success behaviour
     protected <T> void setupBaseSingleSuccess(final RxLocationSingleOnSubscribe<T> rxLocationSingleOnSubscribe, final GoogleApiClient apiClient) {
-        doAnswer(invocation -> {
-            final SingleEmitter<T> subscriber = ((RxLocationSingleOnSubscribe.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                final SingleEmitter<T> subscriber = ((RxLocationSingleOnSubscribe.ApiClientConnectionCallbacks) invocation.getArguments()[0]).emitter;
 
-            doAnswer(invocation1 -> {
-                rxLocationSingleOnSubscribe.onGoogleApiClientReady(apiClient, subscriber);
-                return null;
-            }).when(apiClient).connect();
+                doAnswer(new Answer() {
+                    @Override
+                    public Object answer(InvocationOnMock invocation1) throws Throwable {
+                        rxLocationSingleOnSubscribe.onGoogleApiClientReady(apiClient, subscriber);
+                        return null;
+                    }
+                }).when(apiClient).connect();
 
-            return apiClient;
+                return apiClient;
+            }
         }).when(rxLocationSingleOnSubscribe).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
     }
 
@@ -102,51 +116,72 @@ public abstract class BaseOnSubscribeTest extends BaseTest {
 
     // Mock GoogleApiClient connection success behaviour
     protected <T> void setupBaseMaybeSuccess(final RxLocationMaybeOnSubscribe<T> baseSingle, final GoogleApiClient apiClient) {
-        doAnswer(invocation -> {
-            final MaybeEmitter<T> subscriber = ((RxLocationMaybeOnSubscribe.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                final MaybeEmitter<T> subscriber = ((RxLocationMaybeOnSubscribe.ApiClientConnectionCallbacks) invocation.getArguments()[0]).emitter;
 
-            doAnswer(invocation1 -> {
-                baseSingle.onGoogleApiClientReady(apiClient, subscriber);
-                return null;
-            }).when(apiClient).connect();
+                doAnswer(new Answer() {
+                    @Override
+                    public Object answer(InvocationOnMock invocation1) throws Throwable {
+                        baseSingle.onGoogleApiClientReady(apiClient, subscriber);
+                        return null;
+                    }
+                }).when(apiClient).connect();
 
-            return apiClient;
+                return apiClient;
+            }
         }).when(baseSingle).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
     }
 
     // Mock GoogleApiClient connection error behaviour
     protected <T> void setupBaseSingleError(final RxLocationSingleOnSubscribe<T> rxLocationSingleOnSubscribe) {
-        doAnswer(invocation -> {
-            final SingleEmitter<T> subscriber = ((RxLocationSingleOnSubscribe.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                final SingleEmitter<T> subscriber = ((RxLocationSingleOnSubscribe.ApiClientConnectionCallbacks) invocation.getArguments()[0]).emitter;
 
-            doAnswer(invocation1 -> {
-                subscriber.onError(new GoogleApiConnectionException("Error connecting to GoogleApiClient.", connectionResult));
-                return null;
-            }).when(apiClient).connect();
+                doAnswer(new Answer() {
+                    @Override
+                    public Object answer(InvocationOnMock invocation1) throws Throwable {
+                        subscriber.onError(new GoogleApiConnectionException("Error connecting to GoogleApiClient.", connectionResult));
+                        return null;
+                    }
+                }).when(apiClient).connect();
 
-            return apiClient;
+                return apiClient;
+            }
         }).when(rxLocationSingleOnSubscribe).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
     }
 
     // Mock GoogleApiClient connection error behaviour
     protected <T> void setupBaseFlowableError(final RxLocationFlowableOnSubscribe<T> rxLocationFlowableOnSubscribe) {
-        doAnswer(invocation -> {
-            final FlowableEmitter<T> subscriber = ((RxLocationFlowableOnSubscribe.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                final FlowableEmitter<T> subscriber = ((RxLocationFlowableOnSubscribe.ApiClientConnectionCallbacks) invocation.getArguments()[0]).emitter;
 
-            doAnswer(invocation1 -> {
-                subscriber.onError(new GoogleApiConnectionException("Error connecting to GoogleApiClient.", connectionResult));
-                return null;
-            }).when(apiClient).connect();
+                doAnswer(new Answer() {
+                    @Override
+                    public Object answer(InvocationOnMock invocation1) throws Throwable {
+                        subscriber.onError(new GoogleApiConnectionException("Error connecting to GoogleApiClient.", connectionResult));
+                        return null;
+                    }
+                }).when(apiClient).connect();
 
-            return apiClient;
+                return apiClient;
+            }
         }).when(rxLocationFlowableOnSubscribe).createApiClient(Matchers.any(RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class));
     }
 
     @SuppressWarnings("unchecked")
     protected void setPendingResultValue(final Result result) {
-        doAnswer(invocation -> {
-            ((ResultCallback)invocation.getArguments()[0]).onResult(result);
-            return null;
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((ResultCallback) invocation.getArguments()[0]).onResult(result);
+                return null;
+            }
         }).when(pendingResult).setResultCallback(Matchers.<ResultCallback>any());
     }
 

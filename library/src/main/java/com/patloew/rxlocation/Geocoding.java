@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Callable;
 
 import io.reactivex.Maybe;
 import io.reactivex.Single;
@@ -28,7 +29,13 @@ import io.reactivex.functions.Function;
  * limitations under the License. */
 public class Geocoding {
 
-    private static final Function<List<Address>, Maybe<Address>> ADDRESS_MAYBE_FUNCTION = addresses -> addresses.isEmpty() ? Maybe.empty(): Maybe.just(addresses.get(0));
+    private static final Function<List<Address>, Maybe<Address>> ADDRESS_MAYBE_FUNCTION = new Function<List<Address>, Maybe<Address>>() {
+        @Override
+        public Maybe<Address> apply(List<Address> addresses) throws Exception {
+            Maybe<Address> empty = Maybe.empty();
+            return addresses.isEmpty() ? empty : Maybe.just(addresses.get(0));
+        }
+    };
 
     private final Context context;
 
@@ -58,8 +65,13 @@ public class Geocoding {
         return fromLocation(null, location, maxResults);
     }
 
-    public Single<List<Address>> fromLocation(Locale locale, @NonNull Location location, int maxResults) {
-        return Single.fromCallable(() -> getGeocoder(locale).getFromLocation(location.getLatitude(), location.getLongitude(), maxResults));
+    public Single<List<Address>> fromLocation(final Locale locale, @NonNull final Location location, final int maxResults) {
+        return Single.fromCallable(new Callable<List<Address>>() {
+            @Override
+            public List<Address> call() throws Exception {
+                return Geocoding.this.getGeocoder(locale).getFromLocation(location.getLatitude(), location.getLongitude(), maxResults);
+            }
+        });
     }
 
 
@@ -76,8 +88,13 @@ public class Geocoding {
         return fromLocation(null, latitude, longitude, maxResults);
     }
 
-    public Single<List<Address>> fromLocation(Locale locale, double latitude, double longitude, int maxResults) {
-        return Single.fromCallable(() -> getGeocoder(locale).getFromLocation(latitude, longitude, maxResults));
+    public Single<List<Address>> fromLocation(final Locale locale, final double latitude, final double longitude, final int maxResults) {
+        return Single.fromCallable(new Callable<List<Address>>() {
+            @Override
+            public List<Address> call() throws Exception {
+                return Geocoding.this.getGeocoder(locale).getFromLocation(latitude, longitude, maxResults);
+            }
+        });
     }
 
 
@@ -94,8 +111,13 @@ public class Geocoding {
         return fromLocationName(null, locationName, maxResults, lowerLeftLatitude, lowerLeftLongitude, upperRightLatitude, upperRightLongitude);
     }
 
-    public Single<List<Address>> fromLocationName(Locale locale, @NonNull String locationName, int maxResults, double lowerLeftLatitude, double lowerLeftLongitude, double upperRightLatitude, double upperRightLongitude) {
-        return Single.fromCallable(() -> getGeocoder(locale).getFromLocationName(locationName, maxResults, lowerLeftLatitude, lowerLeftLongitude, upperRightLatitude, upperRightLongitude));
+    public Single<List<Address>> fromLocationName(final Locale locale, @NonNull final String locationName, final int maxResults, final double lowerLeftLatitude, final double lowerLeftLongitude, final double upperRightLatitude, final double upperRightLongitude) {
+        return Single.fromCallable(new Callable<List<Address>>() {
+            @Override
+            public List<Address> call() throws Exception {
+                return Geocoding.this.getGeocoder(locale).getFromLocationName(locationName, maxResults, lowerLeftLatitude, lowerLeftLongitude, upperRightLatitude, upperRightLongitude);
+            }
+        });
     }
 
 
@@ -112,8 +134,13 @@ public class Geocoding {
         return fromLocationName(null, locationName, maxResults);
     }
 
-    public Single<List<Address>> fromLocationName(Locale locale, @NonNull String locationName, int maxResults) {
-        return Single.fromCallable(() -> getGeocoder(locale).getFromLocationName(locationName, maxResults));
+    public Single<List<Address>> fromLocationName(final Locale locale, @NonNull final String locationName, final int maxResults) {
+        return Single.fromCallable(new Callable<List<Address>>() {
+            @Override
+            public List<Address> call() throws Exception {
+                return Geocoding.this.getGeocoder(locale).getFromLocationName(locationName, maxResults);
+            }
+        });
     }
 
 }
