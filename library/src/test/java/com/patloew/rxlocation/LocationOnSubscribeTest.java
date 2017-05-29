@@ -17,6 +17,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareOnlyThisForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -188,14 +190,17 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Test
     public void LocationUpdatesFlowable_Success() {
-        LocationUpdatesFlowableOnSubscribe single = PowerMockito.spy(new LocationUpdatesFlowableOnSubscribe(rxLocation, locationRequest, null, null, null));
+        final LocationUpdatesFlowableOnSubscribe single = PowerMockito.spy(new LocationUpdatesFlowableOnSubscribe(rxLocation, locationRequest, null, null, null));
 
         setPendingResultValue(status);
 
         doReturn(true).when(status).isSuccess();
-        doAnswer(invocation -> {
-            single.locationListener.onLocationChanged(location);
-            return pendingResult;
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                single.locationListener.onLocationChanged(location);
+                return pendingResult;
+            }
         }).when(fusedLocationProviderApi).requestLocationUpdates(eq(apiClient), eq(locationRequest), any(LocationListener.class), isNull(Looper.class));
 
         setupBaseFlowableSuccess(single);

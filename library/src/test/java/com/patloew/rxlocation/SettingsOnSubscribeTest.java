@@ -17,6 +17,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareOnlyThisForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -114,10 +116,13 @@ public class SettingsOnSubscribeTest extends BaseOnSubscribeTest {
         doReturn(LocationSettingsStatusCodes.RESOLUTION_REQUIRED).when(status).getStatusCode();
         when(settingsApi.checkLocationSettings(apiClient, locationSettingsRequest)).thenReturn(pendingResult);
 
-        doAnswer(invocation -> {
-            String key = (String) SettingsCheckHandleSingleOnSubscribe.observableMap.keySet().toArray()[0];
-            SettingsCheckHandleSingleOnSubscribe.onResolutionResult(key, Activity.RESULT_OK);
-            return null;
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                String key = (String) SettingsCheckHandleSingleOnSubscribe.observableMap.keySet().toArray()[0];
+                SettingsCheckHandleSingleOnSubscribe.onResolutionResult(key, Activity.RESULT_OK);
+                return null;
+            }
         }).when(ctx).startActivity(any(Intent.class));
 
         setupBaseSingleSuccess(single);
@@ -135,10 +140,13 @@ public class SettingsOnSubscribeTest extends BaseOnSubscribeTest {
         doReturn(LocationSettingsStatusCodes.RESOLUTION_REQUIRED).when(status).getStatusCode();
         when(settingsApi.checkLocationSettings(apiClient, locationSettingsRequest)).thenReturn(pendingResult);
 
-        doAnswer(invocation -> {
-            String key = (String) SettingsCheckHandleSingleOnSubscribe.observableMap.keySet().toArray()[0];
-            SettingsCheckHandleSingleOnSubscribe.onResolutionResult(key, Activity.RESULT_CANCELED);
-            return null;
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                String key = (String) SettingsCheckHandleSingleOnSubscribe.observableMap.keySet().toArray()[0];
+                SettingsCheckHandleSingleOnSubscribe.onResolutionResult(key, Activity.RESULT_CANCELED);
+                return null;
+            }
         }).when(ctx).startActivity(any(Intent.class));
 
         setupBaseSingleSuccess(single);

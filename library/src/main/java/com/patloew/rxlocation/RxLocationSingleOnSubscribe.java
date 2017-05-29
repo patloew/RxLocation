@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
+import io.reactivex.functions.Cancellable;
 
 /* Copyright (C) 2015 Michał Charmas (http://blog.charmas.pl)
  *
@@ -52,12 +53,15 @@ abstract class RxLocationSingleOnSubscribe<T> extends RxLocationBaseOnSubscribe<
             emitter.onError(ex);
         }
 
-        emitter.setCancellable(() -> {
-            if (apiClient.isConnected()) {
-                onUnsubscribed(apiClient);
-            }
+        emitter.setCancellable(new Cancellable() {
+            @Override
+            public void cancel() throws Exception {
+                if (apiClient.isConnected()) {
+                    RxLocationSingleOnSubscribe.this.onUnsubscribed(apiClient);
+                }
 
-            apiClient.disconnect();
+                apiClient.disconnect();
+            }
         });
     }
 

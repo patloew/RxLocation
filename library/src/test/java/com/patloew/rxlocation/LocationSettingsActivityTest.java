@@ -11,6 +11,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareOnlyThisForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -48,7 +50,12 @@ public class LocationSettingsActivityTest  {
     @Test
     public void onCreate() {
         activity.onCreate(null);
-        doAnswer(invocation -> null).when(activity).handleIntent();
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                return null;
+            }
+        }).when(activity).handleIntent();
         verify(activity).handleIntent();
     }
 
@@ -56,7 +63,12 @@ public class LocationSettingsActivityTest  {
     public void onNewIntent() {
         activity.onNewIntent(intent);
 
-        doAnswer(invocation -> null).when(activity).handleIntent();
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                return null;
+            }
+        }).when(activity).handleIntent();
         verify(activity).setIntent(intent);
         verify(activity).handleIntent();
     }

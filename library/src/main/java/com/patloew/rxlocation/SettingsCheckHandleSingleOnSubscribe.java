@@ -3,11 +3,14 @@ package com.patloew.rxlocation;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import java.lang.ref.WeakReference;
@@ -76,50 +79,53 @@ class SettingsCheckHandleSingleOnSubscribe extends RxLocationSingleOnSubscribe<B
     }
 
     @Override
-    protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<Boolean> emitter) {
+    protected void onGoogleApiClientReady(GoogleApiClient apiClient, final SingleEmitter<Boolean> emitter) {
         emitterWeakRef = new WeakReference<>(emitter);
 
         setupLocationPendingResult(
                 LocationServices.SettingsApi.checkLocationSettings(apiClient, locationSettingsRequest),
-                result -> {
-                    Status status = result.getStatus();
+                new ResultCallback<LocationSettingsResult>() {
+                    @Override
+                    public void onResult(@NonNull LocationSettingsResult result) {
+                        Status status = result.getStatus();
 
-                    switch (status.getStatusCode()) {
-                        case LocationSettingsStatusCodes.SUCCESS:
-                            // All location settings are satisfied. The client can initialize location
-                            // requests here.
-                            emitter.onSuccess(true);
-                            break;
+                        switch (status.getStatusCode()) {
+                            case LocationSettingsStatusCodes.SUCCESS:
+                                // All location settings are satisfied. The client can initialize location
+                                // requests here.
+                                emitter.onSuccess(true);
+                                break;
 
-                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                            // Location settings are not satisfied. But could be fixed by showing the user
-                            // a dialog.
+                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                                // Location settings are not satisfied. But could be fixed by showing the user
+                                // a dialog.
 
-                            if (context != null) {
-                                String observableId = UUID.randomUUID().toString();
-                                observableMap.put(observableId, new WeakReference<>(SettingsCheckHandleSingleOnSubscribe.this));
+                                if (context != null) {
+                                    String observableId = UUID.randomUUID().toString();
+                                    observableMap.put(observableId, new WeakReference<>(SettingsCheckHandleSingleOnSubscribe.this));
 
-                                Intent intent = new Intent(context, LocationSettingsActivity.class);
-                                intent.putExtra(LocationSettingsActivity.ARG_STATUS, status);
-                                intent.putExtra(LocationSettingsActivity.ARG_ID, observableId);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                context.startActivity(intent);
-                            } else {
+                                    Intent intent = new Intent(context, LocationSettingsActivity.class);
+                                    intent.putExtra(LocationSettingsActivity.ARG_STATUS, status);
+                                    intent.putExtra(LocationSettingsActivity.ARG_ID, observableId);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    context.startActivity(intent);
+                                } else {
+                                    emitter.onSuccess(false);
+                                }
+
+                                break;
+
+                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                                // Location settings are not satisfied. However, we have no way to fix the
+                                // settings so we won't show the dialog.
+
                                 emitter.onSuccess(false);
-                            }
+                                break;
 
-                            break;
-
-                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                            // Location settings are not satisfied. However, we have no way to fix the
-                            // settings so we won't show the dialog.
-
-                            emitter.onSuccess(false);
-                            break;
-
-                        default:
-                            emitter.onError(new StatusException(result));
-                            break;
+                            default:
+                                emitter.onError(new StatusException(result));
+                                break;
+                        }
                     }
                 }
         );
