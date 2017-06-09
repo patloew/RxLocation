@@ -64,7 +64,7 @@ public class RxLocationTest extends BaseOnSubscribeTest {
     public void GoogleAPIClientObservable_Success() {
         GoogleApiClientFlowable single = PowerMockito.spy(new GoogleApiClientFlowable(ctx, new Api[]{}, new Scope[]{}));
 
-        setupBaseFlowableSuccess(single);
+        setUpBaseFlowableSuccess(single);
 
         Flowable.create(single, BackpressureStrategy.LATEST).test().assertValue(apiClient);
     }
@@ -73,7 +73,7 @@ public class RxLocationTest extends BaseOnSubscribeTest {
     public void GoogleAPIClientObservable_ConnectionException() {
         final GoogleApiClientFlowable single = PowerMockito.spy(new GoogleApiClientFlowable(ctx, new Api[]{}, new Scope[]{}));
 
-        setupBaseFlowableError(single);
+        setUpBaseFlowableError(single);
 
         assertError(Flowable.create(single, BackpressureStrategy.LATEST).test(), GoogleApiConnectionException.class);
     }

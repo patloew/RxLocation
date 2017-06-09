@@ -59,7 +59,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
         doReturn(true).when(locationAvailability).isLocationAvailable();
         when(fusedLocationProviderApi.getLocationAvailability(apiClient)).thenReturn(locationAvailability);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertSingleValue(Single.create(single).test(), true);
     }
@@ -70,7 +70,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
 
         when(fusedLocationProviderApi.getLocationAvailability(apiClient)).thenReturn(null);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertSingleValue(Single.create(single).test(), false);
     }
@@ -85,7 +85,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
         when(status.isSuccess()).thenReturn(true);
         when(fusedLocationProviderApi.flushLocations(apiClient)).thenReturn(pendingResult);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertSingleValue(Single.create(single).test(), status);
     }
@@ -98,7 +98,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
         when(status.isSuccess()).thenReturn(false);
         when(fusedLocationProviderApi.flushLocations(apiClient)).thenReturn(pendingResult);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertError(Single.create(single).test(), StatusException.class);
     }
@@ -112,7 +112,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
         Location location = Mockito.mock(Location.class);
         when(fusedLocationProviderApi.getLastLocation(apiClient)).thenReturn(location);
 
-        setupBaseMaybeSuccess(maybe);
+        setUpBaseMaybeSuccess(maybe);
 
         assertSingleValue(Maybe.create(maybe).test(), location);
     }
@@ -123,7 +123,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
 
         when(fusedLocationProviderApi.getLocationAvailability(apiClient)).thenReturn(null);
 
-        setupBaseMaybeSuccess(maybe);
+        setUpBaseMaybeSuccess(maybe);
 
         assertNoValue(Maybe.create(maybe).test());
     }
@@ -138,7 +138,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
         when(status.isSuccess()).thenReturn(true);
         when(fusedLocationProviderApi.removeLocationUpdates(apiClient, pendingIntent)).thenReturn(pendingResult);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertSingleValue(Single.create(single).test(), status);
     }
@@ -151,7 +151,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
         when(status.isSuccess()).thenReturn(false);
         when(fusedLocationProviderApi.removeLocationUpdates(apiClient, pendingIntent)).thenReturn(pendingResult);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertError(Single.create(single).test(), StatusException.class);
     }
@@ -166,7 +166,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
         when(status.isSuccess()).thenReturn(true);
         when(fusedLocationProviderApi.requestLocationUpdates(apiClient, locationRequest, pendingIntent)).thenReturn(pendingResult);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertSingleValue(Single.create(single).test(), status);
     }
@@ -179,7 +179,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
         when(status.isSuccess()).thenReturn(false);
         when(fusedLocationProviderApi.requestLocationUpdates(apiClient, locationRequest, pendingIntent)).thenReturn(pendingResult);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertError(Single.create(single).test(), StatusException.class);
     }
@@ -198,7 +198,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
             return pendingResult;
         }).when(fusedLocationProviderApi).requestLocationUpdates(eq(apiClient), eq(locationRequest), any(LocationListener.class), isNull(Looper.class));
 
-        setupBaseFlowableSuccess(single);
+        setUpBaseFlowableSuccess(single);
 
         Flowable.create(single, BackpressureStrategy.BUFFER).test()
                 .assertValue(location)
@@ -214,7 +214,7 @@ public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
         when(status.isSuccess()).thenReturn(false);
         doReturn(pendingResult).when(fusedLocationProviderApi).requestLocationUpdates(eq(apiClient), eq(locationRequest), any(LocationListener.class), isNull(Looper.class));
 
-        setupBaseFlowableSuccess(single);
+        setUpBaseFlowableSuccess(single);
 
         Flowable.create(single, BackpressureStrategy.BUFFER).test()
                 .assertNoValues()

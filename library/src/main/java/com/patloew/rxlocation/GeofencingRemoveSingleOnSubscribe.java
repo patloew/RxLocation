@@ -38,12 +38,12 @@ class GeofencingRemoveSingleOnSubscribe extends RxLocationSingleOnSubscribe<Stat
 
     @Override
     protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<Status> emitter) {
-        ResultCallback<Status> resultCallback = SingleResultCallBack.get(emitter);
+        ResultCallback<Status> resultCallback = SingleResultCallback.get(emitter);
 
         if (geofenceRequestIds != null) {
-            setupLocationPendingResult(LocationServices.GeofencingApi.removeGeofences(apiClient, geofenceRequestIds), resultCallback);
+            setUpPendingResult(LocationServices.GeofencingApi.removeGeofences(apiClient, geofenceRequestIds), resultCallback);
         } else {
-            setupLocationPendingResult(LocationServices.GeofencingApi.removeGeofences(apiClient, pendingIntent), resultCallback);
+            setUpPendingResult(LocationServices.GeofencingApi.removeGeofences(apiClient, pendingIntent), resultCallback);
         }
     }
 }

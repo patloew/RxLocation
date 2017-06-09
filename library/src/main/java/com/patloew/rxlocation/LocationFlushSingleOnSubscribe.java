@@ -31,9 +31,9 @@ class LocationFlushSingleOnSubscribe extends RxLocationSingleOnSubscribe<Status>
 
     @Override
     protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<Status> emitter) {
-        setupLocationPendingResult(
+        setUpPendingResult(
                 LocationServices.FusedLocationApi.flushLocations(apiClient),
-                SingleResultCallBack.get(emitter)
+                SingleResultCallback.get(emitter)
         );
     }
 }

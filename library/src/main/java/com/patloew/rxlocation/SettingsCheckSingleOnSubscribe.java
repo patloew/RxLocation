@@ -33,9 +33,9 @@ class SettingsCheckSingleOnSubscribe extends RxLocationSingleOnSubscribe<Locatio
 
     @Override
     protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<LocationSettingsResult> emitter) {
-        setupLocationPendingResult(
+        setUpPendingResult(
                 LocationServices.SettingsApi.checkLocationSettings(apiClient, locationSettingsRequest),
-                SingleResultCallBack.get(emitter)
+                SingleResultCallback.get(emitter)
         );
     }
 }

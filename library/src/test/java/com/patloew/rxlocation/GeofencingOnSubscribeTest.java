@@ -50,7 +50,7 @@ public class GeofencingOnSubscribeTest extends BaseOnSubscribeTest {
         when(status.isSuccess()).thenReturn(true);
         when(geofencingApi.addGeofences(apiClient, geofencingRequest, pendingIntent)).thenReturn(pendingResult);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertSingleValue(Single.create(single).test(), status);
     }
@@ -63,7 +63,7 @@ public class GeofencingOnSubscribeTest extends BaseOnSubscribeTest {
         when(status.isSuccess()).thenReturn(false);
         when(geofencingApi.addGeofences(apiClient, geofencingRequest, pendingIntent)).thenReturn(pendingResult);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertError(Single.create(single).test(), StatusException.class);
     }
@@ -78,7 +78,7 @@ public class GeofencingOnSubscribeTest extends BaseOnSubscribeTest {
         when(status.isSuccess()).thenReturn(true);
         when(geofencingApi.removeGeofences(apiClient, pendingIntent)).thenReturn(pendingResult);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertSingleValue(Single.create(single).test(), status);
     }
@@ -91,7 +91,7 @@ public class GeofencingOnSubscribeTest extends BaseOnSubscribeTest {
         when(status.isSuccess()).thenReturn(false);
         when(geofencingApi.removeGeofences(apiClient, pendingIntent)).thenReturn(pendingResult);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertError(Single.create(single).test(), StatusException.class);
     }
@@ -104,7 +104,7 @@ public class GeofencingOnSubscribeTest extends BaseOnSubscribeTest {
         when(status.isSuccess()).thenReturn(true);
         when(geofencingApi.removeGeofences(apiClient, geofenceRequestIds)).thenReturn(pendingResult);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertSingleValue(Single.create(single).test(), status);
     }
@@ -117,7 +117,7 @@ public class GeofencingOnSubscribeTest extends BaseOnSubscribeTest {
         when(status.isSuccess()).thenReturn(false);
         when(geofencingApi.removeGeofences(apiClient, geofenceRequestIds)).thenReturn(pendingResult);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertError(Single.create(single).test(), StatusException.class);
     }

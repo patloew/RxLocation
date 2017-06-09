@@ -20,11 +20,11 @@ import io.reactivex.FlowableEmitter;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License. */
-class StatusErrorResultCallBack implements ResultCallback<Status> {
+class StatusErrorResultCallback implements ResultCallback<Status> {
 
     private final FlowableEmitter emitter;
 
-    StatusErrorResultCallBack(@NonNull FlowableEmitter emitter) {
+    StatusErrorResultCallback(@NonNull FlowableEmitter emitter) {
         this.emitter = emitter;
     }
 

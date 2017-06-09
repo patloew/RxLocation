@@ -79,7 +79,7 @@ class SettingsCheckHandleSingleOnSubscribe extends RxLocationSingleOnSubscribe<B
     protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<Boolean> emitter) {
         emitterWeakRef = new WeakReference<>(emitter);
 
-        setupLocationPendingResult(
+        setUpPendingResult(
                 LocationServices.SettingsApi.checkLocationSettings(apiClient, locationSettingsRequest),
                 result -> {
                     Status status = result.getStatus();

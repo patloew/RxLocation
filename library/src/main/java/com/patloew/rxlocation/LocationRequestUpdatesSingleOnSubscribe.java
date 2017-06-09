@@ -39,9 +39,9 @@ class LocationRequestUpdatesSingleOnSubscribe extends RxLocationSingleOnSubscrib
     @Override
     protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<Status> emitter) {
         //noinspection MissingPermission
-        setupLocationPendingResult(
+        setUpPendingResult(
                 LocationServices.FusedLocationApi.requestLocationUpdates(apiClient, locationRequest, pendingIntent),
-                SingleResultCallBack.get(emitter)
+                SingleResultCallback.get(emitter)
         );
     }
 }

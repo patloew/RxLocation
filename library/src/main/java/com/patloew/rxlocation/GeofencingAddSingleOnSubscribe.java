@@ -38,9 +38,9 @@ class GeofencingAddSingleOnSubscribe extends RxLocationSingleOnSubscribe<Status>
     @Override
     protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<Status> emitter) {
         //noinspection MissingPermission
-        setupLocationPendingResult(
+        setUpPendingResult(
                 LocationServices.GeofencingApi.addGeofences(apiClient, geofencingRequest, pendingIntent),
-                SingleResultCallBack.get(emitter)
+                SingleResultCallback.get(emitter)
         );
     }
 }

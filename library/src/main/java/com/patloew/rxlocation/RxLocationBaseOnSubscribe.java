@@ -62,7 +62,7 @@ abstract class RxLocationBaseOnSubscribe<T> {
         timeoutUnit = null;
     }
 
-    protected final <T extends Result> void setupLocationPendingResult(PendingResult<T> pendingResult, ResultCallback<T> resultCallback) {
+    protected final <T extends Result> void setUpPendingResult(PendingResult<T> pendingResult, ResultCallback<T> resultCallback) {
         if (timeoutTime != null && timeoutUnit != null) {
             pendingResult.setResultCallback(resultCallback, timeoutTime, timeoutUnit);
         } else {

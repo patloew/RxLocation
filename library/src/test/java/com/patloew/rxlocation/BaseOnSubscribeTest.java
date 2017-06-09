@@ -59,12 +59,12 @@ public abstract class BaseOnSubscribeTest extends BaseTest {
     }
 
     // Mock GoogleApiClient connection success behaviour
-    protected <T> void setupBaseFlowableSuccess(final RxLocationFlowableOnSubscribe<T> rxLocationFlowableOnSubscribe) {
-        setupBaseFlowableSuccess(rxLocationFlowableOnSubscribe, apiClient);
+    protected <T> void setUpBaseFlowableSuccess(final RxLocationFlowableOnSubscribe<T> rxLocationFlowableOnSubscribe) {
+        setUpBaseFlowableSuccess(rxLocationFlowableOnSubscribe, apiClient);
     }
 
     // Mock GoogleApiClient connection success behaviour
-    protected <T> void setupBaseFlowableSuccess(final RxLocationFlowableOnSubscribe<T> rxLocationFlowableOnSubscribe, final GoogleApiClient apiClient) {
+    protected <T> void setUpBaseFlowableSuccess(final RxLocationFlowableOnSubscribe<T> rxLocationFlowableOnSubscribe, final GoogleApiClient apiClient) {
         doAnswer(invocation -> {
             final FlowableEmitter<T> subscriber = ((RxLocationFlowableOnSubscribe.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
 
@@ -78,12 +78,12 @@ public abstract class BaseOnSubscribeTest extends BaseTest {
     }
 
     // Mock GoogleApiClient connection success behaviour
-    protected <T> void setupBaseSingleSuccess(final RxLocationSingleOnSubscribe<T> rxLocationSingleOnSubscribe) {
-        setupBaseSingleSuccess(rxLocationSingleOnSubscribe, apiClient);
+    protected <T> void setUpBaseSingleSuccess(final RxLocationSingleOnSubscribe<T> rxLocationSingleOnSubscribe) {
+        setUpBaseSingleSuccess(rxLocationSingleOnSubscribe, apiClient);
     }
 
     // Mock GoogleApiClient connection success behaviour
-    protected <T> void setupBaseSingleSuccess(final RxLocationSingleOnSubscribe<T> rxLocationSingleOnSubscribe, final GoogleApiClient apiClient) {
+    protected <T> void setUpBaseSingleSuccess(final RxLocationSingleOnSubscribe<T> rxLocationSingleOnSubscribe, final GoogleApiClient apiClient) {
         doAnswer(invocation -> {
             final SingleEmitter<T> subscriber = ((RxLocationSingleOnSubscribe.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
 
@@ -97,12 +97,12 @@ public abstract class BaseOnSubscribeTest extends BaseTest {
     }
 
     // Mock GoogleApiClient connection success behaviour
-    protected <T> void setupBaseMaybeSuccess(final RxLocationMaybeOnSubscribe<T> baseSingle) {
-        setupBaseMaybeSuccess(baseSingle, apiClient);
+    protected <T> void setUpBaseMaybeSuccess(final RxLocationMaybeOnSubscribe<T> baseSingle) {
+        setUpBaseMaybeSuccess(baseSingle, apiClient);
     }
 
     // Mock GoogleApiClient connection success behaviour
-    protected <T> void setupBaseMaybeSuccess(final RxLocationMaybeOnSubscribe<T> baseSingle, final GoogleApiClient apiClient) {
+    protected <T> void setUpBaseMaybeSuccess(final RxLocationMaybeOnSubscribe<T> baseSingle, final GoogleApiClient apiClient) {
         doAnswer(invocation -> {
             final MaybeEmitter<T> subscriber = ((RxLocationMaybeOnSubscribe.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
 
@@ -116,7 +116,7 @@ public abstract class BaseOnSubscribeTest extends BaseTest {
     }
 
     // Mock GoogleApiClient connection error behaviour
-    protected <T> void setupBaseSingleError(final RxLocationSingleOnSubscribe<T> rxLocationSingleOnSubscribe) {
+    protected <T> void setUpBaseSingleError(final RxLocationSingleOnSubscribe<T> rxLocationSingleOnSubscribe) {
         doAnswer(invocation -> {
             final SingleEmitter<T> subscriber = ((RxLocationSingleOnSubscribe.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
 
@@ -130,7 +130,7 @@ public abstract class BaseOnSubscribeTest extends BaseTest {
     }
 
     // Mock GoogleApiClient connection error behaviour
-    protected <T> void setupBaseFlowableError(final RxLocationFlowableOnSubscribe<T> rxLocationFlowableOnSubscribe) {
+    protected <T> void setUpBaseFlowableError(final RxLocationFlowableOnSubscribe<T> rxLocationFlowableOnSubscribe) {
         doAnswer(invocation -> {
             final FlowableEmitter<T> subscriber = ((RxLocationFlowableOnSubscribe.ApiClientConnectionCallbacks)invocation.getArguments()[0]).emitter;
 

@@ -35,9 +35,9 @@ class LocationRemoveUpdatesSingleOnSubscribe extends RxLocationSingleOnSubscribe
 
     @Override
     protected void onGoogleApiClientReady(GoogleApiClient apiClient, SingleEmitter<Status> emitter) {
-        setupLocationPendingResult(
+        setUpPendingResult(
                 LocationServices.FusedLocationApi.removeLocationUpdates(apiClient, pendingIntent),
-                SingleResultCallBack.get(emitter)
+                SingleResultCallback.get(emitter)
         );
     }
 }

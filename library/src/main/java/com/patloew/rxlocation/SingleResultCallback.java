@@ -21,25 +21,25 @@ import io.reactivex.functions.Function;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License. */
-class SingleResultCallBack<T extends Result, R> implements ResultCallback<T> {
+class SingleResultCallback<T extends Result, R> implements ResultCallback<T> {
 
     private static final Function ID_FUNC = input -> input;
 
     private final SingleEmitter<R> emitter;
     private final Function<T, R> mapper;
 
-    private SingleResultCallBack(@NonNull SingleEmitter<R> emitter, @NonNull Function<T, R> mapper) {
+    private SingleResultCallback(@NonNull SingleEmitter<R> emitter, @NonNull Function<T, R> mapper) {
         this.emitter = emitter;
         this.mapper = mapper;
     }
 
     static <T extends Result, R> ResultCallback<T> get(@NonNull SingleEmitter<R> emitter, @NonNull Function<T, R> mapper) {
-        return new SingleResultCallBack<>(emitter, mapper);
+        return new SingleResultCallback<>(emitter, mapper);
     }
 
     static <T extends Result> ResultCallback<T> get(@NonNull SingleEmitter<T> emitter) {
         //noinspection unchecked
-        return new SingleResultCallBack<>(emitter, ID_FUNC);
+        return new SingleResultCallback<>(emitter, ID_FUNC);
     }
 
     @Override

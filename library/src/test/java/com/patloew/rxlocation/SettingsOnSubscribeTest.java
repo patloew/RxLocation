@@ -55,7 +55,7 @@ public class SettingsOnSubscribeTest extends BaseOnSubscribeTest {
         doReturn(true).when(status).isSuccess();
         when(settingsApi.checkLocationSettings(apiClient, locationSettingsRequest)).thenReturn(pendingResult);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertSingleValue(Single.create(single).test(), locationSettingsResult);
     }
@@ -69,7 +69,7 @@ public class SettingsOnSubscribeTest extends BaseOnSubscribeTest {
         doReturn(false).when(status).isSuccess();
         when(settingsApi.checkLocationSettings(apiClient, locationSettingsRequest)).thenReturn(pendingResult);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertError(Single.create(single).test(), StatusException.class);
     }
@@ -86,7 +86,7 @@ public class SettingsOnSubscribeTest extends BaseOnSubscribeTest {
         doReturn(LocationSettingsStatusCodes.SUCCESS).when(status).getStatusCode();
         when(settingsApi.checkLocationSettings(apiClient, locationSettingsRequest)).thenReturn(pendingResult);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertSingleValue(Single.create(single).test(), true);
     }
@@ -100,7 +100,7 @@ public class SettingsOnSubscribeTest extends BaseOnSubscribeTest {
         doReturn(LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE).when(status).getStatusCode();
         when(settingsApi.checkLocationSettings(apiClient, locationSettingsRequest)).thenReturn(pendingResult);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertSingleValue(Single.create(single).test(), false);
     }
@@ -120,7 +120,7 @@ public class SettingsOnSubscribeTest extends BaseOnSubscribeTest {
             return null;
         }).when(ctx).startActivity(any(Intent.class));
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertSingleValue(Single.create(single).test(), true);
         assertTrue(SettingsCheckHandleSingleOnSubscribe.observableMap.isEmpty());
@@ -141,7 +141,7 @@ public class SettingsOnSubscribeTest extends BaseOnSubscribeTest {
             return null;
         }).when(ctx).startActivity(any(Intent.class));
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertSingleValue(Single.create(single).test(), false);
         assertTrue(SettingsCheckHandleSingleOnSubscribe.observableMap.isEmpty());
@@ -156,7 +156,7 @@ public class SettingsOnSubscribeTest extends BaseOnSubscribeTest {
         doReturn(CommonStatusCodes.TIMEOUT).when(status).getStatusCode();
         when(settingsApi.checkLocationSettings(apiClient, locationSettingsRequest)).thenReturn(pendingResult);
 
-        setupBaseSingleSuccess(single);
+        setUpBaseSingleSuccess(single);
 
         assertError(Single.create(single).test(), StatusException.class);
     }

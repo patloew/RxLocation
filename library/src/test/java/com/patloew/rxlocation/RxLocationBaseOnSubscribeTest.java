@@ -42,7 +42,7 @@ public class RxLocationBaseOnSubscribeTest extends BaseOnSubscribeTest {
 
         ResultCallback resultCallback = Mockito.mock(ResultCallback.class);
 
-        rxLocationBaseOnSubscribe.setupLocationPendingResult(pendingResult, resultCallback);
+        rxLocationBaseOnSubscribe.setUpPendingResult(pendingResult, resultCallback);
 
         verify(pendingResult).setResultCallback(resultCallback);
     }
@@ -53,7 +53,7 @@ public class RxLocationBaseOnSubscribeTest extends BaseOnSubscribeTest {
 
         ResultCallback resultCallback = Mockito.mock(ResultCallback.class);
 
-        rxLocationBaseOnSubscribe.setupLocationPendingResult(pendingResult, resultCallback);
+        rxLocationBaseOnSubscribe.setUpPendingResult(pendingResult, resultCallback);
 
         verify(pendingResult).setResultCallback(resultCallback, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
     }

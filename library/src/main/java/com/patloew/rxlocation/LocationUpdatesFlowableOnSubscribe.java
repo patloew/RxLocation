@@ -43,9 +43,9 @@ class LocationUpdatesFlowableOnSubscribe extends RxLocationFlowableOnSubscribe<L
         locationListener = new RxLocationListener(emitter);
 
         //noinspection MissingPermission
-        setupLocationPendingResult(
+        setUpPendingResult(
                 LocationServices.FusedLocationApi.requestLocationUpdates(apiClient, locationRequest, locationListener, looper),
-                new StatusErrorResultCallBack(emitter)
+                new StatusErrorResultCallback(emitter)
         );
     }
 
