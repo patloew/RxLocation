@@ -4,29 +4,38 @@ import android.location.Address;
 import android.location.Location;
 
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.AutocompletePredictionBuffer;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.patloew.rxlocation.FusedLocation;
+import com.patloew.rxlocation.GeoData;
 import com.patloew.rxlocation.Geocoding;
-import com.patloew.rxlocation.RxLocation;
 import com.patloew.rxlocation.LocationSettings;
+import com.patloew.rxlocation.RxLocation;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
-import static org.mockito.Matchers.eq;
+
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
@@ -50,9 +59,9 @@ public class MainPresenterTest {
 
     @Mock RxLocation rxLocation;
     @Mock FusedLocation fusedLocation;
-    @Mock
-    LocationSettings locationSettings;
+    @Mock LocationSettings locationSettings;
     @Mock Geocoding geocoding;
+    @Mock GeoData geoData;
 
     @Mock MainView mainView;
 
@@ -65,6 +74,7 @@ public class MainPresenterTest {
         doReturn(fusedLocation).when(rxLocation).location();
         doReturn(locationSettings).when(rxLocation).settings();
         doReturn(geocoding).when(rxLocation).geocoding();
+        doReturn(geoData).when(rxLocation).geoData();
 
         mainPresenter = new MainPresenter(rxLocation);
     }
@@ -74,9 +84,9 @@ public class MainPresenterTest {
         Location loc = Mockito.mock(Location.class);
         Address address = Mockito.mock(Address.class);
 
-        doReturn(Single.just(true)).when(locationSettings).checkAndHandleResolution(Matchers.any(LocationRequest.class));
-        doReturn(Observable.just(loc)).when(fusedLocation).updates(Matchers.any(LocationRequest.class));
-        doReturn(Maybe.just(address)).when(geocoding).fromLocation(Matchers.any(android.location.Location.class));
+        doReturn(Single.just(true)).when(locationSettings).checkAndHandleResolution(any(LocationRequest.class));
+        doReturn(Observable.just(loc)).when(fusedLocation).updates(any(LocationRequest.class));
+        doReturn(Maybe.just(address)).when(geocoding).fromLocation(any(android.location.Location.class));
 
         mainPresenter.attachView(mainView);
 
@@ -90,11 +100,14 @@ public class MainPresenterTest {
         Location loc = Mockito.mock(Location.class);
         Address address = Mockito.mock(Address.class);
 
-        doReturn(Single.just(false)).when(locationSettings).checkAndHandleResolution(Matchers.any(LocationRequest.class));
+        doReturn(Single.just(false)).when(locationSettings).checkAndHandleResolution(any(LocationRequest.class));
         doReturn(Maybe.just(loc)).when(fusedLocation).lastLocation();
-        doReturn(Maybe.just(address)).when(geocoding).fromLocation(Matchers.any(android.location.Location.class));
+        doReturn(Maybe.just(address)).when(geocoding).fromLocation(any(android.location.Location.class));
 
         mainPresenter.attachView(mainView);
+
+        verify(locationSettings).checkAndHandleResolution(any(LocationRequest.class));
+
 
         verify(mainView).onLocationSettingsUnsuccessful();
         verify(mainView).onLocationUpdate(loc);
@@ -104,11 +117,33 @@ public class MainPresenterTest {
 
     @Test
     public void settingsNotSatisfied_NoLastLocation() {
-        doReturn(Single.just(false)).when(locationSettings).checkAndHandleResolution(Matchers.any(LocationRequest.class));
+        doReturn(Single.just(false)).when(locationSettings).checkAndHandleResolution(any(LocationRequest.class));
         doReturn(Maybe.empty()).when(fusedLocation).lastLocation();
         mainPresenter.attachView(mainView);
 
         verify(mainView).onLocationSettingsUnsuccessful();
+        verifyNoMoreInteractions(mainView);
+    }
+
+    @Test
+    public void onAutocompleteQueryChanged_1Prediction() {
+        MainPresenter presenter = spy(mainPresenter);
+        AutocompletePrediction prediction = mock(AutocompletePrediction.class);
+        AutocompletePredictionBuffer buffer = mock(AutocompletePredictionBuffer.class);
+        String fullText = "123 Some Address";
+
+        doReturn(fullText).when(prediction).getFullText(null);
+        doReturn(Single.just(buffer)).when(geoData).autocompletePredictions(anyString(), any(LatLngBounds.class), any(AutocompleteFilter.class));
+        doReturn(Collections.singletonList(prediction).iterator()).when(buffer).iterator();
+        doNothing().when(presenter).startLocationRefresh();
+
+        presenter.attachView(mainView);
+        presenter.onAutocompleteQueryChanged("some query");
+
+        verify(geoData).autocompletePredictions(anyString(), any(LatLngBounds.class), any(AutocompleteFilter.class));
+        verify(buffer).iterator();
+        verify(prediction).getFullText(null);
+        verify(mainView).onAutocompleteResultsUpdate(Collections.singletonList(fullText));
         verifyNoMoreInteractions(mainView);
     }
 }

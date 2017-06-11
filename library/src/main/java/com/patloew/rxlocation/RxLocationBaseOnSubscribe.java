@@ -11,6 +11,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
 
 import java.util.concurrent.TimeUnit;
 
@@ -42,7 +43,7 @@ abstract class RxLocationBaseOnSubscribe<T> {
 
     protected RxLocationBaseOnSubscribe(@NonNull RxLocation rxLocation, Long timeout, TimeUnit timeUnit) {
         this.ctx = rxLocation.ctx;
-        this.services = new Api[]{ LocationServices.API, ActivityRecognition.API };
+        this.services = new Api[]{ LocationServices.API, ActivityRecognition.API, Places.GEO_DATA_API };
         this.scopes = null;
 
         if (timeout != null && timeUnit != null) {

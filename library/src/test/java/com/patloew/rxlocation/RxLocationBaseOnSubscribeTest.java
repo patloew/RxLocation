@@ -10,6 +10,7 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,14 +21,13 @@ import org.mockito.MockitoAnnotations;
 import org.powermock.core.classloader.annotations.PrepareOnlyThisForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareOnlyThisForTest({ ContextCompat.class, Status.class, LocationServices.class, ActivityRecognition.class, ConnectionResult.class, GoogleApiClient.Builder.class })
+@PrepareOnlyThisForTest({ ContextCompat.class, Status.class, LocationServices.class, ActivityRecognition.class,
+    Places.class, ConnectionResult.class, GoogleApiClient.Builder.class })
 public class RxLocationBaseOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Before

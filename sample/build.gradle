@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+def getGooglePlayServicesApiKey() {
+    return project.findProperty("GMS_API_KEY") ?: ""
+}
+
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.3"
@@ -10,6 +14,7 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0.0"
+        resValue "string", "API_KEY", getGooglePlayServicesApiKey()
     }
     buildTypes {
         release {
@@ -44,6 +49,7 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxjava:2.1.6'
 
     compile 'com.google.android.gms:play-services-location:11.6.0'
+    compile 'com.google.android.gms:play-services-places:11.6.0'
 
     compile('com.mikepenz:aboutlibraries:5.9.4@aar') {
         transitive = true

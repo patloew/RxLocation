@@ -34,6 +34,7 @@ The following APIs are wrapped by this library:
 * `LocationServices.GeofencingApi` via `rxLocation.geofencing()`
 * `LocationServices.SettingsApi` via `rxLocation.settings()`
 * `Geocoder` via `rxLocation.geocoding()`
+* `Places.GeoDataApi` via `rxLocation.geoData()`
 
 Checking the location settings is simplified with this library, by providing a `Single<Boolean>` via `rxLocation.settings().checkAndHandleResolution(locationRequest)`, which handles showing the resolution dialog if the location settings do not satisfy your request. It returns `true` if the settings are satisfied (optionally after showing the dialog, if a resolution is possible), and `false` otherwise. If you want to handle the `LocationSettingsResult` yourself, you can do so via `rxLocation.settings().check(locationRequest)`.
 
@@ -73,6 +74,10 @@ When using the Geocoding component of RxLocation, exceptions can be thrown even 
 # Sample
 
 A basic sample app is available in the `sample` project.
+Places API requires an API key. To use Places API, you need to create a project on Google API console
+and obtain an API key using this [guide](https://developers.google.com/places/android/signup).
+Obtained key should be exported as gradle property named: ```GMS_API_KEY``` for
+example in ```~/.gradle/gradle.properties```.
 
 # Setup
 

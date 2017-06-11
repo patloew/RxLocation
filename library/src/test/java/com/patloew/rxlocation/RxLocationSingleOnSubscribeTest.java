@@ -8,6 +8,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,13 +22,12 @@ import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.observers.TestObserver;
 
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
+
+import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareOnlyThisForTest({ ContextCompat.class, Status.class, LocationServices.class, ActivityRecognition.class, ConnectionResult.class, SingleEmitter.class })
+@PrepareOnlyThisForTest({ ContextCompat.class, Status.class, LocationServices.class,
+    ActivityRecognition.class, Places.class, ConnectionResult.class, SingleEmitter.class })
 public class RxLocationSingleOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Before

@@ -1,12 +1,21 @@
 package com.patloew.rxlocationsample;
 
+import android.content.Context;
 import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -16,7 +25,9 @@ import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.patloew.rxlocation.RxLocation;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /* Copyright 2016 Patrick Löwenstein
@@ -32,13 +43,16 @@ import java.util.concurrent.TimeUnit;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License. */
-public class MainActivity extends AppCompatActivity implements MainView {
+public class MainActivity extends AppCompatActivity implements MainView, TextWatcher {
 
     private static final DateFormat DATE_FORMAT = DateFormat.getDateTimeInstance();
 
     private TextView lastUpdate;
     private TextView locationText;
     private TextView addressText;
+    private EditText autocompleteQueryText;
+    private RecyclerView autocompleteResultsList;
+    private Adapter autocompleteResultsAdapter;
 
     private RxLocation rxLocation;
 
@@ -52,6 +66,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
         lastUpdate = findViewById(R.id.tv_last_update);
         locationText = findViewById(R.id.tv_current_location);
         addressText = findViewById(R.id.tv_current_address);
+        autocompleteQueryText = findViewById(R.id.et_autocomplete_query);
+        autocompleteResultsList = findViewById(R.id.rv_autocomplete_results);
+
+        autocompleteResultsAdapter = new Adapter(this);
+        autocompleteResultsList.setAdapter(autocompleteResultsAdapter);
+        autocompleteQueryText.addTextChangedListener(this);
 
         rxLocation = new RxLocation(this);
         rxLocation.setDefaultTimeout(15, TimeUnit.SECONDS);
@@ -148,6 +168,67 @@ public class MainActivity extends AppCompatActivity implements MainView {
         }
 
         return addressText;
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        presenter.onAutocompleteQueryChanged(s.toString());
+    }
+
+    @Override
+    public void onAutocompleteResultsUpdate(List<String> results) {
+        autocompleteResultsAdapter.setItems(results);
+    }
+
+    private static class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
+        private final LayoutInflater layoutInflater;
+        private final List<String> items;
+
+        Adapter(@NonNull Context context) {
+            this.layoutInflater = LayoutInflater.from(context);
+            this.items = new ArrayList<>();
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = layoutInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            holder.textView.setText(items.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+
+        public void setItems(List<String> items) {
+            this.items.clear();
+            this.items.addAll(items);
+            notifyDataSetChanged();
+        }
+
+        static class ViewHolder extends RecyclerView.ViewHolder {
+            private TextView textView;
+
+            private ViewHolder(View itemView) {
+                super(itemView);
+                textView = (TextView) itemView;
+            }
+        }
     }
 
 }

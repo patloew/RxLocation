@@ -6,10 +6,12 @@ import android.os.Looper;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,16 +28,16 @@ import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isNull;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings("MissingPermission")
 @RunWith(PowerMockRunner.class)
-@PrepareOnlyThisForTest({ LocationRequest.class, LocationAvailability.class, LocationServices.class, com.google.android.gms.location.ActivityRecognition.class, Status.class, ConnectionResult.class, RxLocationBaseOnSubscribe.class })
+@PrepareOnlyThisForTest({ LocationRequest.class, LocationAvailability.class, LocationServices.class,
+    Places.class, ActivityRecognition.class, Status.class, ConnectionResult.class, RxLocationBaseOnSubscribe.class })
 public class LocationOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Mock PendingIntent pendingIntent;

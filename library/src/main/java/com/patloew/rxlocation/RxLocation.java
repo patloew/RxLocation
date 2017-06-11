@@ -32,6 +32,7 @@ public class RxLocation {
     private final Geocoding geocoding;
     private final Geofencing geofencing = new Geofencing(this);
     private final LocationSettings locationSettings = new LocationSettings(this);
+    private final GeoData geoData = new GeoData(this);
     Long timeoutTime = null;
     TimeUnit timeoutUnit = null;
 
@@ -81,8 +82,13 @@ public class RxLocation {
         return fusedLocation;
     }
 
+    public GeoData geoData() {
+        return geoData;
+    }
+
     public LocationSettings settings() {
         return locationSettings;
     }
+
 
 }

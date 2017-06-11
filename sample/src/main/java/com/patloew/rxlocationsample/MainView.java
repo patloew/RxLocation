@@ -3,6 +3,8 @@ package com.patloew.rxlocationsample;
 import android.location.Address;
 import android.location.Location;
 
+import java.util.List;
+
 /* Copyright 2016 Patrick Löwenstein
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,4 +22,5 @@ public interface MainView {
     void onLocationUpdate(Location location);
     void onAddressUpdate(Address address);
     void onLocationSettingsUnsuccessful();
+    void onAutocompleteResultsUpdate(List<String> results);
 }

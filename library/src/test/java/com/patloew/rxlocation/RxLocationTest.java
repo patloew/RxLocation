@@ -8,6 +8,7 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,11 +22,12 @@ import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+
+import static org.junit.Assert.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareOnlyThisForTest({ Observable.class, ContextCompat.class, LocationServices.class, ActivityRecognition.class, Status.class, ConnectionResult.class, RxLocationBaseOnSubscribe.class })
+@PrepareOnlyThisForTest({ Observable.class, ContextCompat.class, LocationServices.class,ActivityRecognition.class,
+    Places.class, Status.class, ConnectionResult.class, RxLocationBaseOnSubscribe.class })
 public class RxLocationTest extends BaseOnSubscribeTest {
 
     @Before

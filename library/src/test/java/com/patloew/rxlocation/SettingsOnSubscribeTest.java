@@ -6,11 +6,13 @@ import android.content.Intent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.places.Places;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,15 +25,15 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import io.reactivex.Single;
 
-import static org.junit.Assert.assertTrue;
+
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings("MissingPermission")
 @RunWith(PowerMockRunner.class)
-@PrepareOnlyThisForTest({ LocationSettingsRequest.class, LocationSettingsResult.class, LocationAvailability.class, LocationServices.class, com.google.android.gms.location.ActivityRecognition.class, Status.class, ConnectionResult.class, RxLocationBaseOnSubscribe.class })
+@PrepareOnlyThisForTest({ LocationSettingsRequest.class, LocationSettingsResult.class, LocationAvailability.class, LocationServices.class,
+    ActivityRecognition.class, Places.class, Status.class, ConnectionResult.class, RxLocationBaseOnSubscribe.class })
 public class SettingsOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Mock LocationSettingsRequest locationSettingsRequest;

@@ -8,6 +8,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,13 +25,12 @@ import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.subscribers.TestSubscriber;
 
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
+
+import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareOnlyThisForTest({ ContextCompat.class, LocationServices.class, ActivityRecognition.class, Status.class, ConnectionResult.class })
+@PrepareOnlyThisForTest({ ContextCompat.class, LocationServices.class, ActivityRecognition.class,
+    Places.class, Status.class, ConnectionResult.class })
 public class RxLocationFlowableOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Before

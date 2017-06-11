@@ -5,7 +5,13 @@ import android.location.Location;
 import android.util.Log;
 
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.patloew.rxlocation.DataBufferFlowable;
 import com.patloew.rxlocation.RxLocation;
+
+import java.util.Locale;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -31,6 +37,8 @@ public class MainPresenter {
 
     private final RxLocation rxLocation;
     private final LocationRequest locationRequest;
+    private final LatLngBounds bounds;
+    private final AutocompleteFilter filter;
 
     private MainView view;
 
@@ -40,6 +48,12 @@ public class MainPresenter {
         this.locationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(5000);
+
+        this.bounds = new LatLngBounds(new LatLng(37.773967, -122.431302), new LatLng(37.773977, -122.431292));
+        this.filter = new AutocompleteFilter.Builder()
+            .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
+            .setCountry(Locale.US.getCountry())
+            .build();
     }
 
     public void attachView(MainView view) {
@@ -51,6 +65,20 @@ public class MainPresenter {
         this.view = null;
         disposable.clear();
     }
+
+    public void onAutocompleteQueryChanged(String query) {
+        disposable.add(
+            rxLocation.geoData().autocompletePredictions(query, bounds, filter)
+                .flatMapPublisher(DataBufferFlowable::from)
+                .map(autocompletePrediction -> autocompletePrediction.getFullText(null).toString())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .toList()
+                .subscribe(view::onAutocompleteResultsUpdate, throwable -> Log.e("MainPresenter", "Error fetching autocomplete predictions", throwable))
+
+        );
+    }
+
 
     public void startLocationRefresh() {
         disposable.add(

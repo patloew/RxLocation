@@ -1,33 +1,31 @@
 package com.patloew.rxlocation;
 
 import android.app.PendingIntent;
-import android.content.Context;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.MockitoSession;
-import org.mockito.quality.Strictness;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareOnlyThisForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import io.reactivex.Single;
 
+
 import static org.powermock.api.mockito.PowerMockito.doReturn;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 @SuppressWarnings("MissingPermission")
 @RunWith(PowerMockRunner.class)
-@PrepareOnlyThisForTest({ LocationServices.class, com.google.android.gms.location.ActivityRecognition.class, Status.class, ConnectionResult.class, RxLocationBaseOnSubscribe.class })
+@PrepareOnlyThisForTest({ LocationServices.class, com.google.android.gms.location.ActivityRecognition.class,
+    Places.class, Status.class, ConnectionResult.class, RxLocationBaseOnSubscribe.class })
 public class ActivityOnSubscribeTest extends BaseOnSubscribeTest {
 
     @Mock PendingIntent pendingIntent;
