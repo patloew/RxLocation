@@ -5,10 +5,12 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.FlowableEmitter;
@@ -30,7 +32,7 @@ class LocationUpdatesFlowableOnSubscribe extends RxLocationFlowableOnSubscribe<L
 
     final LocationRequest locationRequest;
     final Looper looper;
-    RxLocationListener locationListener;
+    LeakSafeRxLocationListener locationListener;
 
     protected LocationUpdatesFlowableOnSubscribe(@NonNull RxLocation rxLocation, LocationRequest locationRequest, Looper looper, Long timeout, TimeUnit timeUnit) {
         super(rxLocation, timeout, timeUnit);
@@ -40,7 +42,7 @@ class LocationUpdatesFlowableOnSubscribe extends RxLocationFlowableOnSubscribe<L
 
     @Override
     protected void onGoogleApiClientReady(GoogleApiClient apiClient, FlowableEmitter<Location> emitter) {
-        locationListener = new RxLocationListener(emitter);
+        locationListener = new LeakSafeRxLocationListener(emitter);
 
         //noinspection MissingPermission
         setupLocationPendingResult(
@@ -56,21 +58,34 @@ class LocationUpdatesFlowableOnSubscribe extends RxLocationFlowableOnSubscribe<L
         locationListener = null;
     }
 
-    static class RxLocationListener implements LocationListener {
+    /**
+     * WeakReference mitigates a bug in Google Play services which causes a memory leak of the
+     * registered {@link LocationListener} even if {@link
+     * FusedLocationProviderApi#removeLocationUpdates(GoogleApiClient, LocationListener)} is called
+     * correctly. If the {@link LocationListener} is directly referencing an activity context, it will
+     * leak heavy stuff (View hierarchy etc.). Using {@link LeakSafeRxLocationListener} only the
+     * listener will leak and not the containing observer.
+     *
+     * @see <a
+     *     href="https://issuetracker.google.com/issues/37126862">https://issuetracker.google.com/issues/37126862</a>
+     */
+    static class LeakSafeRxLocationListener implements LocationListener {
+        private WeakReference<FlowableEmitter<? super Location>> weakRefEmitter;
 
-        private FlowableEmitter<Location> emitter;
-
-        RxLocationListener(FlowableEmitter<Location> emitter) {
-            this.emitter = emitter;
+        LeakSafeRxLocationListener(FlowableEmitter<? super Location> emitter) {
+            this.weakRefEmitter = new WeakReference<>(emitter);
         }
 
         void onUnsubscribed() {
-            emitter = null;
+            weakRefEmitter = null;
         }
 
         @Override
         public void onLocationChanged(Location location) {
-            if(emitter != null) { emitter.onNext(location); }
+            if (weakRefEmitter.get() == null) {
+                return;
+            }
+            weakRefEmitter.get().onNext(location);
         }
     }
 }
