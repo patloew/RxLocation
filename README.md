@@ -63,8 +63,8 @@ You can also obtain a `Flowable<GoogleApiClient>`, which connects on subscribe a
 The following Exceptions are thrown in the lib and provided via `onError()`:
 
 * `StatusException`: When the call to the Location APIs was not successful or timed out
-* `GoogleAPIConnectionException`: When connecting to the GoogleAPIClient was not successful.
-* `GoogleAPIConnectionSuspendedException`: When the GoogleApiClient connection was suspended.
+* `GoogleApiConnectionException`: When connecting to the GoogleApiClient was not successful.
+* `GoogleApiConnectionSuspendedException`: When the GoogleApiClient connection was suspended.
 * `SecurityException`: When you try to call an API without proper permissions.
 * `LocationSettingsNotSatisfiedException`: When you use `rxLocation.settings().checkAndHandleResolutionCompletable(...)` and the location settings were not satisfied, even after handling the resolution.
 
@@ -78,9 +78,11 @@ A basic sample app is available in the `sample` project.
 
 The lib is available on jCenter. Add the following to your `build.gradle`:
 
-	dependencies {
-	    compile 'com.patloew.rxlocation:rxlocation:1.0.4'
-	}
+```groovy
+dependencies {
+    compile 'com.patloew.rxlocation:rxlocation:1.0.4'
+}
+```
 
 From v1.0.4 on, RxLocation only works with Android gradle plugin 3.0.0 or higher, since it uses Java 8 language features.
 
