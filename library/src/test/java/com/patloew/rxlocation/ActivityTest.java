@@ -46,7 +46,7 @@ public class ActivityTest extends BaseTest {
         rxLocation.activity().requestUpdates(detectionIntervalMillis,pendingIntent);
         rxLocation.activity().requestUpdates(detectionIntervalMillis,pendingIntent, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
 
-        PowerMockito.verifyStatic(times(2));
+        PowerMockito.verifyStatic(Single.class, times(2));
         Single.create(captor.capture());
 
         ActivityRequestUpdatesSingleOnSubscribe single = captor.getAllValues().get(0);
@@ -69,7 +69,7 @@ public class ActivityTest extends BaseTest {
         rxLocation.activity().removeUpdates(pendingIntent);
         rxLocation.activity().removeUpdates(pendingIntent, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
 
-        PowerMockito.verifyStatic(times(2));
+        PowerMockito.verifyStatic(Single.class, times(2));
         Single.create(captor.capture());
 
         ActivityRemoveUpdatesSingleOnSubscribe single = captor.getAllValues().get(0);

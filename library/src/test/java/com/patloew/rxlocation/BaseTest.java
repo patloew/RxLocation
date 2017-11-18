@@ -9,7 +9,8 @@ import java.util.concurrent.TimeUnit;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
-import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.doReturn;
+import static org.powermock.api.mockito.PowerMockito.mock;
 
 public abstract class BaseTest {
 
@@ -22,7 +23,7 @@ public abstract class BaseTest {
 
     @CallSuper
     public void setup() throws Exception {
-        when(ctx.getApplicationContext()).thenReturn(ctx);
+        doReturn(ctx).when(ctx).getApplicationContext();
 
         rxLocation = new RxLocation(ctx);
     }

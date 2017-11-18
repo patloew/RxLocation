@@ -48,7 +48,7 @@ public class RxLocationMaybeOnSubscribeTest extends BaseOnSubscribeTest {
         });
 
         doAnswer(invocation -> {
-            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
+            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgument(0);
             callbacks.setClient(apiClient);
             callbacks.onConnected(null);
             return apiClient;
@@ -69,7 +69,7 @@ public class RxLocationMaybeOnSubscribeTest extends BaseOnSubscribeTest {
         });
 
         doAnswer(invocation -> {
-            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
+            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgument(0);
             callbacks.setClient(apiClient);
             callbacks.onConnected(null);
             return apiClient;
@@ -94,7 +94,7 @@ public class RxLocationMaybeOnSubscribeTest extends BaseOnSubscribeTest {
         });
 
         doAnswer(invocation -> {
-            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
+            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgument(0);
             callbacks.setClient(apiClient);
             callbacks.onConnectionSuspended(0);
             return apiClient;
@@ -119,7 +119,7 @@ public class RxLocationMaybeOnSubscribeTest extends BaseOnSubscribeTest {
         doReturn(false).when(connectionResult).hasResolution();
 
         doAnswer(invocation -> {
-            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgumentAt(0, RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks.class);
+            RxLocationBaseOnSubscribe.ApiClientConnectionCallbacks callbacks = invocation.getArgument(0);
             callbacks.setClient(apiClient);
             callbacks.onConnectionFailed(connectionResult);
             return apiClient;

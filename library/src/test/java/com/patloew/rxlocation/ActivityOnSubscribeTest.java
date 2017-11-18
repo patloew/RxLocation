@@ -1,23 +1,29 @@
 package com.patloew.rxlocation;
 
 import android.app.PendingIntent;
+import android.content.Context;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.MockitoSession;
+import org.mockito.quality.Strictness;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareOnlyThisForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import io.reactivex.Single;
 
-import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.doReturn;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 @SuppressWarnings("MissingPermission")
 @RunWith(PowerMockRunner.class)
@@ -40,8 +46,8 @@ public class ActivityOnSubscribeTest extends BaseOnSubscribeTest {
         ActivityRequestUpdatesSingleOnSubscribe single = PowerMockito.spy(new ActivityRequestUpdatesSingleOnSubscribe(rxLocation, 1L, pendingIntent, null, null));
 
         setPendingResultValue(status);
-        when(status.isSuccess()).thenReturn(true);
-        when(activityRecognitionApi.requestActivityUpdates(apiClient, 1L, pendingIntent)).thenReturn(pendingResult);
+        doReturn(true).when(status).isSuccess();
+        doReturn(pendingResult).when(activityRecognitionApi).requestActivityUpdates(apiClient, 1L, pendingIntent);
 
         setupBaseSingleSuccess(single);
 

@@ -53,7 +53,7 @@ public class GeofencingTest extends BaseTest {
         rxLocation.geofencing().add(geofencingRequest, pendingIntent);
         rxLocation.geofencing().add(geofencingRequest, pendingIntent, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
 
-        PowerMockito.verifyStatic(times(2));
+        PowerMockito.verifyStatic(Single.class, times(2));
         Single.create(captor.capture());
 
         GeofencingAddSingleOnSubscribe single = captor.getAllValues().get(0);
@@ -76,7 +76,7 @@ public class GeofencingTest extends BaseTest {
         rxLocation.geofencing().remove(pendingIntent);
         rxLocation.geofencing().remove(pendingIntent, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
 
-        PowerMockito.verifyStatic(times(2));
+        PowerMockito.verifyStatic(Single.class, times(2));
         Single.create(captor.capture());
 
         GeofencingRemoveSingleOnSubscribe single = captor.getAllValues().get(0);
@@ -97,7 +97,7 @@ public class GeofencingTest extends BaseTest {
         rxLocation.geofencing().remove(geofenceRequestIds);
         rxLocation.geofencing().remove(geofenceRequestIds, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
 
-        PowerMockito.verifyStatic(times(2));
+        PowerMockito.verifyStatic(Single.class, times(2));
         Single.create(captor.capture());
 
         GeofencingRemoveSingleOnSubscribe single = captor.getAllValues().get(0);

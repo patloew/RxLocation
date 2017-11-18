@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 1.0.4
+
+* Update dependencies
+* BREAKING: Removed Retrolambda. Since this library uses Java 8 features, from v1.0.4 on, only Android gradle plugin 3.0.0 or higher is supported.
+
 ## Version 1.0.3
 
 * Update dependencies (Play Services 10.2.1)

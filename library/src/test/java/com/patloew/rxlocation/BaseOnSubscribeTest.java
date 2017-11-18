@@ -27,8 +27,9 @@ import io.reactivex.SingleEmitter;
 import io.reactivex.observers.TestObserver;
 import io.reactivex.subscribers.TestSubscriber;
 
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doReturn;
+import static org.powermock.api.mockito.PowerMockito.doAnswer;
+import static org.powermock.api.mockito.PowerMockito.doReturn;
+
 
 public abstract class BaseOnSubscribeTest extends BaseTest {
 

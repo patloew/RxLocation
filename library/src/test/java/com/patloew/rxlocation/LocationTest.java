@@ -56,7 +56,7 @@ public class LocationTest extends BaseTest {
         rxLocation.location().flush();
         rxLocation.location().flush(TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
 
-        PowerMockito.verifyStatic(times(2));
+        PowerMockito.verifyStatic(Single.class, times(2));
         Single.create(captor.capture());
 
         LocationFlushSingleOnSubscribe single = captor.getAllValues().get(0);
@@ -72,7 +72,7 @@ public class LocationTest extends BaseTest {
 
         rxLocation.location().lastLocation();
 
-        PowerMockito.verifyStatic(times(1));
+        PowerMockito.verifyStatic(Maybe.class, times(1));
         Maybe.create(captor.capture());
 
         LocationLastMaybeOnSubscribe single = captor.getAllValues().get(0);
@@ -85,7 +85,7 @@ public class LocationTest extends BaseTest {
 
         rxLocation.location().isLocationAvailable();
 
-        PowerMockito.verifyStatic(times(1));
+        PowerMockito.verifyStatic(Single.class, times(1));
         Single.create(captor.capture());
 
         LocationAvailabilitySingleOnSubscribe single = captor.getAllValues().get(0);
@@ -99,7 +99,7 @@ public class LocationTest extends BaseTest {
         rxLocation.location().requestUpdates(locationRequest, pendingIntent);
         rxLocation.location().requestUpdates(locationRequest, pendingIntent, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
 
-        PowerMockito.verifyStatic(times(2));
+        PowerMockito.verifyStatic(Single.class, times(2));
         Single.create(captor.capture());
 
         LocationRequestUpdatesSingleOnSubscribe single = captor.getAllValues().get(0);
@@ -120,7 +120,7 @@ public class LocationTest extends BaseTest {
         rxLocation.location().removeUpdates(pendingIntent);
         rxLocation.location().removeUpdates(pendingIntent, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
 
-        PowerMockito.verifyStatic(times(2));
+        PowerMockito.verifyStatic(Single.class, times(2));
         Single.create(captor.capture());
 
         LocationRemoveUpdatesSingleOnSubscribe single = captor.getAllValues().get(0);
@@ -141,7 +141,7 @@ public class LocationTest extends BaseTest {
         rxLocation.location().updates(locationRequest);
         rxLocation.location().updates(locationRequest, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
 
-        PowerMockito.verifyStatic(times(2));
+        PowerMockito.verifyStatic(Flowable.class, times(2));
         Flowable.create(captor.capture(), eq(BackpressureStrategy.MISSING));
 
         LocationUpdatesFlowableOnSubscribe single = captor.getAllValues().get(0);
@@ -162,7 +162,7 @@ public class LocationTest extends BaseTest {
         rxLocation.location().updates(locationRequest, looper);
         rxLocation.location().updates(locationRequest, looper, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
 
-        PowerMockito.verifyStatic(times(2));
+        PowerMockito.verifyStatic(Flowable.class, times(2));
         Flowable.create(captor.capture(), eq(BackpressureStrategy.MISSING));
 
         LocationUpdatesFlowableOnSubscribe single = captor.getAllValues().get(0);
@@ -183,7 +183,7 @@ public class LocationTest extends BaseTest {
         rxLocation.location().updates(locationRequest, BackpressureStrategy.LATEST);
         rxLocation.location().updates(locationRequest, TIMEOUT_TIME, TIMEOUT_TIMEUNIT, BackpressureStrategy.LATEST);
 
-        PowerMockito.verifyStatic(times(2));
+        PowerMockito.verifyStatic(Flowable.class, times(2));
         Flowable.create(captor.capture(), eq(BackpressureStrategy.LATEST));
 
         LocationUpdatesFlowableOnSubscribe single = captor.getAllValues().get(0);
@@ -204,7 +204,7 @@ public class LocationTest extends BaseTest {
         rxLocation.location().updates(locationRequest, looper, BackpressureStrategy.LATEST);
         rxLocation.location().updates(locationRequest, looper, TIMEOUT_TIME, TIMEOUT_TIMEUNIT, BackpressureStrategy.LATEST);
 
-        PowerMockito.verifyStatic(times(2));
+        PowerMockito.verifyStatic(Flowable.class, times(2));
         Flowable.create(captor.capture(), eq(BackpressureStrategy.LATEST));
 
         LocationUpdatesFlowableOnSubscribe single = captor.getAllValues().get(0);

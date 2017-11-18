@@ -55,7 +55,7 @@ public class SettingsTest extends BaseTest {
         settings.check(locationRequest);
         settings.check(locationRequest, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
 
-        PowerMockito.verifyStatic(times(2));
+        PowerMockito.verifyStatic(Single.class, times(2));
         Single.create(captor.capture());
 
         SettingsCheckSingleOnSubscribe single = captor.getAllValues().get(0);
@@ -74,7 +74,7 @@ public class SettingsTest extends BaseTest {
         rxLocation.settings().check(locationSettingsRequest);
         rxLocation.settings().check(locationSettingsRequest, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
 
-        PowerMockito.verifyStatic(times(2));
+        PowerMockito.verifyStatic(Single.class, times(2));
         Single.create(captor.capture());
 
         SettingsCheckSingleOnSubscribe single = captor.getAllValues().get(0);
@@ -99,7 +99,7 @@ public class SettingsTest extends BaseTest {
         settings.checkAndHandleResolutionCompletable(locationRequest);
         settings.checkAndHandleResolutionCompletable(locationRequest, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
 
-        PowerMockito.verifyStatic(times(2));
+        PowerMockito.verifyStatic(Single.class, times(2));
         Single.create(captor.capture());
 
         SettingsCheckHandleSingleOnSubscribe single = captor.getAllValues().get(0);
@@ -124,7 +124,7 @@ public class SettingsTest extends BaseTest {
         settings.checkAndHandleResolution(locationRequest);
         settings.checkAndHandleResolution(locationRequest, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
 
-        PowerMockito.verifyStatic(times(2));
+        PowerMockito.verifyStatic(Single.class, times(2));
         Single.create(captor.capture());
 
         SettingsCheckHandleSingleOnSubscribe single = captor.getAllValues().get(0);
@@ -143,7 +143,7 @@ public class SettingsTest extends BaseTest {
         rxLocation.settings().checkAndHandleResolutionCompletable(locationSettingsRequest);
         rxLocation.settings().checkAndHandleResolutionCompletable(locationSettingsRequest, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
 
-        PowerMockito.verifyStatic(times(2));
+        PowerMockito.verifyStatic(Single.class, times(2));
         Single.create(captor.capture());
 
         SettingsCheckHandleSingleOnSubscribe single = captor.getAllValues().get(0);
@@ -162,7 +162,7 @@ public class SettingsTest extends BaseTest {
         rxLocation.settings().checkAndHandleResolution(locationSettingsRequest);
         rxLocation.settings().checkAndHandleResolution(locationSettingsRequest, TIMEOUT_TIME, TIMEOUT_TIMEUNIT);
 
-        PowerMockito.verifyStatic(times(2));
+        PowerMockito.verifyStatic(Single.class, times(2));
         Single.create(captor.capture());
 
         SettingsCheckHandleSingleOnSubscribe single = captor.getAllValues().get(0);

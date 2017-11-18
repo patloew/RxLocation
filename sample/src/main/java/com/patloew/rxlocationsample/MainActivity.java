@@ -49,9 +49,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        lastUpdate = (TextView) findViewById(R.id.tv_last_update);
-        locationText = (TextView) findViewById(R.id.tv_current_location);
-        addressText = (TextView) findViewById(R.id.tv_current_address);
+        lastUpdate = findViewById(R.id.tv_last_update);
+        locationText = findViewById(R.id.tv_current_location);
+        addressText = findViewById(R.id.tv_current_address);
 
         rxLocation = new RxLocation(this);
         rxLocation.setDefaultTimeout(15, TimeUnit.SECONDS);
