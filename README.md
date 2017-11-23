@@ -84,7 +84,17 @@ dependencies {
 }
 ```
 
-From v1.0.4 on, RxLocation only works with Android gradle plugin 3.0.0 or higher, since it uses Java 8 language features.
+From v1.0.4 on, RxLocation only works with Android gradle plugin 3.0.0 or higher, since it uses Java 8 language features.  
+And don't forget to set the source code compatibility to Java 8:
+
+```groovy
+android {
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+}
+```
 
 # Testing
 
