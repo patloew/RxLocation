@@ -8,12 +8,11 @@ version = '1.0.4'
 project.archivesBaseName = 'rxlocation'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.3"
+    compileSdkVersion 27
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 4
         versionName "1.0.4"
     }
@@ -37,14 +36,13 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'io.reactivex.rxjava2:rxjava:2.1.6'
-    compile 'com.google.android.gms:play-services-location:10.2.1'
+    api 'io.reactivex.rxjava2:rxjava:2.1.7'
+    api 'com.google.android.gms:play-services-location:11.6.2'
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.11.0'
-    testCompile "org.powermock:powermock-module-junit4:2.0.0-beta.5"
-    testCompile "org.powermock:powermock-api-mockito2:2.0.0-beta.5"
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.11.0'
+    testImplementation "org.powermock:powermock-module-junit4:2.0.0-beta.5"
+    testImplementation "org.powermock:powermock-api-mockito2:2.0.0-beta.5"
 }
 
 task generateSourcesJar(type: Jar) {
