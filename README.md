@@ -81,8 +81,11 @@ The lib is available on jCenter. Add the following to your `build.gradle`:
 ```groovy
 dependencies {
     compile 'com.patloew.rxlocation:rxlocation:1.0.4'
+    compile 'com.google.android.gms:play-services-location:15.0.0'
 }
 ```
+
+If you want to use a newer version of Google Play Services, declare the newer version in your `build.gradle`. This then overrides the version declared in the library.
 
 From v1.0.4 on, RxLocation only works with Android gradle plugin 3.0.0 or higher, since it uses Java 8 language features.  
 And don't forget to set the source code compatibility to Java 8:
@@ -106,7 +109,7 @@ The code for managing the GoogleApiClient was adapted from the [Android-Reactive
 
 # Donations
 
-If you like the library and want to support the creator for development/maintenance, you can make a donation in Bitcoin to [1HSPW3NUZjfzsrkVxToWhiScfCnW7adwxk](bitcoin:1HSPW3NUZjfzsrkVxToWhiScfCnW7adwxk). Thank you!
+If you like the library and want to support the creator for development/maintenance, you can make a donation in Bitcoin to `bc1q5uejfyl2kskhhveg7lx4fcwgv8hz88r92yzjsu`. Thank you!
 
 # License
 
