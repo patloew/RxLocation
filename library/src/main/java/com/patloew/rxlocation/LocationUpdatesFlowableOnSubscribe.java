@@ -51,9 +51,11 @@ class LocationUpdatesFlowableOnSubscribe extends RxLocationFlowableOnSubscribe<L
 
     @Override
     protected void onUnsubscribed(GoogleApiClient apiClient) {
-        LocationServices.FusedLocationApi.removeLocationUpdates(apiClient, locationListener);
-        locationListener.onUnsubscribed();
-        locationListener = null;
+        if(locationListener != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(apiClient, locationListener);
+            locationListener.onUnsubscribed();
+            locationListener = null;
+        }
     }
 
     static class RxLocationListener implements LocationListener {
