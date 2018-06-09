@@ -80,7 +80,7 @@ The lib is available on jCenter. Add the following to your `build.gradle`:
 
 ```groovy
 dependencies {
-    compile 'com.patloew.rxlocation:rxlocation:1.0.4'
+    compile 'com.patloew.rxlocation:rxlocation:1.0.5'
     compile 'com.google.android.gms:play-services-location:15.0.0'
 }
 ```

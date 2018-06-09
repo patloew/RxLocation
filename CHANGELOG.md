@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 1.0.5
+
+* Update dependencies
+* Fix bugs #55, #38
+
 ## Version 1.0.4
 
 * Update dependencies
