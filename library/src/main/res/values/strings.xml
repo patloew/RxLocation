@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">RxLocation</string>
-
     <string name="define_rxlocation"></string>
     <!-- Author section -->
     <string name="library_rxlocation_author">Patrick Löwenstein</string>
