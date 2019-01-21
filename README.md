@@ -48,7 +48,7 @@ Disposable disposable = rxLocation.location().updates(locationRequest).subscribe
 disposable.dispose();
 ```
 
-As an alternative, multiple Disposables can be collected to dipose of at once via `CompositeDisposable`:
+As an alternative, multiple Disposables can be collected to dispose of at once via `CompositeDisposable`:
 
 ```java
 CompositeDisposable disposable = new CompositeDisposable();
