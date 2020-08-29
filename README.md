@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/patloew/RxLocation.svg?branch=master)](https://travis-ci.org/patloew/RxLocation) [![codecov](https://codecov.io/gh/patloew/RxLocation/branch/master/graph/badge.svg)](https://codecov.io/gh/patloew/RxLocation) [![Download](https://api.bintray.com/packages/patloew/maven/RxLocation/images/download.svg) ](https://bintray.com/patloew/maven/RxLocation/_latestVersion) [![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
 
+**This library is now deprecated and not maintained anymore. Please switch to the [CoLocation](https://github.com/patloew/CoLocation) library.**
+
 This library wraps the Location APIs in [RxJava 2](https://github.com/ReactiveX/RxJava/tree/2.x) Observables, Singles, Maybes and Completables. No more managing GoogleApiClients! Also, the resolution of the location settings check is optionally handled by the lib.
 
 For [RxJava 1](https://github.com/ReactiveX/RxJava/tree/1.x), please take a look at the [Android-ReactiveLocation](https://github.com/mcharmas/Android-ReactiveLocation) library by Michał Charmas.
