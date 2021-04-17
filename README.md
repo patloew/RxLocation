@@ -78,7 +78,7 @@ A basic sample app is available in the `sample` project.
 
 # Setup
 
-The lib is available on jCenter. Add the following to your `build.gradle`:
+The latest version 1.0.5 of this library is available on Maven Central. Add the following to your `build.gradle`:
 
 ```groovy
 dependencies {

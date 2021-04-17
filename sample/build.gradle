@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion "28.0.0"
 
     defaultConfig {
         applicationId "com.patloew.rxlocationsample"
@@ -38,7 +37,7 @@ dependencies {
     implementation "com.android.support:cardview-v7:27.1.1"
 
     implementation project(':library')
-    //implementation 'com.patloew.rxlocation:rxlocation:1.0.4'
+    //implementation 'com.patloew.rxlocation:rxlocation:1.0.5'
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.14'
